@@ -670,7 +670,6 @@
 				ORGANIZATIONNAME = "Publiss GmbH";
 				TargetAttributes = {
 					870110D5180FCF140034B9AC = {
-						DevelopmentTeam = 563BA5NND9;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
