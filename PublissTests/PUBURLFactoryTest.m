@@ -32,6 +32,7 @@
     NSMutableDictionary *currentSettings = [PUBConfig.sharedConfig valueForKey:@"currentSettings"];
     currentSettings[PUBConfigDefaultAppToken] = @"cf59bf5d-d528-483d-904c-b9f54688ed51";
     currentSettings[PUBConfigDefaultAppSecret] = @"b2a9975ccd5b50dd09cdf622427353ee";
+    currentSettings[PUBConfigDefaultWebserviceBaseURL] = @"https://staging-backend.publiss.com";
 }
 
 - (void)tearDown

@@ -7,11 +7,10 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const PUBStatisticsUserDefaultsKey = @"PUBStatisticsUserDefaultsKey";
-static NSString *const PUBConfigDefaultAppToken = @"App Token";
-static NSString *const PUBConfigDefaultAppSecret = @"App Secret";
-static NSString *const PUBConfigTempAppSecret = @"Temp App Secret";
-static NSString *const PUBConfigTempAppToken = @"Temp App Token";
+extern NSString *const PUBStatisticsUserDefaultsKey;
+extern NSString *const PUBConfigDefaultWebserviceBaseURL;
+extern NSString *const PUBConfigDefaultAppToken;
+extern NSString *const PUBConfigDefaultAppSecret;
 
 @interface PUBConfig : NSObject
 

@@ -15,7 +15,6 @@
 + (NSString *)createImageURLStringForDocument:(uint64_t)publishedDocumentId page:(uint64_t)pageIndex parameters:(NSDictionary *)parameters;
 + (NSURL *)createDownloadURLForDocument:(uint64_t)publishedDocumentId page:(NSUInteger)pageIndex iapSecret:(NSString *)iapSecret productId:(NSString*)productId;
 
-// TODO check if this two methods need to be invoked this way
 + (NSString *)createPublishedDocumentsPath;
 
 + (NSString *)createTrackingPathForPayload:(NSDictionary *)payload;
