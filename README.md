@@ -3,6 +3,8 @@ How To Get Started
 
 #### PUBLISS Digital Publishing Bliss
 [Visit Publiss Website](http://publiss.com "Visit Publiss Website")
+[Publiss App](http://appstore.com/publiss "Publiss App")
+
 
 ## Table of Contents   
 
