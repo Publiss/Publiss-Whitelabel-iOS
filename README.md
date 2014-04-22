@@ -42,7 +42,7 @@ Publiss enables you to enrich PDFs with multimedia content and publish them to a
  - Click on your app
  - Copy the "App Secret", "App Token"
  - Edit the Config.plist found in "Supporting Files" Folder in Xcode with "App Secret" & "App Token"
- - Optional: edit the Design.plist file to customize the look of your feel
+ - Optional: edit the Design.plist file to customize the look & feel
  - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
  
 ###Requirements:
