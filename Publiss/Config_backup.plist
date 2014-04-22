@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Webservice Base URL</key>
+	<string>https://www.publiss.at</string>
+	<key>App Secret</key>
+	<string>9fc4153103bd73cbe36c88738dc9e8bb</string>
+	<key>App Token</key>
+	<string>1d3ae766-0206-4eb7-90e1-f2e2917a4635</string>
+</dict>
+</plist>

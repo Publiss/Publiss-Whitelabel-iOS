@@ -1,0 +1,30 @@
+/****************************************************************************/
+/* Localization file */
+
+
+"Response: %@" = "Response: %@";
+"Downloading Document %@" = "Downloading Document %@";
+"Read" = "Read";
+"Free" = "Free";
+"Description" = "Description";
+"Loading" = "Loading";
+"Fetching..." = "Fetching...";
+"Loading" = "Loading";
+"Preview Page %d of %d" = "Preview Page %d of %d";
+"Download stopped" = "Download stopped";
+"Downloading..." = "Downloading...";
+"Close" = "Close";
+"Logout" = "Logout";
+"Switch User Account" = "Switch User Account";
+"Cancel" = "Cancel";
+"Reload" = "Reload";
+"Restore Purchases" = "Restore Purchases";
+"About Publiss" = "About Publiss";
+"Purchases" = "Purchases";
+"Your purchases have been restored." = "Your purchases have been restored.";
+"Your purchases could not be restored. Please try again later." = "Your purchases could not be restored. Please try again later.";
+"Page %tu of %tu done." = "Page %tu of %tu done.";
+"Visit Publiss Website" = "Visit Publiss Website";
+"Processing Purchase..." = "Processing Purchase...";
+"purchased"= "purchased";
+"PDF is being downloaded ..." = "PDF is being downloaded ...";
