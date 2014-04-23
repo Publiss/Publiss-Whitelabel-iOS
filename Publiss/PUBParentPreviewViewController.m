@@ -196,11 +196,12 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    static NSString *const identifier = @"PreviewCell";
     PUBPreviewCell *cell =
-    (PUBPreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PreviewCell" forIndexPath:indexPath];
+    (PUBPreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    cell.previewImageView.image = nil;
     
-    NSString *previewImageURL = [PUBURLFactory createPreviewImageURLStringForDocument: self.document.publishedID page:indexPath.row];
+    NSString *previewImageURL = [PUBURLFactory createPreviewImageURLStringForDocument:self.document.publishedID page:indexPath.row];
     
     __weak PUBPreviewCell *weakCell = cell;
     NSURLRequest *urlrequest = [NSURLRequest requestWithURL:[NSURL URLWithString:previewImageURL]];
@@ -212,14 +213,17 @@
         [cell.previewImageView setImageWithURLRequest:urlrequest
                                  placeholderImage:nil
                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                              PUBPreviewCell *strongCell = weakCell;
+                                              strongCell.previewImageView.image = image;
+                                              strongCell.previewImageView.alpha = 0.f;
+                                              [strongCell.activityIndicator stopAnimating];
+                                              [strongCell setNeedsLayout];
                                               [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:previewImageURL];
-                                              [UIView transitionWithView:weakCell.previewImageView
-                                                                duration:0.35f
-                                                                 options:UIViewAnimationOptionTransitionCrossDissolve
-                                                              animations:^{ weakCell.previewImageView.image = image; }
-                                                              completion:^(BOOL finished){
-                                                                  [weakCell.activityIndicator stopAnimating];
-                                                              }];
+                                              
+                                              [UIView animateWithDuration:.25f animations:^{
+                                                  strongCell.previewImageView.alpha = 1.f;
+                                              } completion:NULL];
+                                              
                                           } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                               PUBLogError(@"%@: Error fetching Previewimage URL, %@", [self class], error.localizedDescription);
                                           }];
