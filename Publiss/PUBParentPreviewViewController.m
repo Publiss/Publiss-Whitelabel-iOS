@@ -78,12 +78,6 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                      object:NULL];
-}
-
 #pragma mark - Dismiss ViewController
 
 // http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
@@ -92,6 +86,8 @@
         if (sender.state == UIGestureRecognizerStateEnded) {
             CGPoint location = [sender locationInView:nil];
             if (![self.view pointInside:[self.view convertPoint:location fromView:self.view.window] withEvent:nil]) {
+                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
+                                                                  object:NULL];
                 [self dismissViewControllerAnimated:YES completion:NULL];
             }
         }
@@ -243,7 +239,7 @@
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
-    [self presentViewController:navController animated:YES completion:nil];
+    [self presentViewController:navController animated:YES completion:NULL];
 }
 
 
