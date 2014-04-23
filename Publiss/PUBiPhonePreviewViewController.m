@@ -60,7 +60,7 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-     [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:NULL];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:NULL];
 }
 
 
@@ -85,7 +85,10 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 - (void)dismissNavController:(id)sender {
     if ([sender isKindOfClass:UIBarButtonItem.class]) {
         if (!self.presentingViewController.isBeingPresented) 
-            [self dismissViewControllerAnimated:YES completion:nil];
+            [self dismissViewControllerAnimated:YES completion:^{
+                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
+                                                                  object:NULL];
+            }];
     }
 }
 
