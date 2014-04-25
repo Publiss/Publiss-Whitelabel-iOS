@@ -176,7 +176,7 @@
         
         NSError *clearCacheError = nil;
         NSError *error = nil;
-        if (document) {
+        if (document && document.state == PUBDocumentStateDownloaded) {
             // remove pdf cache for document
             if ([PSPDFCache.sharedCache removeCacheForDocument:[PUBPDFDocument documentWithPUBDocument:document] deleteDocument:YES error:&clearCacheError]) {
                 PUBLogVerbose(@"PDF Cache for document %@ cleared.", document.title);

@@ -364,9 +364,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     } else {
         [weakCell.activityIndicator startAnimating];
         cell.coverImage.hidden = YES;
-
         NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
-        
         
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
@@ -568,7 +566,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         if (indexPath) {
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
             
-            CGFloat startAlpha;
             CGFloat endAlpha;
             CGAffineTransform endTransform;
             BOOL startAnimation = NO;
@@ -576,12 +573,10 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
             if (cell.deleteButton.hidden && cell.document.state == PUBDocumentStateDownloaded) {
                 startAnimation = YES;
                 cell.showDeleteButton = YES;
-                startAlpha = 0.0f;
                 endAlpha = 0.98f;
                 cell.deleteButton.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
                 endTransform = CGAffineTransformMakeScale(1.0f, 1.0f);
             } else {
-                startAlpha = 0.98f;
                 endAlpha = 0.0f;
                 endTransform = CGAffineTransformMakeScale(0.1f, 0.1f);
             }

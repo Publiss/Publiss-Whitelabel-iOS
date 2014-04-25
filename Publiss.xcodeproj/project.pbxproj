@@ -11,7 +11,6 @@
 		5B59C3C61861FA4600191B45 /* PUBCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C51861FA4600191B45 /* PUBCenteredScrollView.m */; };
 		783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783E316B18BE68FB004A49EA /* PUBProgressView.m */; };
 		7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7864703518A532030005B3B1 /* Publiss.xcdatamodeld */; };
-		786EC49618BE99C000788B1E /* PUBGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 786EC48F18BE99C000788B1E /* PUBGalleryViewController.m */; };
 		786EC49718BE99C000788B1E /* PUBPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 786EC49118BE99C000788B1E /* PUBPageView.m */; };
 		786EC49818BE99C000788B1E /* PUBPDFDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 786EC49318BE99C000788B1E /* PUBPDFDocument.m */; };
 		786EC49918BE99C000788B1E /* PUBPDFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 786EC49518BE99C000788B1E /* PUBPDFViewController.m */; };
@@ -114,8 +113,6 @@
 		7864703618A532030005B3B1 /* Publiss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss.xcdatamodel; sourceTree = "<group>"; };
 		7864703718A532030005B3B1 /* Publiss_1.01.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.01.xcdatamodel; sourceTree = "<group>"; };
 		7864703818A532030005B3B1 /* Publiss_1.02.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.02.xcdatamodel; sourceTree = "<group>"; };
-		786EC48E18BE99C000788B1E /* PUBGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBGalleryViewController.h; sourceTree = "<group>"; };
-		786EC48F18BE99C000788B1E /* PUBGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBGalleryViewController.m; sourceTree = "<group>"; };
 		786EC49018BE99C000788B1E /* PUBPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBPageView.h; sourceTree = "<group>"; };
 		786EC49118BE99C000788B1E /* PUBPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBPageView.m; sourceTree = "<group>"; };
 		786EC49218BE99C000788B1E /* PUBPDFDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBPDFDocument.h; sourceTree = "<group>"; };
@@ -296,8 +293,6 @@
 		786EC48D18BE99C000788B1E /* PSPDFSubclasses */ = {
 			isa = PBXGroup;
 			children = (
-				786EC48E18BE99C000788B1E /* PUBGalleryViewController.h */,
-				786EC48F18BE99C000788B1E /* PUBGalleryViewController.m */,
 				786EC49018BE99C000788B1E /* PUBPageView.h */,
 				786EC49118BE99C000788B1E /* PUBPageView.m */,
 				786EC49218BE99C000788B1E /* PUBPDFDocument.h */,
@@ -801,7 +796,6 @@
 				D4C6D72A190130050078B8B7 /* UIImage+Tinting.m in Sources */,
 				8103B5781846B60E00E8E77E /* PUBPreviewViewController.m in Sources */,
 				81B3AF3E1817B98000CB5CF1 /* UIColor+Design.m in Sources */,
-				786EC49618BE99C000788B1E /* PUBGalleryViewController.m in Sources */,
 				786EC49818BE99C000788B1E /* PUBPDFDocument.m in Sources */,
 				EF7E8D9318BF33F8002FF8CC /* IAPManager.m in Sources */,
 				5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */,

@@ -12,7 +12,6 @@
 #import "PUBDocumentFetcher.h"
 #import "PUBPDFDocument.h"
 #import "PUBPageView.h"
-#import "PUBGalleryViewController.h"
 #import "PUBSearchViewController.h"
 #import "JDStatusBarNotification.h"
 #import "PUBThumbnailGridViewCell.h"
@@ -41,7 +40,6 @@
     // Customize PSPDFKit defaults.
    // [self overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
     [self overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
-    [self overrideClass:PSPDFGalleryViewController.class withClass:PUBGalleryViewController.class];
     [self overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
 
     // Appearance only needs to be set up once.
@@ -100,12 +98,7 @@
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - PSPDFViewController
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-}
+#pragma mark - UIViewController
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -117,6 +110,21 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    self.navigationController.navigationBar.hidden = YES;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [[PSPDFGalleryEmbeddedBackgroundView appearance] setBlurEnabledObject:@YES];
+        [[PSPDFGalleryFullscreenBackgroundView appearance] setBlurEnabledObject:@YES];
+    });
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

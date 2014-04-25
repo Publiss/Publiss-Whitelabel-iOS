@@ -78,12 +78,6 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                      object:NULL];
-}
-
 #pragma mark - Dismiss ViewController
 
 // http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
@@ -92,6 +86,8 @@
         if (sender.state == UIGestureRecognizerStateEnded) {
             CGPoint location = [sender locationInView:nil];
             if (![self.view pointInside:[self.view convertPoint:location fromView:self.view.window] withEvent:nil]) {
+                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
+                                                                  object:NULL];
                 [self dismissViewControllerAnimated:YES completion:NULL];
             }
         }
@@ -196,11 +192,12 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    static NSString *const identifier = @"PreviewCell";
     PUBPreviewCell *cell =
-    (PUBPreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"PreviewCell" forIndexPath:indexPath];
+    (PUBPreviewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    cell.previewImageView.image = nil;
     
-    NSString *previewImageURL = [PUBURLFactory createPreviewImageURLStringForDocument: self.document.publishedID page:indexPath.row];
+    NSString *previewImageURL = [PUBURLFactory createPreviewImageURLStringForDocument:self.document.publishedID page:indexPath.row];
     
     __weak PUBPreviewCell *weakCell = cell;
     NSURLRequest *urlrequest = [NSURLRequest requestWithURL:[NSURL URLWithString:previewImageURL]];
@@ -212,14 +209,17 @@
         [cell.previewImageView setImageWithURLRequest:urlrequest
                                  placeholderImage:nil
                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                              PUBPreviewCell *strongCell = weakCell;
+                                              strongCell.previewImageView.image = image;
+                                              strongCell.previewImageView.alpha = 0.f;
+                                              [strongCell.activityIndicator stopAnimating];
+                                              [strongCell setNeedsLayout];
                                               [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:previewImageURL];
-                                              [UIView transitionWithView:weakCell.previewImageView
-                                                                duration:0.35f
-                                                                 options:UIViewAnimationOptionTransitionCrossDissolve
-                                                              animations:^{ weakCell.previewImageView.image = image; }
-                                                              completion:^(BOOL finished){
-                                                                  [weakCell.activityIndicator stopAnimating];
-                                                              }];
+                                              
+                                              [UIView animateWithDuration:.25f animations:^{
+                                                  strongCell.previewImageView.alpha = 1.f;
+                                              } completion:NULL];
+                                              
                                           } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
                                               PUBLogError(@"%@: Error fetching Previewimage URL, %@", [self class], error.localizedDescription);
                                           }];
@@ -239,7 +239,7 @@
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
-    [self presentViewController:navController animated:YES completion:nil];
+    [self presentViewController:navController animated:YES completion:NULL];
 }
 
 
