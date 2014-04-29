@@ -32,30 +32,31 @@
         PUBLogWarning(@"Dictionary is empty.");
         return nil;
     }
-
+    
+    static NSDateFormatter *dateFormatter;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        dateFormatter = [NSDateFormatter new];
+        dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
+        dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
+    });
+    NSDate *onlineUpdatedAt = [dateFormatter dateFromString:PUBSafeCast(dictionary[@"updated_at"], NSString.class)];
+    
     BOOL shouldUpdateValues = NO;
     PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:dictionary[@"apple_product_id"]];
     if (!document) {
         document = [PUBDocument createEntity];
         shouldUpdateValues = YES;
     } else {
-        shouldUpdateValues = ![document.updatedAt isEqual:dictionary[@"updated_at"]];
+        shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
     }
-
-    static NSDateFormatter *_dateFormatter;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _dateFormatter = [NSDateFormatter new];
-        _dateFormatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US"];
-        _dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
-    });
-
+    
     if (shouldUpdateValues) {
         // Never trust external content.
         @try {
             document.productID = PUBSafeCast(dictionary[@"apple_product_id"], NSString.class);
             document.publishedID = (uint16_t)[dictionary[@"id"] integerValue];
-            document.updatedAt = [_dateFormatter dateFromString:PUBSafeCast(dictionary[@"updated_at"], NSString.class)];
+            document.updatedAt = onlineUpdatedAt;
             document.priority = (uint16_t)[dictionary[@"priority"] integerValue];
             document.title = PUBSafeCast(dictionary[@"name"], NSString.class);
             document.pageCount = (uint16_t)[[dictionary valueForKeyPath:@"pages_info.count"] integerValue] - 1;
@@ -72,19 +73,9 @@
         }
     }
 
-    [document importValuesFromDictionaty:dictionary];
     return document;
 }
 
-- (void)importValuesFromDictionaty:(NSDictionary *)dict {
-    NSDictionary *attributes = self.entity.attributesByName;
-
-    for (NSString *key in attributes.allKeys) {
-        if ([dict.allKeys containsObject:key]) {
-            [self setValue:dict[key] forKey:key];
-        }
-    }
-}
 
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID {
     PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
