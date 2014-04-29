@@ -121,15 +121,16 @@
     self.navigationController.navigationBar.hidden = YES;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [[PSPDFGalleryEmbeddedBackgroundView appearance] setBlurEnabledObject:@YES];
-        [[PSPDFGalleryFullscreenBackgroundView appearance] setBlurEnabledObject:@YES];
-    });
-}
+// Blurring of gallery
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        [[PSPDFGalleryEmbeddedBackgroundView appearance] setBlurEnabledObject:@YES];
+//        [[PSPDFGalleryFullscreenBackgroundView appearance] setBlurEnabledObject:@YES];
+//    });
+//}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private
