@@ -172,7 +172,9 @@
         NSError *error = nil;
         if (document && document.state == PUBDocumentStateDownloaded) {
             // remove pdf cache for document
-            if ([PSPDFCache.sharedCache removeCacheForDocument:[PUBPDFDocument documentWithPUBDocument:document] deleteDocument:YES error:&clearCacheError]) {
+            PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
+            [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
+            if ([PSPDFCache.sharedCache removeCacheForDocument:pubPDFDocument deleteDocument:YES error:&clearCacheError]) {
                 PUBLogVerbose(@"PDF Cache for document %@ cleared.", document.title);
             } else {
                 PUBLogError(@"Error clearing PDF Cache for document %@: %@", document.title, clearCacheError.localizedDescription);

@@ -151,7 +151,7 @@ static NSString *const kPublissStore = @"Publiss.sqlite";
 #pragma mark - Google Analytics
 
 - (void)loadGoogleAnalytics {
-    if ([[PUBConfig sharedConfig] GATrackingCode]) {
+    if (PUBConfig.sharedConfig.GATrackingCode.length > 0) {
         // Optional: automatically send uncaught exceptions to Google Analytics.
         GAI.sharedInstance.trackUncaughtExceptions = YES;
         // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
