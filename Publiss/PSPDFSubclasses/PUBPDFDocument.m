@@ -24,7 +24,12 @@
 
 + (instancetype)documentWithPUBDocument:(PUBDocument *)document {
     PUBPDFDocument *PDFDocument = [self documentWithBaseURL:document.localDocumentURL fileTemplate:@"%d.pdf" startPage:0 endPage:document.pageCount];
-
+    PDFDocument.pageDimensions = document.dimensions;
+    PDFDocument.productID = document.productID;
+    
+    // restore local annotations if any exsist
+    [self.class restoreLocalAnnotations:PDFDocument];
+    
     [PDFDocument overrideClass:PSPDFDocumentProvider.class withClass:PUBDocumentProvider.class];
     [PDFDocument setDidCreateDocumentProviderBlock:^(PSPDFDocumentProvider *documentProvider) {
         // Hide warnings for missing files.
@@ -44,15 +49,34 @@
     PDFDocument.annotationSaveMode = PSPDFAnnotationSaveModeExternalFile;
 //    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
 
-    PDFDocument.pageDimensions = document.dimensions;
-    PDFDocument.productID = document.productID;
     [PDFDocument loadAnnotationsFromXFDF];
 
     return PDFDocument;
 }
 
++ (void)restoreLocalAnnotations:(PUBPDFDocument *)pdfDocument {
+    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *annotationSavePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"publiss/annotations_%@",  pdfDocument.productID]];
+    if ([[NSFileManager defaultManager] fileExistsAtPath:annotationSavePath]) {
+        NSError *copyError = nil;
+        if (![[NSFileManager defaultManager] copyItemAtPath:annotationSavePath toPath:pdfDocument.dataDirectory error:&copyError]) {
+            PUBLogError(@"Error copying files: %@", [copyError localizedDescription]);
+        }
+        [[NSFileManager defaultManager] removeItemAtPath:annotationSavePath error:nil];
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Public
+
++ (void)saveLocalAnnotations:(PUBPDFDocument *)pdfDocument {
+    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    NSString *annotationSavePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"publiss/annotations_%@",  pdfDocument.productID]];
+    NSError *copyError = nil;
+    if (![[NSFileManager defaultManager] copyItemAtPath:pdfDocument.dataDirectory toPath:annotationSavePath error:&copyError]) {
+        PUBLogError(@"Error copying files: %@", [copyError localizedDescription]);
+    }
+}
 
 - (PUBDocument *)pubDocument {
     PUBAssertIfNotMainThread();

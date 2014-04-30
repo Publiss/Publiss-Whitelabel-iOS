@@ -18,5 +18,6 @@
 
 // Load annotations.
 - (void)loadAnnotationsFromXFDF;
++ (void)saveLocalAnnotations:(PUBPDFDocument *)pdfDocument;
 
 @end
