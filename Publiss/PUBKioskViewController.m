@@ -199,6 +199,7 @@
     [dnc addObserver:self selector:@selector(trackPage) name:PUBApplicationWillResignActiveNotification object:nil];
     [dnc addObserver:self selector:@selector(documentFetched:) name:PUBDocumentDownloadFinished object:nil];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
+    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:PUBApplicationWillEnterForegroundNotification object:nil];
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIView animateWithDuration:0.25f animations:^{
         self.navigationController.navigationBar.alpha = 1.f;
