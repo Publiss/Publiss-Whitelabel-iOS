@@ -9,10 +9,10 @@
 
 typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateOnline,
-    PUBDocumentStateUpdated,
     PUBDocumentStateDownloaded,
     PUBDocumentStateLoading,
-    PUBDocumentPurchased  // just for UI stuff
+    PUBDocumentPurchased,  // just for UI stuff
+    PUBDocumentStateUpdated
 };
 
 @interface PUBDocument (Helper)
