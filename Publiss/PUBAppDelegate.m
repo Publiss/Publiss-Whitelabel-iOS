@@ -34,6 +34,9 @@
 
     // Reset data model
     [PUBDocument restoreDocuments];
+    
+    // Track GA
+    [self loadGoogleAnalytics];
 
     // Start statistics async.
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -148,9 +151,6 @@ static NSString *const kPublissStore = @"Publiss.sqlite";
 #pragma mark - Google Analytics
 
 - (void)loadGoogleAnalytics {
-    /*
-     Note: When you obtain a tracker for a given tracking ID, the tracker instance is persisted in the library. When you call trackerWithTrackingId: with the same tracking ID later, the same tracker instance will be returned. Also, the Google Analytics SDK exposes a default tracker instance that gets set to the first tracker instance created. It can be accessed by:
-     */
     if ([[PUBConfig sharedConfig] GATrackingCode]) {
         // Optional: automatically send uncaught exceptions to Google Analytics.
         GAI.sharedInstance.trackUncaughtExceptions = YES;
@@ -160,10 +160,10 @@ static NSString *const kPublissStore = @"Publiss.sqlite";
         //GAI.sharedInstance.logger.logLevel = kGAILogLevelVerbose;
 
         id<GAITracker> tracker = [GAI.sharedInstance trackerWithTrackingId:[[PUBConfig sharedConfig] GATrackingCode]];
-        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"Whitelabel App" // Event category (required)
-                                                              action:@"Start"          // Event action (required)
-                                                               label:@"Start"          // Event label
-                                                               value:nil] build]];     // Event value
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"App"             // Event category (required)
+                                                              action:@"Start"           // Event action (required)
+                                                               label:@"Start"           // Event label
+                                                               value:nil] build]];      // Event value
     }
 }
 

@@ -85,7 +85,6 @@
 		EFC288A118A0ED2D00D74A1C /* Changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = EFC2889718A0ED2D00D74A1C /* Changelog.txt */; };
 		EFC288A218A0ED2D00D74A1C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC2889F18A0ED2D00D74A1C /* libGoogleAnalyticsServices.a */; };
 		EFC288A318A0ED2D00D74A1C /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = EFC288A018A0ED2D00D74A1C /* Readme.txt */; };
-		EFC288A518A0ED5500D74A1C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A418A0ED5500D74A1C /* AdSupport.framework */; };
 		EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */; };
 		EFC7FC2518FFDD48001FF5EB /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */; };
 		EFD5DDD518D3059D007FEB58 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFD5DDD718D3059D007FEB58 /* Storyboard.storyboard */; };
@@ -246,7 +245,6 @@
 			files = (
 				EFC288A218A0ED2D00D74A1C /* libGoogleAnalyticsServices.a in Frameworks */,
 				EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */,
-				EFC288A518A0ED5500D74A1C /* AdSupport.framework in Frameworks */,
 				EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */,
 				8110782E1811301F00281106 /* libxml2.2.dylib in Frameworks */,
 				8110782C1811301900281106 /* libsqlite3.dylib in Frameworks */,
