@@ -82,7 +82,9 @@
         case PUBDocumentStateOnline:
             [self documentOnline];
             break;
-
+        case PUBDocumentStateUpdated:
+            [self documentUpdated];
+            break;
         case PUBDocumentStateDownloaded:
             [self documentDownloaded];
             break;
@@ -217,6 +219,10 @@
     self.progressView.hidden = YES;
 }
 
+- (void)documentUpdated {
+    self.progressView.hidden = YES;
+}
+
 - (void)documentDownloaded {
     self.progressView.hidden = YES;
 }
@@ -276,9 +282,20 @@
 }
 
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
-    if (self.document.state == PUBDocumentPurchased ) {
-        self.badgeView.fillColor = [UIColor lightGrayColor];
+    
+    switch (self.document.state) {
+        case PUBDocumentPurchased:
+            self.badgeView.fillColor = [UIColor lightGrayColor];
+            break;
+        case PUBDocumentStateUpdated:
+            self.badgeView.fillColor = [UIColor redColor];
+            break;
+        default:
+            self.badgeView.fillColor = [UIColor publissPrimaryColor];
+            break;
     }
+    
+    [self.badgeView setNeedsDisplay];
     
     self.badgeView.alpha = animated ? 0.f : 1.f;
     self.badgeView.hidden = hidden;

@@ -166,7 +166,6 @@
     [Lockbox setDictionary:secretsDict forKey:PUBiAPSecrets];
 }
 
-#pragma mark - open PDF &&PSPDFKit
 
 - (void)openPDFWithWithDocument:(PUBDocument *)document {
     [self dismissViewControllerAnimated:YES completion:^{
@@ -176,9 +175,7 @@
     }];
 }
 
-
-
-#pragma mark - UICollectionViewDataSource
+#pragma mark - UICollectionView DataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -188,7 +185,6 @@
     // maximum 5 preview pages
     return MIN(5, self.document.pageCount + 1);
 }
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -227,6 +223,8 @@
     return cell;
 }
 
+#pragma mark - UICollectionView Delegate
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (PUBIsiPad()) {
         self.oldViewFrame = self.view.frame;
@@ -242,6 +240,7 @@
     [self presentViewController:navController animated:YES completion:NULL];
 }
 
+#pragma mark - Helper
 
 - (void)updateUI {
     if (self.document.fileSize > 0) {

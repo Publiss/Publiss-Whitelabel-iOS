@@ -49,6 +49,13 @@
         shouldUpdateValues = YES;
     } else {
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
+        
+        if (shouldUpdateValues) {
+            [document deleteDocument:^{
+                document.state = PUBDocumentStateUpdated;
+            }];
+        }
+        
     }
     
     if (shouldUpdateValues) {
@@ -92,7 +99,7 @@
     return [self findWithPredicate:nil];
 }
 
-+ (NSFetchedResultsController *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending {
++ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending {
     PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
 
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
@@ -101,18 +108,14 @@
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending];
     fetchRequest.sortDescriptors = @[sortDescriptor];
 
-    NSFetchedResultsController *controller =
-    [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-                                        managedObjectContext:appDelegate.managedObjectContext
-                                          sectionNameKeyPath:nil
-                                                   cacheName:nil];
-
     NSError *error = nil;
-    if (![controller performFetch:&error]) {
+    NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    
+    if (error) {
         PUBLogError(@"Error while fetching documents: %@", error);
     }
 
-    return controller;
+    return results ? results : [NSArray new];
 }
 
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {
@@ -198,6 +201,16 @@
             [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
             if (completionBlock) completionBlock();
         }
+    }
+}
+
+- (void)clearChache:(void (^)())completionBlock {
+    PUBDocument *document = self;
+    
+    if (document && document.state == PUBDocumentStateUpdated) {
+        
+        
+        
     }
 }
 

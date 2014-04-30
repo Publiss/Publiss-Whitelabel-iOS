@@ -36,7 +36,6 @@
 @property (nonatomic, assign) BOOL isOpening;
 @property (nonatomic, strong) PUBScaleTransition *scaleTransition;
 @property (nonatomic, copy) NSArray *documentArray;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
@@ -270,8 +269,7 @@
     
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
-        self.fetchedResultsController = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES];
-        self.documentArray = self.fetchedResultsController.fetchedObjects;
+        self.documentArray = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES];
         [self.collectionView reloadData];
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
@@ -280,7 +278,7 @@
     }];
 }
 
-#pragma mark - CollectionView datasoure
+#pragma mark - CollectionView DataSoure
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -290,7 +288,64 @@
     return self.documentArray.count;
 }
 
-#pragma mark - UICollectionViewDelegate
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
+                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *const identifier = @"DocumentCell";
+    PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    [self configureCell:cell atIndexPath:indexPath];
+    
+    
+    // first look in cover image cache if there is already a preprocessed cover image
+    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher imageForDocument:cell.document page:0 size:cell.bounds.size];
+    UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
+    NSString *cachedImageURL = [PUBThumbnailImageCache.sharedInstance cacheFilePathForURLString:thumbnailURL.absoluteString];
+    
+    (self.coverImageDictionary)[cachedImageURL] = cell.document.title;
+    
+    if (thumbnail != nil && [cell.document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
+        cell.coverImage.image = thumbnail;
+        [cell setBadgeViewHidden:cell.document.state == PUBDocumentStateDownloaded ? YES : NO animated:NO];
+        [cell setNeedsLayout];
+        
+    } else {
+        [cell.activityIndicator startAnimating];
+        cell.coverImage.hidden = YES;
+        NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
+        
+        __weak PUBCellView *weakCell = cell;
+        [cell.coverImage setImageWithURLRequest:URLRequest
+                               placeholderImage:nil
+                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                            PUBCellView *strongCell = weakCell;
+                                            strongCell.coverImage.image = image;
+                                            strongCell.coverImage.alpha = 0.f;
+                                            strongCell.coverImage.hidden = NO;
+                                            [strongCell setBadgeViewHidden:YES animated:NO];
+                                            [strongCell.activityIndicator stopAnimating];
+                                            [strongCell setNeedsLayout];
+                                            
+                                            // animate first magazin coverload with scale animation
+                                            strongCell.coverImage.transform = CGAffineTransformMakeScale(.1f, .1f);
+                                            [UIView animateWithDuration:.4f animations:^{
+                                                strongCell.coverImage.alpha = 1.f;
+                                                strongCell.coverImage.transform = CGAffineTransformIdentity;
+                                            } completion:^(BOOL finished) {
+                                                [strongCell setBadgeViewHidden:NO animated:YES];
+                                            }];
+                                            
+                                            
+                                            [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
+                                        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                            PUBCellView *strongCell = weakCell;
+                                            strongCell.coverImage.hidden = NO;
+                                            [strongCell.activityIndicator stopAnimating];
+                                            PUBLogWarning(@"Failed to get image: %@", error);
+                                        }];
+    }
+    return cell;
+}
+
+#pragma mark - UICollectionView Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                   layout:(UICollectionViewLayout *)collectionViewLayout
@@ -342,75 +397,22 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return space;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *const identifier = @"DocumentCell";
-    PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    __weak PUBCellView *weakCell = cell;
-
-    [self configureCell:cell atIndexPath:indexPath];
-    
-    // first look in cover image cache if there is already a preprocessed cover image
-    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher imageForDocument:cell.document page:0 size:cell.bounds.size];
-    UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
-    NSString *cachedImageURL = [PUBThumbnailImageCache.sharedInstance cacheFilePathForURLString:thumbnailURL.absoluteString];
-    
-    (self.coverImageDictionary)[cachedImageURL] = cell.document.title;
-    
-    if (thumbnail != nil && [cell.document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
-        cell.coverImage.image = thumbnail;
-        [cell setBadgeViewHidden:cell.document.state == PUBDocumentStateDownloaded ? YES : NO animated:NO];
-        [cell setNeedsLayout];
-    } else {
-        [weakCell.activityIndicator startAnimating];
-        cell.coverImage.hidden = YES;
-        NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
-        
-        [cell.coverImage setImageWithURLRequest:URLRequest
-                               placeholderImage:nil
-                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                            PUBCellView *strongCell = weakCell;
-                                            strongCell.coverImage.image = image;
-                                            strongCell.coverImage.alpha = 0.f;
-                                            strongCell.coverImage.hidden = NO;
-                                            [strongCell setBadgeViewHidden:YES animated:NO];
-                                            [strongCell.activityIndicator stopAnimating];
-                                            [strongCell setNeedsLayout];
-                                            
-                                            // animate first magazin coverload with scale animation
-                                            strongCell.coverImage.transform = CGAffineTransformMakeScale(.1f, .1f);
-                                            [UIView animateWithDuration:.4f animations:^{
-                                                strongCell.coverImage.alpha = 1.f;
-                                                strongCell.coverImage.transform = CGAffineTransformIdentity;
-                                            } completion:^(BOOL finished) {
-                                                [strongCell setBadgeViewHidden:NO animated:YES];
-                                            }];
-                                            
-                                            
-                                            [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
-                                        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                            PUBCellView *strongCell = weakCell;
-                                            strongCell.coverImage.hidden = NO;
-                                            [strongCell.activityIndicator stopAnimating];
-                                            PUBLogWarning(@"Failed to get image: %@", error);
-                                        }];
-    }
-    return cell;
-}
 
 
 #pragma mark cv cell layout
 
 - (void)configureCell:(PUBCellView *)cell atIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = (self.documentArray)[indexPath.row];
+    PUBDocument *document = (self.documentArray)[indexPath.item];
     [cell setupCellForDocument:(PUBDocument *)document];
     [cell.deleteButton addTarget:self
                           action:@selector(deleteButtonClicked:)
                 forControlEvents:UIControlEventTouchUpInside];
 }
 
+#pragma mark - UICollectionViewDelegate
+
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = self.documentArray[indexPath.row];
+    PUBDocument *document = self.documentArray[indexPath.item];
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
     
     switch (document.state) {
@@ -605,7 +607,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 }
 
 
-#pragma mark - helper methods
+#pragma mark - Helper
 
 - (UIImage *)imageForDocument:(PUBDocument *)document {
     if (!document) return nil;
