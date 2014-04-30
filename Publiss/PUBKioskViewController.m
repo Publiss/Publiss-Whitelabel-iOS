@@ -630,6 +630,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         self.isOpening = YES;
         self.lastOpenedDocument = document;
         PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
+        [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
         PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
         pdfController.delegate = self;
         

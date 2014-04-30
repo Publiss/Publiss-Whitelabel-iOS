@@ -44,18 +44,20 @@
     
     BOOL shouldUpdateValues = NO;
     PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:dictionary[@"apple_product_id"]];
+    // create new Document
     if (!document) {
         document = [PUBDocument createEntity];
         shouldUpdateValues = YES;
     } else {
+        //check if exsisting document should be updated
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
-        
         if (shouldUpdateValues) {
+            PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
+            [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
             [document deleteDocument:^{
                 document.state = PUBDocumentStateUpdated;
             }];
         }
-        
     }
     
     if (shouldUpdateValues) {
@@ -70,7 +72,7 @@
             document.fileDescription = PUBSafeCast(dictionary[@"description"], NSString.class);
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
             document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
-
+            
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);
             document.dimensions = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.dimensions"], NSArray.class);
@@ -78,6 +80,8 @@
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
         }
+        
+        
     }
 
     return document;
@@ -173,7 +177,6 @@
         if (document && document.state == PUBDocumentStateDownloaded) {
             // remove pdf cache for document
             PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
-            [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
             if ([PSPDFCache.sharedCache removeCacheForDocument:pubPDFDocument deleteDocument:YES error:&clearCacheError]) {
                 PUBLogVerbose(@"PDF Cache for document %@ cleared.", document.title);
             } else {

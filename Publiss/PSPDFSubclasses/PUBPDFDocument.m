@@ -27,9 +27,6 @@
     PDFDocument.pageDimensions = document.dimensions;
     PDFDocument.productID = document.productID;
     
-    // restore local annotations if any exsist
-    [self.class restoreLocalAnnotations:PDFDocument];
-    
     [PDFDocument overrideClass:PSPDFDocumentProvider.class withClass:PUBDocumentProvider.class];
     [PDFDocument setDidCreateDocumentProviderBlock:^(PSPDFDocumentProvider *documentProvider) {
         // Hide warnings for missing files.
