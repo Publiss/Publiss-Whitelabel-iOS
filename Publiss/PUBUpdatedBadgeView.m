@@ -56,7 +56,7 @@
 {
     if (!_updatedLabel) {
         _updatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 44, 12)];
-        _updatedLabel.text = @"UPDATE";
+        _updatedLabel.text = PUBLocalize(@"UPDATE");
         _updatedLabel.textAlignment = NSTextAlignmentCenter;
         _updatedLabel.font = [UIFont systemFontOfSize:10];
         _updatedLabel.textColor = [UIColor whiteColor];

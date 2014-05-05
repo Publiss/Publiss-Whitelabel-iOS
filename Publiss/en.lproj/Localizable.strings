@@ -9,7 +9,6 @@
 "Description" = "Description";
 "Loading" = "Loading";
 "Fetching..." = "Fetching...";
-"Loading" = "Loading";
 "Preview Page %d of %d" = "Preview Page %d of %d";
 "Download stopped" = "Download stopped";
 "Downloading..." = "Downloading...";
@@ -21,11 +20,13 @@
 "Restore Purchases" = "Restore Purchases";
 "About Publiss" = "About Publiss";
 "Purchases" = "Purchases";
-"purchased"= "purchased";
 "Your purchases have been restored." = "Your purchases have been restored.";
 "Your purchases could not be restored. Please try again later." = "Your purchases could not be restored. Please try again later.";
 "Page %tu of %tu done." = "Page %tu of %tu done.";
 "Visit Publiss Website" = "Visit Publiss Website";
-"No active internet connection." = "No active internet connection.";
 "Processing Purchase..." = "Processing Purchase...";
+"purchased" = "purchased";
 "PDF is being downloaded ..." = "PDF is being downloaded ...";
+"No active internet connection." = "No active internet connection.";
+"UPDATE" = "UPDATE";
+"Update" = "Update";

@@ -7,7 +7,7 @@
 
 #import "PUBParentPreviewViewController.h"
 #import "PUBDocumentFetcher.h"
-#import "PUBDocument.h"
+#import "PUBDocument+Helper.h"
 #import "PUBPreviewCell.h"
 #import "UIColor+Design.h"
 #import "PUBPagePreviewViewController.h"

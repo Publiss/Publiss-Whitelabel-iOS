@@ -62,8 +62,7 @@
     return _activityIndicator;
 }
 
-- (UIButton *)deleteButton
-{
+- (UIButton *)deleteButton {
     if (!_deleteButton) {
         _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
         UIImage *deleteButtonImage = [UIImage imageNamed:@"delete"];
@@ -141,7 +140,7 @@
 
 - (void)setShowDeleteButton:(BOOL)showDeleteButton {
     _showDeleteButton = showDeleteButton;
-    _deleteButton.hidden = !showDeleteButton;
+    self.deleteButton.hidden = !showDeleteButton;
 }
 
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
@@ -263,22 +262,19 @@
                       12);
 }
 
-- (CGRect)badgeViewFrame
-{
+- (CGRect)badgeViewFrame {
     CGRect frame = self.badgeView.frame;
     frame.origin.x = CGRectGetMaxX(self.coverImage.frame) - self.badgeView.frame.size.width;
     frame.origin.y = self.coverImage.frame.origin.y;
     return frame;
 }
 
-- (CGRect)deleteButtonFrame
-{
+- (CGRect)deleteButtonFrame {
     return CGRectIntegral(CGRectMake(self.coverImage.frame.origin.x - (DELETE_BUTTON_WIDTH / 2.f),
                                      self.coverImage.frame.origin.y - (DELETE_BUTTON_WIDTH / 2.f), DELETE_BUTTON_WIDTH, DELETE_BUTTON_WIDTH)) ;
 }
 
-- (CGRect)progressViewFrame
-{
+- (CGRect)progressViewFrame {
     return CGRectIntegral( CGRectMake(self.coverImage.frame.origin.x,
                                       self.coverImage.frame.origin.y - (self.progressView.frame.size.height) +
                                       CGRectGetHeight(self.coverImage.bounds),
@@ -313,7 +309,6 @@
             [self setNeedsDisplay];
     }
 }
-
 
 - (void)documentFetcherDidUpdateNotification:(NSNotification *)notification {
     if ([notification.userInfo[self.document.productID] count] && self.document.state == PUBDocumentStateLoading) {

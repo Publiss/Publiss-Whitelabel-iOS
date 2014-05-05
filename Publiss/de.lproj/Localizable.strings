@@ -7,8 +7,8 @@
 "Read" = "Lesen";
 "Free" = "Gratis";
 "Description" = "Beschreibung";
-"Fetching..." = "Aktualisiere...";
 "Loading" = "Lädt";
+"Fetching..." = "Aktualisiere...";
 "Preview Page %d of %d" = "Vorschau Seite %d von %d";
 "Download stopped" = "Download abgebrochen";
 "Downloading..." = "Lädt...";
@@ -20,11 +20,13 @@
 "Restore Purchases" = "Einkäufe wiederherstellen";
 "About Publiss" = "Über Publiss";
 "Purchases" = "Einkäufe";
-"purchased"= "gekauft";
 "Your purchases have been restored." = "Deine Einkäufe wurden wiederhergestellt.";
 "Your purchases could not be restored. Please try again later." = "Deine Einkäufe konnten nicht wiederhergestellt werden, bitte versuche es später noch einmal.";
 "Page %tu of %tu done." = "Seite %tu von %tu geladen.";
 "Visit Publiss Website" = "Publiss Website besuchen";
-"No active internet connection." = "Keine aktive Internetverbindung.";
 "Processing Purchase..." = "Einkauf wird bearbeitet...";
+"purchased"= "gekauft";
 "PDF is being downloaded ..." = "PDF wird geladen ...";
+"No active internet connection." = "Keine aktive Internetverbindung.";
+"UPDATE" = "UPDATE";
+"Update" = "Update";

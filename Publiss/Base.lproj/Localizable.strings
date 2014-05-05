@@ -9,7 +9,6 @@
 "Description" = "Description";
 "Loading" = "Loading";
 "Fetching..." = "Fetching...";
-"Loading" = "Loading";
 "Preview Page %d of %d" = "Preview Page %d of %d";
 "Download stopped" = "Download stopped";
 "Downloading..." = "Downloading...";
@@ -26,5 +25,8 @@
 "Page %tu of %tu done." = "Page %tu of %tu done.";
 "Visit Publiss Website" = "Visit Publiss Website";
 "Processing Purchase..." = "Processing Purchase...";
-"purchased"= "purchased";
+"purchased" = "purchased";
 "PDF is being downloaded ..." = "PDF is being downloaded ...";
+"No active internet connection." = "No active internet connection.";
+"UPDATE" = "UPDATE";
+"Update" = "Update";
