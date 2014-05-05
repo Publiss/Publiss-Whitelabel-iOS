@@ -305,7 +305,9 @@
     
     if (thumbnail != nil && [cell.document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
-        [cell setBadgeViewHidden:cell.document.state == PUBDocumentStateDownloaded ? YES : NO animated:NO];
+        
+        BOOL shouldHideBadgeView = (cell.document.state == PUBDocumentStateDownloaded || cell.document.state == PUBDocumentStateUpdated);
+        [cell setBadgeViewHidden:shouldHideBadgeView animated:NO];
         [cell setNeedsLayout];
         
     } else {
@@ -331,7 +333,8 @@
                                                 strongCell.coverImage.alpha = 1.f;
                                                 strongCell.coverImage.transform = CGAffineTransformIdentity;
                                             } completion:^(BOOL finished) {
-                                                [strongCell setBadgeViewHidden:NO animated:YES];
+                                                BOOL shouldHideBadgeView = strongCell.document.state == PUBDocumentStateUpdated;
+                                                [strongCell setBadgeViewHidden:shouldHideBadgeView animated:YES];
                                             }];
                                             
                                             

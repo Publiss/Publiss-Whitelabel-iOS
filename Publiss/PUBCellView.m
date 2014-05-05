@@ -7,12 +7,14 @@
 
 #import "PUBCellView.h"
 #import "PUBBadgeView.h"
+#import "PUBUpdatedView.h"
 #import "UIColor+Design.h"
 #import <tgmath.h>
 
 @interface PUBCellView ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
 @property (nonatomic, strong) UIView *overlayView;
+
 @end
 
 @implementation PUBCellView
@@ -36,16 +38,11 @@
     deleteButtonImage = [deleteButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self.deleteButton setBackgroundImage:deleteButtonImage forState:UIControlStateNormal];
     self.deleteButton.tintColor = [UIColor colorWithRed:0.99f green:0.24f blue:0.22f alpha:1.f];
-    UIImage *downloadImage = [UIImage imageNamed:@"download"];
-    
-    downloadImage = [downloadImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    self.badgeView.icon = downloadImage;
-    self.badgeView.iconOffset = CGSizeMake(-5.0f, 5.0f);
-    self.badgeView.fillColor = [UIColor publissPrimaryColor];
     
     [self.contentView addSubview:self.coverImage];
     [self.contentView addSubview:self.badgeView];
     [self.contentView addSubview:self.deleteButton];
+    [self.contentView addSubview:self.updatedView];
     
     self.coverImage.clipsToBounds = NO;
     
@@ -60,12 +57,8 @@
     self.activityIndicator.color = UIColor.publissPrimaryColor;
     self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
-    self.activityIndicator.hidden = YES;
     
-    self.coverImage.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.coverImage.layer.shadowOffset = CGSizeMake(-.3f, 0.f);
-    self.coverImage.layer.shadowRadius = 1.f;
-    self.coverImage.layer.shadowOpacity = .2f;
+    self.activityIndicator.hidden = YES;
 }
 
 - (void)dealloc {
@@ -73,33 +66,13 @@
     [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
 }
 
-- (void)setupCellForDocument:(PUBDocument *)document {
-    self.document = document;
-    self.deleteButton.hidden = YES;
-    self.badgeView.hidden = YES;
-    
-    switch (document.state) {
-        case PUBDocumentStateOnline:
-            [self documentOnline];
-            break;
-        case PUBDocumentStateUpdated:
-            [self documentUpdated];
-            break;
-        case PUBDocumentStateDownloaded:
-            [self documentDownloaded];
-            break;
+#pragma mark - Custom Getter
 
-        case PUBDocumentStateLoading:
-            [self documentLoading];
-            break;
-        
-        case PUBDocumentPurchased:
-            [self documentPurchased];
-            break;
-            
-        default:
-            break;
+- (PUBUpdatedView *)updatedView {
+    if (!_updatedView) {
+        _updatedView = [[PUBUpdatedView alloc] initWithFrame:[self updatedViewFrame]];
     }
+    return _updatedView;
 }
 
 - (UIView *)overlayView {
@@ -112,8 +85,13 @@
 
 - (UIImageView *)coverImage {
     if (!_coverImage) {
-        self.coverImage = [[UIImageView alloc] initWithFrame:self.bounds];
+        _coverImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _coverImage.contentMode = UIViewContentModeScaleAspectFit;
+        
+        _coverImage.layer.shadowColor = [UIColor blackColor].CGColor;
+        _coverImage.layer.shadowOffset = CGSizeMake(-.3f, 0.f);
+        _coverImage.layer.shadowRadius = 1.f;
+        _coverImage.layer.shadowOpacity = .2f;
     }
     return _coverImage;
 }
@@ -128,8 +106,67 @@
 - (PUBBadgeView *)badgeView {
     if (!_badgeView) {
         self.badgeView = [[PUBBadgeView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 50.0f, 50.0f)];
+        
+        UIImage *downloadImage = [UIImage imageNamed:@"download"];
+        downloadImage = [downloadImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        self.badgeView.icon = downloadImage;
+        self.badgeView.iconOffset = CGSizeMake(-5.0f, 5.0f);
+        self.badgeView.fillColor = [UIColor publissPrimaryColor];
     }
     return _badgeView;
+}
+
+- (CGRect)updatedViewFrame {
+    return CGRectMake(self.bounds.size.width / 2 - 6,
+                      self.bounds.size.height + 6,
+                      12,
+                      12);
+}
+
+- (void)setupCellForDocument:(PUBDocument *)document {
+    self.document = document;
+    self.deleteButton.hidden = YES;
+    self.badgeView.hidden = YES;
+    self.updatedView.hidden = YES;
+    
+    switch (document.state) {
+        case PUBDocumentStateOnline:
+            [self documentOnline];
+            break;
+        case PUBDocumentStateUpdated:
+            [self documentUpdated];
+            break;
+        case PUBDocumentStateDownloaded:
+            [self documentDownloaded];
+            break;
+        case PUBDocumentStateLoading:
+            [self documentLoading];
+            break;
+        case PUBDocumentPurchased:
+            [self documentPurchased];
+            break;
+    }
+}
+
+- (void)documentOnline {
+    self.progressView.hidden = YES;
+}
+
+- (void)documentUpdated {
+    self.progressView.hidden = YES;
+    self.updatedView.hidden = NO;
+}
+
+- (void)documentDownloaded {
+    self.progressView.hidden = YES;
+}
+
+- (void)documentLoading {
+    self.progressView.hidden = NO;
+}
+
+- (void)documentPurchased {
+    self.badgeView.fillColor = [UIColor lightGrayColor];
 }
 
 #pragma mark layout UI items
@@ -180,6 +217,8 @@
     self.activityIndicator.frame = CGRectMake(self.coverImage.center.x - 5.f, self.coverImage.center.y - 5.f, 10.f, 10.f);
     
     self.coverImage.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.coverImage.bounds].CGPath;
+    
+    self.updatedView.frame = [self updatedViewFrame];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {
@@ -195,7 +234,7 @@
     [self setNeedsDisplay];
 }
 
-#pragma mark touch events
+#pragma mark - Touch Events
 
 - (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     [super   hitTest:point withEvent:event];
@@ -213,31 +252,25 @@
     return [super hitTest:point withEvent:event];
 }
 
-#pragma mark helpers
-
-- (void)documentOnline {
-    self.progressView.hidden = YES;
-}
-
-- (void)documentUpdated {
-    self.progressView.hidden = YES;
-}
-
-- (void)documentDownloaded {
-    self.progressView.hidden = YES;
-}
-
-- (void)documentLoading {
-    self.progressView.hidden = NO;
-}
-
-- (void)documentPurchased {
-    self.badgeView.fillColor = [UIColor lightGrayColor];
-}
-
 - (void)setShowDeleteButton:(BOOL)showDeleteButton {
     _showDeleteButton = showDeleteButton;
     _deleteButton.hidden = !showDeleteButton;
+}
+
+- (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
+    if (self.document.state == PUBDocumentPurchased) {
+        self.badgeView.fillColor = [UIColor lightGrayColor];
+    }
+    [self.badgeView setNeedsDisplay];
+    
+    self.badgeView.alpha = animated ? 0.f : 1.f;
+    self.badgeView.hidden = hidden;
+    if (!self.badgeView.hidden && animated) {
+        [UIView animateWithDuration:.25f animations:^{
+            self.badgeView.alpha = 1.f;
+        } completion:NULL];
+    }
+    
 }
 
 #pragma mark Notification
@@ -262,6 +295,7 @@
 
 - (void)handleProgress {
     self.badgeView.hidden = YES;
+    self.updatedView.hidden = YES;
     self.progressView.hidden = NO;
     self.progressView.progress = self.document.downloadProgress;
     if (self.document.downloadProgress >= 1.0f) {
@@ -281,30 +315,6 @@
     if (completionBLock) completionBLock();
 }
 
-- (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
-    
-    switch (self.document.state) {
-        case PUBDocumentPurchased:
-            self.badgeView.fillColor = [UIColor lightGrayColor];
-            break;
-        case PUBDocumentStateUpdated:
-            self.badgeView.fillColor = [UIColor redColor];
-            break;
-        default:
-            self.badgeView.fillColor = [UIColor publissPrimaryColor];
-            break;
-    }
-    
-    [self.badgeView setNeedsDisplay];
-    
-    self.badgeView.alpha = animated ? 0.f : 1.f;
-    self.badgeView.hidden = hidden;
-    if (!self.badgeView.hidden && animated) {
-        [UIView animateWithDuration:.25f animations:^{
-            self.badgeView.alpha = 1.f;
-        } completion:NULL];
-    }
-    
-}
+
 
 @end
