@@ -59,6 +59,10 @@
     [NSNotificationCenter.defaultCenter postNotificationName:PUBApplicationWillResignActiveNotification object:nil];
 }
 
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    [NSNotificationCenter.defaultCenter postNotificationName:PUBApplicationWillEnterForegroundNotification object:nil];
+}
+
 - (void)saveContext {
     PUBLogVerbose(@"%@: Saving context", self.class);
     NSError *error = nil;
