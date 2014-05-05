@@ -7,7 +7,6 @@
 
 #import "PUBCellView.h"
 #import "PUBBadgeView.h"
-#import "PUBUpdatedView.h"
 #import "UIColor+Design.h"
 #import <tgmath.h>
 
@@ -33,29 +32,12 @@
 }
 
 - (void)setupViews {
-    self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *deleteButtonImage = [UIImage imageNamed:@"delete"];
-    deleteButtonImage = [deleteButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    [self.deleteButton setBackgroundImage:deleteButtonImage forState:UIControlStateNormal];
-    self.deleteButton.tintColor = [UIColor colorWithRed:0.99f green:0.24f blue:0.22f alpha:1.f];
-    
     [self.contentView addSubview:self.coverImage];
     [self.contentView addSubview:self.badgeView];
     [self.contentView addSubview:self.deleteButton];
     [self.contentView addSubview:self.updatedView];
-    
-    self.coverImage.clipsToBounds = NO;
-    
-    self.progressView.tintColor = [UIColor publissPrimaryColor];
     [self.contentView addSubview:self.progressView];
     [self bringSubviewToFront:self.progressView];
-    self.coverImage.backgroundColor = UIColor.clearColor;
-    
-    // activity indicator
-    self.activityIndicator = [UIActivityIndicatorView new];
-    self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    self.activityIndicator.color = UIColor.publissPrimaryColor;
-    self.activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
     
     self.activityIndicator.hidden = YES;
@@ -68,16 +50,40 @@
 
 #pragma mark - Custom Getter
 
-- (PUBUpdatedView *)updatedView {
+- (UIActivityIndicatorView *)activityIndicator
+{
+    if (!_activityIndicator)
+    {
+        _activityIndicator = [UIActivityIndicatorView new];
+        _activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+        _activityIndicator.color = UIColor.publissPrimaryColor;
+        _activityIndicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    }
+    return _activityIndicator;
+}
+
+- (UIButton *)deleteButton
+{
+    if (!_deleteButton) {
+        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIImage *deleteButtonImage = [UIImage imageNamed:@"delete"];
+        deleteButtonImage = [deleteButtonImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [_deleteButton setBackgroundImage:deleteButtonImage forState:UIControlStateNormal];
+        _deleteButton.tintColor = [UIColor colorWithRed:0.99f green:0.24f blue:0.22f alpha:1.f];
+    }
+    return _deleteButton;
+}
+
+- (PUBUpdatedBadgeView *)updatedView {
     if (!_updatedView) {
-        _updatedView = [[PUBUpdatedView alloc] initWithFrame:[self updatedViewFrame]];
+        _updatedView = [[PUBUpdatedBadgeView alloc] initWithFrame:[self updatedViewFrame]];
     }
     return _updatedView;
 }
 
 - (UIView *)overlayView {
     if (!_overlayView) {
-        _overlayView = [[UIView alloc] initWithFrame:CGRectZero];
+        _overlayView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 50.0f, 50.0f)];
         _overlayView.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.4f];
     }
     return _overlayView;
@@ -87,6 +93,8 @@
     if (!_coverImage) {
         _coverImage = [[UIImageView alloc] initWithFrame:self.bounds];
         _coverImage.contentMode = UIViewContentModeScaleAspectFit;
+        _coverImage.backgroundColor = [UIColor clearColor];
+        _coverImage.clipsToBounds = NO;
         
         _coverImage.layer.shadowColor = [UIColor blackColor].CGColor;
         _coverImage.layer.shadowOffset = CGSizeMake(-.3f, 0.f);
@@ -98,14 +106,15 @@
 
 - (UIProgressView *)progressView {
     if (!_progressView) {
-        self.progressView = [[UIProgressView alloc] initWithFrame:CGRectZero];
+        _progressView = [[UIProgressView alloc] initWithFrame:CGRectZero];
+        _progressView.tintColor = [UIColor publissPrimaryColor];
     }
     return _progressView;
 }
 
 - (PUBBadgeView *)badgeView {
     if (!_badgeView) {
-        self.badgeView = [[PUBBadgeView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 50.0f, 50.0f)];
+        _badgeView = [[PUBBadgeView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 50.0f, 50.0f)];
         
         UIImage *downloadImage = [UIImage imageNamed:@"download"];
         downloadImage = [downloadImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
@@ -116,12 +125,42 @@
     return _badgeView;
 }
 
-- (CGRect)updatedViewFrame {
-    return CGRectMake(self.bounds.size.width / 2 - 6,
-                      self.bounds.size.height + 6,
-                      12,
-                      12);
+#pragma mark - Custom Setter
+
+- (void)setHighlighted:(BOOL)highlighted {
+    [super setHighlighted:highlighted];
+    
+    if (highlighted) {
+        [self.contentView addSubview:self.overlayView];
+        [self.contentView insertSubview:self.overlayView aboveSubview:self.coverImage];
+    } else {
+        [self.overlayView removeFromSuperview];
+    }
+    [self setNeedsDisplay];
 }
+
+- (void)setShowDeleteButton:(BOOL)showDeleteButton {
+    _showDeleteButton = showDeleteButton;
+    _deleteButton.hidden = !showDeleteButton;
+}
+
+- (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
+    if (self.document.state == PUBDocumentPurchased) {
+        self.badgeView.fillColor = [UIColor lightGrayColor];
+    }
+    [self.badgeView setNeedsDisplay];
+    
+    self.badgeView.alpha = animated ? 0.f : 1.f;
+    self.badgeView.hidden = hidden;
+    if (!self.badgeView.hidden && animated) {
+        [UIView animateWithDuration:.25f animations:^{
+            self.badgeView.alpha = 1.f;
+        } completion:NULL];
+    }
+    
+}
+
+#pragma mark - Document Setup
 
 - (void)setupCellForDocument:(PUBDocument *)document {
     self.document = document;
@@ -169,69 +208,81 @@
     self.badgeView.fillColor = [UIColor lightGrayColor];
 }
 
-#pragma mark layout UI items
+#pragma mark - Layout Views
 
 - (void)layoutSubviews {
     [super layoutSubviews];
 
     self.contentView.frame =  CGRectIntegral(CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height));
 
-    // resize the image view proportionally to fit the cover image
-    if (self.coverImage.image != nil) {
-        CGFloat width;
-        CGFloat height;
-        CGFloat ratio = self.coverImage.image.size.width / self.coverImage.image.size.height;
-        if (ratio > 1.f) {
-            width = __tg_ceil(self.bounds.size.width);
-            height = __tg_ceil(self.bounds.size.height / ratio);
-        } else {
-            width = __tg_ceil(self.bounds.size.width * ratio);
-            height = __tg_ceil(self.bounds.size.height);
-        }
-
-        self.coverImage.frame = CGRectIntegral(CGRectMake(0.0f, 0.0f, width, height));
-        self.coverImage.center =
-             CGPointMake(__tg_ceil(self.bounds.size.width / 2.0f),
-                        __tg_ceil(self.bounds.size.height - self.coverImage.frame.size.height / 2.0f - Y_OFFSET));
+    // Resize the views to fit the cover image.
+    
+    if (self.coverImage.image) {
+        self.coverImage.frame = [self coverImageFrame];
+        self.coverImage.center = [self coverImageCenter];
+        self.coverImage.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.coverImage.bounds].CGPath;
     }
     
     self.overlayView.frame = self.coverImage.frame;
-    
-    // align delete button with cover image
-    self.deleteButton.frame =
-    CGRectIntegral(CGRectMake(self.coverImage.frame.origin.x - (DELETE_BUTTON_WIDTH / 2.f),
-                              self.coverImage.frame.origin.y - (DELETE_BUTTON_WIDTH / 2.f), DELETE_BUTTON_WIDTH, DELETE_BUTTON_WIDTH)) ;
-    
-    // align download progress bar with cover image
-    self.progressView.frame = CGRectIntegral( CGRectMake(self.coverImage.frame.origin.x,
-                                                         self.coverImage.frame.origin.y - (self.progressView.frame.size.height) +
-                                                         CGRectGetHeight(self.coverImage.bounds),
-                                                         CGRectGetWidth(self.coverImage.frame), CGRectGetHeight(self.coverImage.frame)));
-    
-    // align badge view to be in top right of cover image
+    self.deleteButton.frame = [self deleteButtonFrame];
+    self.progressView.frame = [self progressViewFrame];
+    self.badgeView.frame = [self badgeViewFrame];
+    self.activityIndicator.frame = [self activityIndicatorFrame];
+    self.updatedView.frame = [self badgeViewFrame];
+}
+
+- (CGRect)coverImageFrame
+{
+    CGFloat width;
+    CGFloat height;
+    CGFloat ratio = self.coverImage.image.size.width / self.coverImage.image.size.height;
+    if (ratio > 1.f) {
+        width = __tg_ceil(self.bounds.size.width);
+        height = __tg_ceil(self.bounds.size.height / ratio);
+    } else {
+        width = __tg_ceil(self.bounds.size.width * ratio);
+        height = __tg_ceil(self.bounds.size.height);
+    }
+    return CGRectIntegral(CGRectMake(0.0f, 0.0f, width, height));
+}
+
+- (CGPoint)coverImageCenter
+{
+    return CGPointMake(__tg_ceil(self.bounds.size.width / 2.0f),
+                       __tg_ceil(self.bounds.size.height - self.coverImage.frame.size.height / 2.0f - Y_OFFSET));
+}
+
+- (CGRect)activityIndicatorFrame {
+    return CGRectMake(self.coverImage.center.x - 5.f, self.coverImage.center.y - 5.f, 10.f, 10.f);
+}
+
+- (CGRect)updatedViewFrame {
+    return CGRectMake(self.bounds.size.width / 2 - 6,
+                      self.bounds.size.height + 6,
+                      12,
+                      12);
+}
+
+- (CGRect)badgeViewFrame
+{
     CGRect frame = self.badgeView.frame;
     frame.origin.x = CGRectGetMaxX(self.coverImage.frame) - self.badgeView.frame.size.width;
     frame.origin.y = self.coverImage.frame.origin.y;
-    self.badgeView.frame = frame;
-    
-    self.activityIndicator.frame = CGRectMake(self.coverImage.center.x - 5.f, self.coverImage.center.y - 5.f, 10.f, 10.f);
-    
-    self.coverImage.layer.shadowPath = [UIBezierPath bezierPathWithRect:self.coverImage.bounds].CGPath;
-    
-    self.updatedView.frame = [self updatedViewFrame];
+    return frame;
 }
 
-- (void)setHighlighted:(BOOL)highlighted {
-    [super setHighlighted:highlighted];
+- (CGRect)deleteButtonFrame
+{
+    return CGRectIntegral(CGRectMake(self.coverImage.frame.origin.x - (DELETE_BUTTON_WIDTH / 2.f),
+                                     self.coverImage.frame.origin.y - (DELETE_BUTTON_WIDTH / 2.f), DELETE_BUTTON_WIDTH, DELETE_BUTTON_WIDTH)) ;
+}
 
-    if (highlighted) {
-        [self.contentView addSubview:self.overlayView];
-        [self.contentView insertSubview:self.overlayView aboveSubview:self.coverImage];
-    } else {
-        
-        [self.overlayView removeFromSuperview];
-    }
-    [self setNeedsDisplay];
+- (CGRect)progressViewFrame
+{
+    return CGRectIntegral( CGRectMake(self.coverImage.frame.origin.x,
+                                      self.coverImage.frame.origin.y - (self.progressView.frame.size.height) +
+                                      CGRectGetHeight(self.coverImage.bounds),
+                                      CGRectGetWidth(self.coverImage.frame), CGRectGetHeight(self.coverImage.frame)));
 }
 
 #pragma mark - Touch Events
@@ -252,28 +303,7 @@
     return [super hitTest:point withEvent:event];
 }
 
-- (void)setShowDeleteButton:(BOOL)showDeleteButton {
-    _showDeleteButton = showDeleteButton;
-    _deleteButton.hidden = !showDeleteButton;
-}
-
-- (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
-    if (self.document.state == PUBDocumentPurchased) {
-        self.badgeView.fillColor = [UIColor lightGrayColor];
-    }
-    [self.badgeView setNeedsDisplay];
-    
-    self.badgeView.alpha = animated ? 0.f : 1.f;
-    self.badgeView.hidden = hidden;
-    if (!self.badgeView.hidden && animated) {
-        [UIView animateWithDuration:.25f animations:^{
-            self.badgeView.alpha = 1.f;
-        } completion:NULL];
-    }
-    
-}
-
-#pragma mark Notification
+#pragma mark - Download Progress Notifications
 
 - (void)documentPurchasedNotification:(NSNotification *)notification {
     if (notification.userInfo[@"purchased_document"]) {
@@ -314,7 +344,5 @@
     }
     if (completionBLock) completionBLock();
 }
-
-
 
 @end

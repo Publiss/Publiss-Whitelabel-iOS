@@ -313,6 +313,7 @@
     } else {
         [cell.activityIndicator startAnimating];
         cell.coverImage.hidden = YES;
+        cell.updatedView.hidden = YES;
         NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
         __weak PUBCellView *weakCell = cell;
@@ -323,6 +324,7 @@
                                             strongCell.coverImage.image = image;
                                             strongCell.coverImage.alpha = 0.f;
                                             strongCell.coverImage.hidden = NO;
+                                            strongCell.updatedView.hidden = YES;
                                             [strongCell setBadgeViewHidden:YES animated:NO];
                                             [strongCell.activityIndicator stopAnimating];
                                             [strongCell setNeedsLayout];
@@ -334,6 +336,7 @@
                                                 strongCell.coverImage.transform = CGAffineTransformIdentity;
                                             } completion:^(BOOL finished) {
                                                 BOOL shouldHideBadgeView = strongCell.document.state == PUBDocumentStateUpdated;
+                                                strongCell.updatedView.hidden = !shouldHideBadgeView;
                                                 [strongCell setBadgeViewHidden:shouldHideBadgeView animated:YES];
                                             }];
                                             

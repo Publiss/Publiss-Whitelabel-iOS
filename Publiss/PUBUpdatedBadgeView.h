@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PUBUpdatedView : UIView
+@interface PUBUpdatedBadgeView : UIView
 
 @end

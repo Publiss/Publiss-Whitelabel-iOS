@@ -7,8 +7,9 @@
 
 #import "PUBDocument+Helper.h"
 #import "PUBCoverImageCell.h"
+#import "PUBUpdatedBadgeView.h"
 
-@class PUBDocument, PUBBadgeView, PUBUpdatedView;
+@class PUBDocument, PUBBadgeView;
 
 @interface PUBCellView : UICollectionViewCell <PUBCoverImageCell>
 @property (strong, nonatomic) UIImageView *coverImage;
@@ -17,7 +18,7 @@
 @property (strong, nonatomic) UIButton *deleteButton;
 @property (strong, nonatomic) UIProgressView *progressView;
 @property (strong, nonatomic) PUBBadgeView *badgeView;
-@property (nonatomic, strong) PUBUpdatedView *updatedView;
+@property (nonatomic, strong) PUBUpdatedBadgeView *updatedView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
 
 - (void)setupCellForDocument:(PUBDocument *)document;

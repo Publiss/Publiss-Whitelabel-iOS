@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		37ADD262191764D500C2232A /* PUBUpdatedView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ADD261191764D500C2232A /* PUBUpdatedView.m */; };
+		37ADD262191764D500C2232A /* PUBUpdatedBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ADD261191764D500C2232A /* PUBUpdatedBadgeView.m */; };
 		5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */; };
 		5B59C3C61861FA4600191B45 /* PUBCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C51861FA4600191B45 /* PUBCenteredScrollView.m */; };
 		783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783E316B18BE68FB004A49EA /* PUBProgressView.m */; };
@@ -103,8 +103,8 @@
 
 /* Begin PBXFileReference section */
 		1A1C88605D6E40A7B3C6BBC4 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
-		37ADD260191764D500C2232A /* PUBUpdatedView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBUpdatedView.h; sourceTree = "<group>"; };
-		37ADD261191764D500C2232A /* PUBUpdatedView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBUpdatedView.m; sourceTree = "<group>"; };
+		37ADD260191764D500C2232A /* PUBUpdatedBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBUpdatedBadgeView.h; sourceTree = "<group>"; };
+		37ADD261191764D500C2232A /* PUBUpdatedBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBUpdatedBadgeView.m; sourceTree = "<group>"; };
 		5B59C3C11861FA1400191B45 /* PUBContentInsetCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBContentInsetCenteredScrollView.h; sourceTree = "<group>"; };
 		5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBContentInsetCenteredScrollView.m; sourceTree = "<group>"; };
 		5B59C3C41861FA4600191B45 /* PUBCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBCenteredScrollView.h; sourceTree = "<group>"; };
@@ -417,8 +417,8 @@
 				5BB63A6818632C7100C9EE10 /* PUBCoverImageCell.h */,
 				D4ED392C188018E60047EB77 /* PUBBadgeView.h */,
 				D4ED392D188018E60047EB77 /* PUBBadgeView.m */,
-				37ADD260191764D500C2232A /* PUBUpdatedView.h */,
-				37ADD261191764D500C2232A /* PUBUpdatedView.m */,
+				37ADD260191764D500C2232A /* PUBUpdatedBadgeView.h */,
+				37ADD261191764D500C2232A /* PUBUpdatedBadgeView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -803,7 +803,7 @@
 				EF7E8D9318BF33F8002FF8CC /* IAPManager.m in Sources */,
 				5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */,
 				8103B5671846ACC200E8E77E /* PUBPreviewCell.m in Sources */,
-				37ADD262191764D500C2232A /* PUBUpdatedView.m in Sources */,
+				37ADD262191764D500C2232A /* PUBUpdatedBadgeView.m in Sources */,
 				EF123A0918A3B4CD001A43D4 /* PUBStatisticsManager.m in Sources */,
 				783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */,
 				8110783D1811493000281106 /* PUBLinkAnnotationView.m in Sources */,
