@@ -51,9 +51,11 @@
     return PDFDocument;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - Public
+
 + (void)restoreLocalAnnotations:(PUBPDFDocument *)pdfDocument {
-    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *annotationSavePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"publiss/annotations_%@",  pdfDocument.productID]];
+    NSString *annotationSavePath = [self.class annotationBackupPathForPDFDocument:pdfDocument];
     if ([[NSFileManager defaultManager] fileExistsAtPath:annotationSavePath]) {
         NSError *copyError = nil;
         if (![[NSFileManager defaultManager] copyItemAtPath:annotationSavePath toPath:pdfDocument.dataDirectory error:&copyError]) {
@@ -63,16 +65,17 @@
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - Public
-
 + (void)saveLocalAnnotations:(PUBPDFDocument *)pdfDocument {
-    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
-    NSString *annotationSavePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"publiss/annotations_%@",  pdfDocument.productID]];
+    NSString *annotationSavePath = [self.class annotationBackupPathForPDFDocument:pdfDocument];
     NSError *copyError = nil;
     if (![[NSFileManager defaultManager] copyItemAtPath:pdfDocument.dataDirectory toPath:annotationSavePath error:&copyError]) {
         PUBLogError(@"Error copying files: %@", [copyError localizedDescription]);
     }
+}
+
++ (NSString *)annotationBackupPathForPDFDocument:(PUBPDFDocument *)pdfDocument {
+    NSString *documentsPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
+    return [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"publiss/annotations_%@",  pdfDocument.productID]];
 }
 
 - (PUBDocument *)pubDocument {

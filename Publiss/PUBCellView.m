@@ -230,8 +230,7 @@
     self.updatedView.frame = [self badgeViewFrame];
 }
 
-- (CGRect)coverImageFrame
-{
+- (CGRect)coverImageFrame {
     CGFloat width;
     CGFloat height;
     CGFloat ratio = self.coverImage.image.size.width / self.coverImage.image.size.height;
@@ -245,8 +244,7 @@
     return CGRectIntegral(CGRectMake(0.0f, 0.0f, width, height));
 }
 
-- (CGPoint)coverImageCenter
-{
+- (CGPoint)coverImageCenter {
     return CGPointMake(__tg_ceil(self.bounds.size.width / 2.0f),
                        __tg_ceil(self.bounds.size.height - self.coverImage.frame.size.height / 2.0f - Y_OFFSET));
 }
