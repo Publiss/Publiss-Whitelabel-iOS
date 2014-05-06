@@ -761,8 +761,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         if (document) {
             document.state = PUBDocumentPurchased;
             [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
-            NSString *purchased = PUBLocalize(@"purchased");
-            [JDStatusBarNotification showWithStatus:[NSString stringWithFormat:@"%@ %@.", document.title, purchased] styleName:PurchasedMenuStyle];
         }
     }
 }

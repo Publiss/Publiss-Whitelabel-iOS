@@ -126,7 +126,7 @@
                                                                                                       [downloadButton setupDownloadButtonWithPUBDocument:self.document];
                                                                                                       if (!self.presentedViewController.isBeingPresented) {
                                                                                                           [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentPurchaseFinishedNotification object:nil userInfo:@{@"productID": self.document.productID}];
-                                                                                                          [self dismissViewControllerAnimated:YES completion:NULL];
+                                                                                                          [self openPDFWithWithDocument:self.document];
                                                                                                       }
                                                                                                   }
                                                                                               }
