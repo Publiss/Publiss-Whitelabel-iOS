@@ -22,7 +22,6 @@
 #import "IAPController.h"
 #import "PUBHTTPRequestManager.h"
 #import <REMenu/REMenu.h>
-#import "Lockbox.h"
 #import "JDStatusBarNotification.h"
 #import "UIImage+Tinting.h"
 #import "PSPDFWebViewController.h"
@@ -512,15 +511,12 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                                                      NSDictionary *jsonData = (NSDictionary *)responseObject;
                                                                      NSArray *productIDs = jsonData.allKeys;
                                                                      
-                                                                     NSMutableDictionary *secrets = [NSMutableDictionary dictionary];
                                                                      for (NSString *productID in productIDs) {
                                                                          NSString *secret = PUBSafeCast(jsonData[productID], NSString.class);
                                                                          if (secret.length > 0) {
-                                                                             [secrets setObject:secret forKey:productID];
+                                                                             [IAPController.sharedInstance setIAPSecret:secret productID:productID];
                                                                          }
                                                                      }
-                                                                     
-                                                                     [Lockbox setDictionary:secrets forKey:PUBiAPSecrets];
                                                                      
                                                                      // update state of documents
                                                                      for (PUBDocument *document in [PUBDocument findAll]) {

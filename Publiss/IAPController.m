@@ -9,6 +9,12 @@
 #import "PUBDocument+Helper.h"
 #import "Lockbox.h"
 
+@interface IAPController()
+
+@property (nonatomic, strong) NSDictionary *iAPSecrets;
+
+@end
+
 @implementation IAPController
 
 + (IAPController *)sharedInstance {
@@ -99,6 +105,25 @@
     NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receipt = [NSData dataWithContentsOfURL:receiptURL options:0 error:error];
     return receipt;
+}
+
+
+- (NSDictionary *)iAPSecrets {
+    if (!_iAPSecrets) {
+        _iAPSecrets = [Lockbox dictionaryForKey:PUBiAPSecrets];
+    }
+    return _iAPSecrets;
+}
+
+- (NSString *)iAPSecretForProductID:(NSString *)productID {
+    return [self.iAPSecrets objectForKey:productID];
+}
+
+- (void)setIAPSecret:(NSString *)secret productID:(NSString *)productID {
+    NSMutableDictionary *secretsDict = self.iAPSecrets.mutableCopy;
+    [secretsDict setObject:secret forKey:productID];
+    [Lockbox setDictionary:secretsDict forKey:PUBiAPSecrets];
+    self.iAPSecrets = secretsDict;
 }
 
 @end

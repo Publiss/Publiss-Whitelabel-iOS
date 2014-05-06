@@ -8,7 +8,6 @@
 #import "PUBDocument+Helper.h"
 #import "PUBAppDelegate.h"
 #import "PUBPDFDocument.h"
-#import <Lockbox/Lockbox.h>
 #import "PUBThumbnailImageCache.h"
 
 @implementation PUBDocument (Helper)
@@ -209,16 +208,6 @@
     }
 }
 
-- (void)clearChache:(void (^)())completionBlock {
-    PUBDocument *document = self;
-    
-    if (document && document.state == PUBDocumentStateUpdated) {
-        
-        
-        
-    }
-}
-
 + (void)deleteAll {
     for (PUBDocument *document in [PUBDocument findAll]) {
         [document deleteDocument:NULL];
@@ -233,10 +222,6 @@
     NSString *path = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.xfdf", self.productID]];
     NSURL *fileXML = [NSURL fileURLWithPath:path];
     return fileXML;
-}
-
-- (NSString *)iapSecret {
-    return [[Lockbox dictionaryForKey:PUBiAPSecrets] objectForKey:self.productID];
 }
 
 #pragma mark - PSPDFKit Viewstate

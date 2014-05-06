@@ -38,8 +38,6 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 - (NSURL *)localXFDFURL;
 - (BOOL)removedLastViewState;
 
-- (NSString *)iapSecret;
-
 @property (copy, nonatomic) NSArray *sizes;      // wrapped integers
 @property (copy, nonatomic) NSArray *dimensions; // wrapped CGSizes.
 

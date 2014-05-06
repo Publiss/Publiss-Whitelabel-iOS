@@ -15,7 +15,6 @@
 #import "PUBThumbnailImageCache.h"
 #import "IAPController.h"
 #import "PUBCommunication.h"
-#import "Lockbox.h"
 #import "JDStatusBarNotification.h"
 #import "PUBURLFactory.h"
 
@@ -122,7 +121,7 @@
                                                                                                   NSString *secret = PUBSafeCast(jsonData[PUBJSONSecret], NSString.class);
                                                                                                   
                                                                                                   if (secret.length > 0) {
-                                                                                                      [self storeIAPSecret:secret forDocument:self.document];
+                                                                                                      [IAPController.sharedInstance setIAPSecret:secret productID:self.document.productID];
                                                                                                       [downloadButton setupDownloadButtonWithPUBDocument:self.document];
                                                                                                       if (!self.presentedViewController.isBeingPresented) {
                                                                                                           [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentPurchaseFinishedNotification object:nil userInfo:@{@"productID": self.document.productID}];
@@ -159,13 +158,6 @@
         }
     }
 }
-
-- (void)storeIAPSecret:(NSString *)secret forDocument:(PUBDocument *)document {
-    NSMutableDictionary *secretsDict = [NSMutableDictionary dictionaryWithDictionary:[Lockbox dictionaryForKey:PUBiAPSecrets]];
-    [secretsDict setObject:secret forKey:document.productID];
-    [Lockbox setDictionary:secretsDict forKey:PUBiAPSecrets];
-}
-
 
 - (void)openPDFWithWithDocument:(PUBDocument *)document {
     [self dismissViewControllerAnimated:YES completion:^{
