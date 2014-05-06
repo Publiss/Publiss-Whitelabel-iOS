@@ -97,56 +97,52 @@
 
 - (void)downloadButtonTouchUpInside:(id)sender {
     if ([sender isKindOfClass:PUBDownloadButton.class]) {
-        __block PUBDownloadButton *downloadButton = self.downloadButton;
         if (!self.document.paid || [IAPController.sharedInstance hasPurchased:self.document.productID]) {
             [self openPDFWithWithDocument:self.document];
         }
         else {
             if (self.product != nil) {
-                [JDStatusBarNotification showWithStatus:PUBLocalize(@"Processing Purchase...") styleName:PurchasingMenuStyle];
-                [JDStatusBarNotification showActivityIndicator:YES indicatorStyle:UIActivityIndicatorViewStyleWhite];
-                [downloadButton showActivityIndicator];
+                [self startPaymentProcess];
+                
                 [IAPController.sharedInstance purchase:self.document
                                             completion:^(SKPaymentTransaction *transaction) {
-                                                // send receipt data to server
+                                                
                                                 [IAPController.sharedInstance readReceiptDataWithCompletion:^(NSData *receipt) {
                                                     [PUBCommunication.sharedInstance sendReceiptData:receipt
                                                                                        withProductID:self.document.productID
                                                                                          publishedID:@(self.document.publishedID)
                                                                                           completion:^(id responseObject) {
-                                                                                              [downloadButton hideActivityIndicator];
                                                                                               
-                                                                                              // save secret in keychain
+                                                                                              BOOL shouldOpenDocument = NO;
                                                                                               if ([NSJSONSerialization isValidJSONObject:responseObject]) {
                                                                                                   NSDictionary *jsonData = (NSDictionary *)responseObject;
                                                                                                   NSString *secret = PUBSafeCast(jsonData[PUBJSONSecret], NSString.class);
                                                                                                   
                                                                                                   if (secret.length > 0) {
+                                                                                                      shouldOpenDocument = YES;
                                                                                                       [self storeIAPSecret:secret forDocument:self.document];
-                                                                                                      [downloadButton setupDownloadButtonWithPUBDocument:self.document];
-                                                                                                      if (!self.presentedViewController.isBeingPresented) {
-                                                                                                          [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentPurchaseFinishedNotification object:nil userInfo:@{@"productID": self.document.productID}];
-                                                                                                          [self openPDFWithWithDocument:self.document];
-                                                                                                      }
+                                                                                                      [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentPurchaseFinishedNotification
+                                                                                                                                                        object:nil
+                                                                                                                                                      userInfo:@{@"productID": self.document.productID}];
                                                                                                   }
                                                                                               }
+                                                                                              
+                                                                                              [self finishPaymentProcess];
+                                                                                              if (shouldOpenDocument) {
+                                                                                                  [self openPDFWithWithDocument:self.document];
+                                                                                              }
                                                                                           } error:^(NSError *error) {
-                                                                                              [downloadButton setupDownloadButtonWithPUBDocument:self.document];
-                                                                                              [downloadButton hideActivityIndicator];
-                                                                                              [JDStatusBarNotification dismiss];
+                                                                                              [self finishPaymentProcess];
                                                                                           }];
                                                 } error:^(NSError *error) {
                                                     PUBLogError(@"%@: Error reading receipt: %@", self.class, error.localizedDescription);
-                                                    [downloadButton setupDownloadButtonWithPUBDocument:self.document];
-                                                    [downloadButton hideActivityIndicator];
-                                                    [JDStatusBarNotification dismiss];
+                                                    [self finishPaymentProcess];
                                                 }];
                                             }
                                                  error:^(NSError *error) {
-                                                     [downloadButton setupDownloadButtonWithPUBDocument:self.document];
-                                                     [downloadButton hideActivityIndicator];
-                                                     [JDStatusBarNotification dismiss];
                                                      PUBLogError(@"Error purchasing document: %@", error);
+                                                     [self finishPaymentProcess];
+                                                     
                                                      if (error.code != SKErrorPaymentCancelled) {
                                                          [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Error")
                                                                                      message:PUBLocalize(@"The document could not be purchased. Please try again later.")
@@ -158,6 +154,27 @@
             }
         }
     }
+}
+
+- (void)startPaymentProcess {
+    __block PUBDownloadButton *downloadButton = self.downloadButton;
+    [JDStatusBarNotification showWithStatus:PUBLocalize(@"Processing Purchase...") styleName:PurchasingMenuStyle];
+    [JDStatusBarNotification showActivityIndicator:YES indicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [downloadButton showActivityIndicator];
+    
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+}
+
+- (void)finishPaymentProcess {
+    __block PUBDownloadButton *downloadButton = self.downloadButton;
+    
+    if ([[UIApplication sharedApplication] isIgnoringInteractionEvents]) {
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+    }
+    
+    [downloadButton setupDownloadButtonWithPUBDocument:self.document];
+    [downloadButton hideActivityIndicator];
+    [JDStatusBarNotification dismiss];
 }
 
 - (void)storeIAPSecret:(NSString *)secret forDocument:(PUBDocument *)document {
