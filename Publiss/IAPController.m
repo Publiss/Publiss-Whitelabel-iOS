@@ -76,7 +76,7 @@
 }
 
 - (void)clearPurchases {
-    [Lockbox setDictionary:nil forKey:PUBiAPSecrets];
+    [Lockbox setDictionary:[NSDictionary dictionary] forKey:PUBiAPSecrets];
     [IAPManager.sharedIAPManager clearPurchases];
 }
 
@@ -107,10 +107,12 @@
     return receipt;
 }
 
-
 - (NSDictionary *)iAPSecrets {
     if (!_iAPSecrets) {
         _iAPSecrets = [Lockbox dictionaryForKey:PUBiAPSecrets];
+    }
+    if (nil == _iAPSecrets) {
+        _iAPSecrets = [NSDictionary dictionary];
     }
     return _iAPSecrets;
 }
