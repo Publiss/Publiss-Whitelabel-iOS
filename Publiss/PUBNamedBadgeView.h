@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PUBUpdatedBadgeView : UIView
+@interface PUBNamedBadgeView : UIView
+
+- (void)setBadgeText:(NSString *)badgeText;
 
 @end

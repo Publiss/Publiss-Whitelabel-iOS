@@ -20,6 +20,7 @@
 "Restore Purchases" = "Einkäufe wiederherstellen";
 "About Publiss" = "Über Publiss";
 "Purchases" = "Einkäufe";
+"PURCHASED" = "GEKAUFT";
 "Your purchases have been restored." = "Deine Einkäufe wurden wiederhergestellt.";
 "Your purchases could not be restored. Please try again later." = "Deine Einkäufe konnten nicht wiederhergestellt werden, bitte versuche es später noch einmal.";
 "Page %tu of %tu done." = "Seite %tu von %tu geladen.";

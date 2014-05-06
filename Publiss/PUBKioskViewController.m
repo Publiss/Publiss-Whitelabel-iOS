@@ -305,14 +305,14 @@
     if (thumbnail != nil && [cell.document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
         
-        BOOL shouldHideBadgeView = (cell.document.state == PUBDocumentStateDownloaded || cell.document.state == PUBDocumentStateUpdated);
+        BOOL shouldHideBadgeView = (cell.document.state == PUBDocumentStateDownloaded || cell.document.state == PUBDocumentStateUpdated || cell.document.state == PUBDocumentPurchased);
         [cell setBadgeViewHidden:shouldHideBadgeView animated:NO];
         [cell setNeedsLayout];
         
     } else {
         [cell.activityIndicator startAnimating];
         cell.coverImage.hidden = YES;
-        cell.updatedView.hidden = YES;
+        cell.namedBadgeView.hidden = YES;
         NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
         __weak PUBCellView *weakCell = cell;
@@ -323,7 +323,7 @@
                                             strongCell.coverImage.image = image;
                                             strongCell.coverImage.alpha = 0.f;
                                             strongCell.coverImage.hidden = NO;
-                                            strongCell.updatedView.hidden = YES;
+                                            strongCell.namedBadgeView.hidden = YES;
                                             [strongCell setBadgeViewHidden:YES animated:NO];
                                             [strongCell.activityIndicator stopAnimating];
                                             [strongCell setNeedsLayout];
@@ -334,8 +334,8 @@
                                                 strongCell.coverImage.alpha = 1.f;
                                                 strongCell.coverImage.transform = CGAffineTransformIdentity;
                                             } completion:^(BOOL finished) {
-                                                BOOL shouldHideBadgeView = strongCell.document.state == PUBDocumentStateUpdated;
-                                                strongCell.updatedView.hidden = !shouldHideBadgeView;
+                                                BOOL shouldHideBadgeView = (strongCell.document.state == PUBDocumentStateUpdated || strongCell.document.state == PUBDocumentPurchased);
+                                                strongCell.namedBadgeView.hidden = !shouldHideBadgeView;
                                                 [strongCell setBadgeViewHidden:shouldHideBadgeView animated:YES];
                                             }];
                                             
@@ -548,6 +548,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                delegate:nil
                       cancelButtonTitle:PUBLocalize(@"OK")
                       otherButtonTitles:nil] show];
+    [self.collectionView reloadData];
 }
 
 - (void)displayRestoreFailedMessage {

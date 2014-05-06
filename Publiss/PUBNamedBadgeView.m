@@ -6,19 +6,18 @@
 //  Copyright (c) 2014 Publiss GmbH. All rights reserved.
 //
 
-#import "PUBUpdatedBadgeView.h"
+#import "PUBNamedBadgeView.h"
 #import "UIColor+Design.h"
 
-@interface PUBUpdatedBadgeView()
+@interface PUBNamedBadgeView()
 
 @property (nonatomic, strong) UILabel *updatedLabel;
 
 @end
 
-@implementation PUBUpdatedBadgeView
+@implementation PUBNamedBadgeView
 
-- (id)initWithFrame:(CGRect)frame
-{
+- (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
@@ -26,19 +25,15 @@
     return self;
 }
 
-- (void)layoutSubviews
-{
+- (void)layoutSubviews {
     [super layoutSubviews];
     self.updatedLabel.frame = CGRectMake(0, 0, 44, 12);
     self.updatedLabel.center = CGPointMake(self.bounds.size.width / 2 + 6,
                                            self.bounds.size.height / 2 - 6);
 }
 
-- (void)drawRect:(CGRect)rect
-{
+- (void)drawRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
-    // Banner
     
     UIBezierPath *path = [UIBezierPath bezierPath];
     CGContextSetFillColor(ctx, CGColorGetComponents([[UIColor publissPrimaryColor] CGColor]));
@@ -52,18 +47,21 @@
     [path fill];
 }
 
-- (UILabel *)updatedLabel
-{
+- (UILabel *)updatedLabel {
     if (!_updatedLabel) {
         _updatedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 44, 12)];
-        _updatedLabel.text = PUBLocalize(@"UPDATE");
         _updatedLabel.textAlignment = NSTextAlignmentCenter;
         _updatedLabel.font = [UIFont systemFontOfSize:10];
+        _updatedLabel.adjustsFontSizeToFitWidth = YES;
         _updatedLabel.textColor = [UIColor whiteColor];
         _updatedLabel.transform = CGAffineTransformMakeRotation((45 * M_PI) / 180.0);
         [self addSubview:_updatedLabel];
     }
     return _updatedLabel;
+}
+
+- (void)setBadgeText:(NSString *)badgeText {
+    self.updatedLabel.text = badgeText;
 }
 
 @end

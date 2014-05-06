@@ -35,7 +35,7 @@
     [self.contentView addSubview:self.coverImage];
     [self.contentView addSubview:self.badgeView];
     [self.contentView addSubview:self.deleteButton];
-    [self.contentView addSubview:self.updatedView];
+    [self.contentView addSubview:self.namedBadgeView];
     [self.contentView addSubview:self.progressView];
     [self bringSubviewToFront:self.progressView];
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
@@ -73,11 +73,11 @@
     return _deleteButton;
 }
 
-- (PUBUpdatedBadgeView *)updatedView {
-    if (!_updatedView) {
-        _updatedView = [[PUBUpdatedBadgeView alloc] initWithFrame:[self updatedViewFrame]];
+- (PUBNamedBadgeView *)namedBadgeView {
+    if (!_namedBadgeView) {
+        _namedBadgeView = [[PUBNamedBadgeView alloc] initWithFrame:[self updatedViewFrame]];
     }
-    return _updatedView;
+    return _namedBadgeView;
 }
 
 - (UIView *)overlayView {
@@ -144,9 +144,7 @@
 }
 
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
-    if (self.document.state == PUBDocumentPurchased) {
-        self.badgeView.fillColor = [UIColor lightGrayColor];
-    }
+
     [self.badgeView setNeedsDisplay];
     
     self.badgeView.alpha = animated ? 0.f : 1.f;
@@ -165,7 +163,7 @@
     self.document = document;
     self.deleteButton.hidden = YES;
     self.badgeView.hidden = YES;
-    self.updatedView.hidden = YES;
+    self.namedBadgeView.hidden = YES;
     
     switch (document.state) {
         case PUBDocumentStateOnline:
@@ -192,7 +190,8 @@
 
 - (void)documentUpdated {
     self.progressView.hidden = YES;
-    self.updatedView.hidden = NO;
+    self.namedBadgeView.hidden = NO;
+    [self.namedBadgeView setBadgeText:PUBLocalize(@"UPDATE")];
 }
 
 - (void)documentDownloaded {
@@ -204,7 +203,9 @@
 }
 
 - (void)documentPurchased {
-    self.badgeView.fillColor = [UIColor lightGrayColor];
+    self.progressView.hidden = YES;
+    self.namedBadgeView.hidden = NO;
+    [self.namedBadgeView setBadgeText:PUBLocalize(@"PURCHASED")];
 }
 
 #pragma mark - Layout Views
@@ -227,7 +228,7 @@
     self.progressView.frame = [self progressViewFrame];
     self.badgeView.frame = [self badgeViewFrame];
     self.activityIndicator.frame = [self activityIndicatorFrame];
-    self.updatedView.frame = [self badgeViewFrame];
+    self.namedBadgeView.frame = [self badgeViewFrame];
 }
 
 - (CGRect)coverImageFrame {
@@ -269,7 +270,9 @@
 
 - (CGRect)deleteButtonFrame {
     return CGRectIntegral(CGRectMake(self.coverImage.frame.origin.x - (DELETE_BUTTON_WIDTH / 2.f),
-                                     self.coverImage.frame.origin.y - (DELETE_BUTTON_WIDTH / 2.f), DELETE_BUTTON_WIDTH, DELETE_BUTTON_WIDTH)) ;
+                                     self.coverImage.frame.origin.y - (DELETE_BUTTON_WIDTH / 2.f),
+                                     DELETE_BUTTON_WIDTH,
+                                     DELETE_BUTTON_WIDTH)) ;
 }
 
 - (CGRect)progressViewFrame {
@@ -318,7 +321,7 @@
 
 - (void)handleProgress {
     self.badgeView.hidden = YES;
-    self.updatedView.hidden = YES;
+    self.namedBadgeView.hidden = YES;
     self.progressView.hidden = NO;
     self.progressView.progress = self.document.downloadProgress;
     if (self.document.downloadProgress >= 1.0f) {
