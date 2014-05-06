@@ -58,6 +58,7 @@
     self.statusBarStyle = UIStatusBarStyleLightContent;
     self.backgroundColor = UIColor.clearColor;
 
+    self.allowBackgroundSaving = YES;
     self.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
     self.pageTransition = PSPDFPageTransitionCurl;
     //self.pageTransition = PSPDFPageTransitionScrollPerPage;
