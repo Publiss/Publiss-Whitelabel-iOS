@@ -51,7 +51,7 @@
     } else {
         //check if exsisting document should be updated
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
-        if (shouldUpdateValues) {
+        if (shouldUpdateValues && document.state == PUBDocumentStateDownloaded) {
             PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
             [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
             [document deleteDocument:^{
