@@ -7,8 +7,8 @@
 
 #import "PUBKioskViewController.h"
 #import "PUBPreviewViewController.h"
-#import "PUBDocument.h"
-#import "PUBCellView.h"
+#import "PUBDocument+Helper.h"
+#import "PUBCellView+Document.h"
 #import "PUBCommunication.h"
 #import "PUBDocumentFetcher.h"
 #import "UIColor+Design.h"
@@ -43,6 +43,8 @@
 @property (nonatomic, strong) REMenu *menu;
 @property (nonatomic, strong) UIImageView *documentView;
 @property (nonatomic, strong) PUBDocument *lastOpenedDocument;
+
+@property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
 
 @end
 
@@ -186,7 +188,6 @@
     self.menu.textOffset = CGSizeMake(66.f, 0.f);
     self.menu.imageOffset = CGSizeMake(18.f, 0.f);
     self.menu.backgroundColor = UIColor.clearColor;
-    // publiss primary "blue" color
     self.menu.liveBlurTintColor = [UIColor  publissPrimaryColor];
 }
 
@@ -196,9 +197,11 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(enableUIInteraction:) name:PUBEnableUIInteractionNotification object:nil];
     [dnc addObserver:self selector:@selector(trackPage) name:PUBApplicationWillResignActiveNotification object:nil];
-    [dnc addObserver:self selector:@selector(documentFetched:) name:PUBDocumentDownloadFinished object:nil];
+    [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
+    [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
     [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:PUBApplicationWillEnterForegroundNotification object:nil];
+    
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIView animateWithDuration:0.25f animations:^{
         self.navigationController.navigationBar.alpha = 1.f;
@@ -209,6 +212,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
     // Animate back to grid cell?
     if (self.documentView) {
         [self.collectionView layoutSubviews]; // ensure cells are laid out
@@ -216,6 +220,7 @@
         // Convert the coordinates into view coordinate system.
         // We can't remember those, because the device might has been rotated.
         PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:_animationCellIndex inSection:0]];
+        [cell setupForDocument:self.lastOpenedDocument];
         CGRect relativeCellRect = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
         
         self.documentView.frame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
@@ -248,7 +253,8 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc removeObserver:self name:PUBEnableUIInteractionNotification object:nil];
     [dnc removeObserver:self name:PUBApplicationWillResignActiveNotification object:nil];
-    [dnc removeObserver:self name:PUBDocumentDownloadFinished object:nil];
+    [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
+    [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
 
     if (self.pageTracker.isValid) {
@@ -292,20 +298,24 @@
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
     PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    [self configureCell:cell atIndexPath:indexPath];
+    PUBDocument *document = (self.documentArray)[indexPath.item];
+    [cell setupForDocument:(PUBDocument *)document];
+    [cell.deleteButton addTarget:self
+                          action:@selector(deleteButtonClicked:)
+                forControlEvents:UIControlEventTouchUpInside];
     
     
     // first look in cover image cache if there is already a preprocessed cover image
-    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher imageForDocument:cell.document page:0 size:cell.bounds.size];
+    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher imageForDocument:document page:0 size:cell.bounds.size];
     UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
     NSString *cachedImageURL = [PUBThumbnailImageCache.sharedInstance cacheFilePathForURLString:thumbnailURL.absoluteString];
     
-    (self.coverImageDictionary)[cachedImageURL] = cell.document.title;
+    (self.coverImageDictionary)[cachedImageURL] = document.title;
     
-    if (thumbnail != nil && [cell.document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
+    if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
         
-        BOOL shouldHideBadgeView = (cell.document.state == PUBDocumentStateDownloaded || cell.document.state == PUBDocumentStateUpdated || cell.document.state == PUBDocumentPurchased);
+        BOOL shouldHideBadgeView = (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStateUpdated || document.state == PUBDocumentPurchased);
         [cell setBadgeViewHidden:shouldHideBadgeView animated:NO];
         [cell setNeedsLayout];
         
@@ -316,10 +326,12 @@
         NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
         __weak PUBCellView *weakCell = cell;
+        __weak PUBDocument *weakDocument = document;
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                             PUBCellView *strongCell = weakCell;
+                                            PUBDocument *strongDocument = weakDocument;
                                             strongCell.coverImage.image = image;
                                             strongCell.coverImage.alpha = 0.f;
                                             strongCell.coverImage.hidden = NO;
@@ -334,7 +346,7 @@
                                                 strongCell.coverImage.alpha = 1.f;
                                                 strongCell.coverImage.transform = CGAffineTransformIdentity;
                                             } completion:^(BOOL finished) {
-                                                BOOL shouldHideBadgeView = (strongCell.document.state == PUBDocumentStateUpdated || strongCell.document.state == PUBDocumentPurchased);
+                                                BOOL shouldHideBadgeView = (strongDocument.state == PUBDocumentStateUpdated || strongDocument.state == PUBDocumentPurchased);
                                                 strongCell.namedBadgeView.hidden = !shouldHideBadgeView;
                                                 [strongCell setBadgeViewHidden:shouldHideBadgeView animated:YES];
                                             }];
@@ -401,18 +413,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         space = 51.f;
     }
     return space;
-}
-
-
-
-#pragma mark cv cell layout
-
-- (void)configureCell:(PUBCellView *)cell atIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = (self.documentArray)[indexPath.item];
-    [cell setupCellForDocument:(PUBDocument *)document];
-    [cell.deleteButton addTarget:self
-                          action:@selector(deleteButtonClicked:)
-                forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -499,7 +499,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     }
 }
 
-
 - (void)restorePurchases {
     [IAPController.sharedInstance restorePurchasesWithCompletion:^(NSError *error) {
         if (error == nil) {
@@ -563,7 +562,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     [IAPController.sharedInstance clearPurchases];
 }
 
-
 - (void)handleLongPressgesture:(UILongPressGestureRecognizer *)gesture {
     if (gesture.state == UIGestureRecognizerStateBegan) {
         CGPoint point = [gesture locationInView:self.collectionView];
@@ -571,12 +569,13 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         
         if (indexPath) {
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            PUBDocument *document = self.documentArray[indexPath.item];
             
             CGFloat endAlpha;
             CGAffineTransform endTransform;
             BOOL startAnimation = NO;
             
-            if (cell.deleteButton.hidden && cell.document.state == PUBDocumentStateDownloaded) {
+            if (cell.deleteButton.hidden && document.state == PUBDocumentStateDownloaded) {
                 startAnimation = YES;
                 cell.showDeleteButton = YES;
                 endAlpha = 0.98f;
@@ -609,7 +608,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         }
     }
 }
-
 
 #pragma mark - Helper
 
@@ -742,24 +740,79 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     [self.pageTracker fire];
 }
 
-- (void)documentFetched:(NSNotification *)notification {
+- (void)documentFetcherDidUpdate:(NSNotification *)notification {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
-        PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:notification.userInfo[@"productID"]];
+        NSString *productID = [[notification.userInfo allKeys] firstObject];
+        NSIndexPath *indexPath = [self indexPathForProductID:productID];
+        PUBDocument *document = self.documentArray[indexPath.item];
+        
+        if (document && document.state == PUBDocumentStateLoading) {
+            NSDictionary *documentProgress = notification.userInfo[document.productID];
+            document.downloadProgress = [documentProgress[@"totalProgress"] floatValue];
+            
+            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            [cell setupForDocument:document];
+        }
+    }
+}
+
+- (void)documentFetcherDidFinish:(NSNotification *)notification {
+    if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
+        NSString *productID = [notification.userInfo objectForKey:PUBStatisticsDocumentIDKey];
+        NSIndexPath *indexPath = [self indexPathForProductID:productID];
+        PUBDocument *document = self.documentArray[indexPath.item];
+        
         if (document) {
             document.state = PUBDocumentStateDownloaded;
             [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+            
+            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            [cell setupForDocument:document];
         }
     }
 }
 
 - (void)documentPurchased:(NSNotification *)notification {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
-        PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:notification.userInfo[@"productID"]];
+        NSIndexPath *indexPath = [self indexPathForProductID:notification.userInfo[@"productID"]];
+        PUBDocument *document = self.documentArray[indexPath.item];
+        
         if (document) {
             document.state = PUBDocumentPurchased;
             [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+            
+            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            [cell setupForDocument:document];
         }
     }
+}
+
+- (NSIndexPath *)indexPathForProductID:(NSString *)productID {
+    if (!self.indexPathsForDocuments) {
+        self.indexPathsForDocuments = [NSDictionary new];
+    }
+    
+    NSIndexPath *indexPath = self.indexPathsForDocuments[productID];
+    if (!indexPath) {
+        for (NSInteger i = 0; i < self.documentArray.count; i++) {
+            PUBDocument *document = self.documentArray[i];
+            if ([document.productID isEqualToString:productID]) {
+                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+                
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocuments];
+                [dictionary setObject:indexPath forKey:document.productID];
+                self.indexPathsForDocuments = dictionary;
+                break;
+            }
+        }
+    }
+    
+    return indexPath;
+}
+
+- (void)setDocumentArray:(NSArray *)documentArray {
+    _documentArray = documentArray;
+    self.indexPathsForDocuments = nil;
 }
 
 #pragma mark PSPDFViewControllerDelegate

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		37ADD262191764D500C2232A /* PUBNamedBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ADD261191764D500C2232A /* PUBNamedBadgeView.m */; };
+		37D26E9B1919359B00694BFA /* PUBCellView+Document.m in Sources */ = {isa = PBXBuildFile; fileRef = 37D26E9A1919359B00694BFA /* PUBCellView+Document.m */; };
 		5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */; };
 		5B59C3C61861FA4600191B45 /* PUBCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C51861FA4600191B45 /* PUBCenteredScrollView.m */; };
 		783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783E316B18BE68FB004A49EA /* PUBProgressView.m */; };
@@ -105,6 +106,8 @@
 		1A1C88605D6E40A7B3C6BBC4 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		37ADD260191764D500C2232A /* PUBNamedBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBNamedBadgeView.h; sourceTree = "<group>"; };
 		37ADD261191764D500C2232A /* PUBNamedBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBNamedBadgeView.m; sourceTree = "<group>"; };
+		37D26E991919359B00694BFA /* PUBCellView+Document.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PUBCellView+Document.h"; sourceTree = "<group>"; };
+		37D26E9A1919359B00694BFA /* PUBCellView+Document.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PUBCellView+Document.m"; sourceTree = "<group>"; };
 		5B59C3C11861FA1400191B45 /* PUBContentInsetCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBContentInsetCenteredScrollView.h; sourceTree = "<group>"; };
 		5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBContentInsetCenteredScrollView.m; sourceTree = "<group>"; };
 		5B59C3C41861FA4600191B45 /* PUBCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBCenteredScrollView.h; sourceTree = "<group>"; };
@@ -412,6 +415,8 @@
 				5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */,
 				811A8B7D1816A67000D0F893 /* PUBCellView.h */,
 				811A8B7E1816A67000D0F893 /* PUBCellView.m */,
+				37D26E991919359B00694BFA /* PUBCellView+Document.h */,
+				37D26E9A1919359B00694BFA /* PUBCellView+Document.m */,
 				8103B5651846ACC200E8E77E /* PUBPreviewCell.h */,
 				8103B5661846ACC200E8E77E /* PUBPreviewCell.m */,
 				5BB63A6818632C7100C9EE10 /* PUBCoverImageCell.h */,
@@ -812,6 +817,7 @@
 				870110E8180FCF140034B9AC /* main.m in Sources */,
 				786EC49718BE99C000788B1E /* PUBPageView.m in Sources */,
 				8784A72B18F5763C001DB322 /* PUBDocument.m in Sources */,
+				37D26E9B1919359B00694BFA /* PUBCellView+Document.m in Sources */,
 				D4ED3928187EF6B60047EB77 /* PUBThumbnailImageCache.m in Sources */,
 				EF22E8B418605F2A00D0009F /* PUBPagePreviewViewController.m in Sources */,
 				D4ED392E188018E60047EB77 /* PUBBadgeView.m in Sources */,
