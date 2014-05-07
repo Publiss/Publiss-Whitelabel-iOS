@@ -45,7 +45,11 @@
                 
                 for (NSString *productIDs in deletedDocs) {
                     PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:productIDs];
-                    [document deleteEntity];
+                    
+                    // Delete all documents that were not downloaded.
+                    if (document.state != PUBDocumentStateDownloaded) {
+                        [document deleteEntity];
+                    }
                 }
                 
                 if (completionHandler) completionHandler();
