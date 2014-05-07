@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37ADD262191764D500C2232A /* PUBNamedBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37ADD261191764D500C2232A /* PUBNamedBadgeView.m */; };
 		5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */; };
 		5B59C3C61861FA4600191B45 /* PUBCenteredScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B59C3C51861FA4600191B45 /* PUBCenteredScrollView.m */; };
 		783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 783E316B18BE68FB004A49EA /* PUBProgressView.m */; };
@@ -85,7 +86,6 @@
 		EFC288A118A0ED2D00D74A1C /* Changelog.txt in Resources */ = {isa = PBXBuildFile; fileRef = EFC2889718A0ED2D00D74A1C /* Changelog.txt */; };
 		EFC288A218A0ED2D00D74A1C /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC2889F18A0ED2D00D74A1C /* libGoogleAnalyticsServices.a */; };
 		EFC288A318A0ED2D00D74A1C /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = EFC288A018A0ED2D00D74A1C /* Readme.txt */; };
-		EFC288A518A0ED5500D74A1C /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A418A0ED5500D74A1C /* AdSupport.framework */; };
 		EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */; };
 		EFC7FC2518FFDD48001FF5EB /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */; };
 		EFD5DDD518D3059D007FEB58 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EFD5DDD718D3059D007FEB58 /* Storyboard.storyboard */; };
@@ -103,6 +103,8 @@
 
 /* Begin PBXFileReference section */
 		1A1C88605D6E40A7B3C6BBC4 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		37ADD260191764D500C2232A /* PUBNamedBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBNamedBadgeView.h; sourceTree = "<group>"; };
+		37ADD261191764D500C2232A /* PUBNamedBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBNamedBadgeView.m; sourceTree = "<group>"; };
 		5B59C3C11861FA1400191B45 /* PUBContentInsetCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBContentInsetCenteredScrollView.h; sourceTree = "<group>"; };
 		5B59C3C21861FA1400191B45 /* PUBContentInsetCenteredScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBContentInsetCenteredScrollView.m; sourceTree = "<group>"; };
 		5B59C3C41861FA4600191B45 /* PUBCenteredScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBCenteredScrollView.h; sourceTree = "<group>"; };
@@ -246,7 +248,6 @@
 			files = (
 				EFC288A218A0ED2D00D74A1C /* libGoogleAnalyticsServices.a in Frameworks */,
 				EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */,
-				EFC288A518A0ED5500D74A1C /* AdSupport.framework in Frameworks */,
 				EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */,
 				8110782E1811301F00281106 /* libxml2.2.dylib in Frameworks */,
 				8110782C1811301900281106 /* libsqlite3.dylib in Frameworks */,
@@ -416,6 +417,8 @@
 				5BB63A6818632C7100C9EE10 /* PUBCoverImageCell.h */,
 				D4ED392C188018E60047EB77 /* PUBBadgeView.h */,
 				D4ED392D188018E60047EB77 /* PUBBadgeView.m */,
+				37ADD260191764D500C2232A /* PUBNamedBadgeView.h */,
+				37ADD261191764D500C2232A /* PUBNamedBadgeView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -800,6 +803,7 @@
 				EF7E8D9318BF33F8002FF8CC /* IAPManager.m in Sources */,
 				5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */,
 				8103B5671846ACC200E8E77E /* PUBPreviewCell.m in Sources */,
+				37ADD262191764D500C2232A /* PUBNamedBadgeView.m in Sources */,
 				EF123A0918A3B4CD001A43D4 /* PUBStatisticsManager.m in Sources */,
 				783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */,
 				8110783D1811493000281106 /* PUBLinkAnnotationView.m in Sources */,

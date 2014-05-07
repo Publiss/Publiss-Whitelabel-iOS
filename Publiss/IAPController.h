@@ -33,4 +33,7 @@ enum IAPControllerError {
 - (void)clearPurchases;
 - (void)readReceiptDataWithCompletion:(void(^)(NSData *receipt))completionBlock error:(void(^)(NSError *error))errorBlock;
 
+- (NSString *)iAPSecretForProductID:(NSString *)productID;
+- (void)setIAPSecret:(NSString *)secret productID:(NSString *)productID;
+
 @end

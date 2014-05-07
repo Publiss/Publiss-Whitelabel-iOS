@@ -11,7 +11,8 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateOnline,
     PUBDocumentStateDownloaded,
     PUBDocumentStateLoading,
-    PUBDocumentPurchased  // just for UI stuff
+    PUBDocumentPurchased,  // just for UI stuff
+    PUBDocumentStateUpdated
 };
 
 @interface PUBDocument (Helper)
@@ -21,7 +22,7 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 // Fetch helper
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID;
 + (NSArray *)findAll;
-+ (NSFetchedResultsController *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending;
++ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending;
 + (PUBDocument *)createPUBDocumentWithDictionary:(NSDictionary *)dictionary;
 
 /// deletes the file of the document and pspdfcache
@@ -36,8 +37,6 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 
 - (NSURL *)localXFDFURL;
 - (BOOL)removedLastViewState;
-
-- (NSString *)iapSecret;
 
 @property (copy, nonatomic) NSArray *sizes;      // wrapped integers
 @property (copy, nonatomic) NSArray *dimensions; // wrapped CGSizes.

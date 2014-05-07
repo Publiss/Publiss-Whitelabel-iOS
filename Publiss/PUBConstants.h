@@ -22,6 +22,7 @@ static NSString *const PUBDocumentDownloadFinished = @"PUBDocumentDownloadFinish
 
 static NSString *const PUBApplicationDidStartNotification = @"PUBApplicationDidStartNotification";
 static NSString *const PUBApplicationWillResignActiveNotification = @"PUBApplicationWillResignActiveNotification";
+static NSString *const PUBApplicationWillEnterForegroundNotification = @"PUBApplicationWillEnterForegroundNotification";
 static NSString *const PUBDocumentDidOpenNotification = @"PUBDocumentDidOpenNotification";
 static NSString *const PUBDocumentDownloadNotification = @"PUBDocumentDownloadNotification";
 static NSString *const PUBDocumentPageTrackedNotification = @"PUBDocumentPageTracked";

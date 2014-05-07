@@ -98,11 +98,17 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
             self.navigationItem.title = PUBLocalize(@"Downloading...");
             [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
             break;
-         
+            
         case PUBDocumentStateDownloaded:
             self.navigationItem.title = nil;
             [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
             break;
+            
+        case PUBDocumentStateUpdated:
+            self.navigationItem.title = nil;
+            [self.downloadButton setTitle:PUBLocalize(@"Update") forState:UIControlStateNormal];
+            break;
+            
         default:
             self.navigationItem.title = nil;
             break;

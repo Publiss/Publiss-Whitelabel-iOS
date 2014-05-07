@@ -126,7 +126,7 @@
                                         animated:NO];
 }
 
-#pragma mark UICollectionViewDelegate
+#pragma mark - UICollectionView DataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -174,6 +174,8 @@
     [cell enableZooming];
     return cell;
 }
+
+#pragma mark - UICollectionView Delegate
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
                     layout:(UICollectionViewLayout *)collectionViewLayout

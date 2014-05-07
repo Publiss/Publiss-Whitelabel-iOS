@@ -58,6 +58,7 @@
     self.statusBarStyle = UIStatusBarStyleLightContent;
     self.backgroundColor = UIColor.clearColor;
 
+    self.allowBackgroundSaving = YES;
     self.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
     self.pageTransition = PSPDFPageTransitionCurl;
     //self.pageTransition = PSPDFPageTransitionScrollPerPage;
@@ -68,7 +69,11 @@
     self.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
 
     // Toolbar configuration
-    self.rightBarButtonItems = @[self.annotationButtonItem, self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
+    if (PUBIsiPad()) {
+        self.rightBarButtonItems = @[self.annotationButtonItem, self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
+    } else {
+        self.rightBarButtonItems = @[self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
+    }
     self.outlineButtonItem.availableControllerOptions = [NSOrderedSet orderedSetWithObjects:@(PSPDFOutlineBarButtonItemOptionOutline), @(PSPDFOutlineBarButtonItemOptionBookmarks), nil];
     self.activityButtonItem.applicationActivities = @[PSPDFActivityTypeGoToPage];
     self.activityButtonItem.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact];
@@ -117,15 +122,16 @@
     self.navigationController.navigationBar.hidden = YES;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [[PSPDFGalleryEmbeddedBackgroundView appearance] setBlurEnabledObject:@YES];
-        [[PSPDFGalleryFullscreenBackgroundView appearance] setBlurEnabledObject:@YES];
-    });
-}
+// Blurring of gallery
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        [[PSPDFGalleryEmbeddedBackgroundView appearance] setBlurEnabledObject:@YES];
+//        [[PSPDFGalleryFullscreenBackgroundView appearance] setBlurEnabledObject:@YES];
+//    });
+//}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Private

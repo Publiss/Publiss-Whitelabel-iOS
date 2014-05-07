@@ -115,7 +115,11 @@
         case PUBDocumentStateDownloaded:
             [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
             break;
-
+            
+        case PUBDocumentStateUpdated:
+            [self.downloadButton setTitle:PUBLocalize(@"Update") forState:UIControlStateNormal];
+            break;
+            
         default:
             break;
     }

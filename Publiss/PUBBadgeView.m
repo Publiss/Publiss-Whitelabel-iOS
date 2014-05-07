@@ -13,6 +13,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.backgroundColor = [UIColor clearColor];
+        
     }
     return self;
 }
@@ -34,7 +35,6 @@
 
 - (void)setIcon:(UIImage *)icon {
     _icon = icon;
-   // [self setNeedsDisplay];
 }
 
 - (void)drawIcon {

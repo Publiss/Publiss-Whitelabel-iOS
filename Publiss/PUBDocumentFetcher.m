@@ -9,6 +9,7 @@
 #import "PUBHTTPRequestManager.h"
 #import "PUBDocument+Helper.h"
 #import "PUBAppDelegate.h"
+#import "IAPController.h"
 #import "PUBURLFactory.h"
 
 @interface PUBDocumentFetcher () <PSPDFDownloadManagerDelegate>
@@ -64,7 +65,11 @@
     PUBLogVerbose(@"Downloading Page %tu of document %@", page, document.title);
     
     // Get the target URLs.
-    NSURL *downloadURL = [PUBURLFactory createDownloadURLForDocument:document.publishedID page:page iapSecret:document.iapSecret productId:document.productID];
+    NSURL *downloadURL = [PUBURLFactory createDownloadURLForDocument:document.publishedID
+                                                                page:page
+                                                           iapSecret:[IAPController.sharedInstance iAPSecretForProductID:document.productID]
+                                                           productId:document.productID];
+    
     NSURL *targetURL = [document localDocumentURLForPage:page];
 
     // Check if we're currently downloading
@@ -89,7 +94,10 @@
 }
 
 - (PSPDFRemoteFileObject *)remoteContentObjectForDocument:(PUBDocument *)document page:(NSUInteger)page {
-    NSURL *downloadURL = [PUBURLFactory createDownloadURLForDocument:document.publishedID page:page iapSecret:document.iapSecret productId:document.productID];
+    NSURL *downloadURL = [PUBURLFactory createDownloadURLForDocument:document.publishedID
+                                                                page:page
+                                                           iapSecret:[IAPController.sharedInstance iAPSecretForProductID:document.productID]
+                                                           productId:document.productID];
 
     NSArray *remoteObjects = [self.downloadManager objectsPassingTest:^BOOL(id <PSPDFRemoteContentObject> obj, NSUInteger index, BOOL *stop) {
         return [obj isKindOfClass:PSPDFRemoteFileObject.class] && [((PSPDFRemoteFileObject *)obj).remoteURL isEqual:downloadURL];
