@@ -256,7 +256,8 @@
     [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
-
+    [dnc removeObserver:self name:PUBApplicationWillEnterForegroundNotification object:nil];
+    
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
         self.pageTracker = nil;
