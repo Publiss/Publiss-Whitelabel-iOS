@@ -18,6 +18,8 @@
 #import "JDStatusBarNotification.h"
 #import "PUBURLFactory.h"
 
+#import "PUBDocumentFetcher.h"
+
 @interface PUBParentPreviewViewController ()
 
 @end
@@ -41,8 +43,6 @@
                                        style.progressBarHeight = 20.0;
                                        return style;
                                    }];
-    
-    [self updateUI];
 }
 
 
@@ -75,6 +75,20 @@
         self.recognizer.cancelsTouchesInView = NO;
         [self.view.window addGestureRecognizer:self.recognizer];
     }
+    
+    [self checkIfUnpublished:^(BOOL unpublished) {
+        if (unpublished) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.kioskController) {
+                    [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
+                }
+                [self.downloadButton hideActivityIndicator];
+            }];
+        } else {
+            [self.downloadButton hideActivityIndicator];
+            [self updateUI];
+        }
+    }];
 }
 
 #pragma mark - Dismiss ViewController
@@ -250,6 +264,34 @@
 }
 
 #pragma mark - Helper
+
+- (void)checkIfUnpublished:(void (^)(BOOL unpublished))completionBlock {
+    [[PUBDocumentFetcher sharedFetcher] fetchDocumentList:^(BOOL success, NSError *error, NSDictionary *result) {
+        BOOL documentUnpublished = YES;
+        
+        if (success && result) {
+            if ([NSJSONSerialization isValidJSONObject:result]) {
+                NSArray *jsonData = (NSArray *)result[@"data"];
+                NSMutableArray *deletedDocs = [NSMutableArray array];
+                
+                for (PUBDocument *document in [PUBDocument findAll]) {
+                    [deletedDocs addObject:document.productID];
+                }
+                
+                for (NSDictionary *documentInfo in jsonData) {
+                    NSString *productID = documentInfo[@"apple_product_id"];
+                    if ([self.document.productID isEqualToString:productID]) {
+                        documentUnpublished = NO;
+                    }
+                }
+            }
+        } else {
+            documentUnpublished = NO;
+        }
+        
+        completionBlock(documentUnpublished);
+    }];
+}
 
 - (void)updateUI {
     if (self.document.fileSize > 0) {

@@ -352,16 +352,16 @@
 				8103B57A1846C14E00E8E77E /* xib */,
 				811A8B791816A13A00D0F893 /* PUBKioskViewController.h */,
 				811A8B7A1816A13A00D0F893 /* PUBKioskViewController.m */,
+				87AA008518D72FA600AC1019 /* PUBParentPreviewViewController.h */,
+				87AA008618D72FA600AC1019 /* PUBParentPreviewViewController.m */,
+				81902C94189697D10046B7CC /* PUBiPhonePreviewViewController.h */,
+				81902C95189697D10046B7CC /* PUBiPhonePreviewViewController.m */,
 				8103B5751846B60E00E8E77E /* PUBPreviewViewController.h */,
 				8103B5761846B60E00E8E77E /* PUBPreviewViewController.m */,
 				EF22E8B218605F2A00D0009F /* PUBPagePreviewViewController.h */,
 				EF22E8B318605F2A00D0009F /* PUBPagePreviewViewController.m */,
 				D4ED3926187EF6B60047EB77 /* PUBThumbnailImageCache.h */,
 				D4ED3927187EF6B60047EB77 /* PUBThumbnailImageCache.m */,
-				81902C94189697D10046B7CC /* PUBiPhonePreviewViewController.h */,
-				81902C95189697D10046B7CC /* PUBiPhonePreviewViewController.m */,
-				87AA008518D72FA600AC1019 /* PUBParentPreviewViewController.h */,
-				87AA008618D72FA600AC1019 /* PUBParentPreviewViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
