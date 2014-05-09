@@ -43,6 +43,7 @@
                                        style.progressBarHeight = 20.0;
                                        return style;
                                    }];
+    [self updateUI];
 }
 
 
@@ -51,6 +52,7 @@
     if (PUBIsiPad() && !CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
         self.view.alpha = 0.f;
     }
+    [self.downloadButton showActivityIndicator];
 }
 
 
@@ -76,17 +78,17 @@
         [self.view.window addGestureRecognizer:self.recognizer];
     }
     
-    [self checkIfUnpublished:^(BOOL unpublished) {
+    [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.document competionHandler:^(BOOL unpublished) {
         if (unpublished) {
+            [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
+                                                              object:NULL];
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.kioskController) {
                     [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
                 }
-                [self.downloadButton hideActivityIndicator];
             }];
         } else {
-            [self.downloadButton hideActivityIndicator];
-            [self updateUI];
+            [self updateButtonUI];
         }
     }];
 }
@@ -265,34 +267,6 @@
 
 #pragma mark - Helper
 
-- (void)checkIfUnpublished:(void (^)(BOOL unpublished))completionBlock {
-    [[PUBDocumentFetcher sharedFetcher] fetchDocumentList:^(BOOL success, NSError *error, NSDictionary *result) {
-        BOOL documentUnpublished = YES;
-        
-        if (success && result) {
-            if ([NSJSONSerialization isValidJSONObject:result]) {
-                NSArray *jsonData = (NSArray *)result[@"data"];
-                NSMutableArray *deletedDocs = [NSMutableArray array];
-                
-                for (PUBDocument *document in [PUBDocument findAll]) {
-                    [deletedDocs addObject:document.productID];
-                }
-                
-                for (NSDictionary *documentInfo in jsonData) {
-                    NSString *productID = documentInfo[@"apple_product_id"];
-                    if ([self.document.productID isEqualToString:productID]) {
-                        documentUnpublished = NO;
-                    }
-                }
-            }
-        } else {
-            documentUnpublished = NO;
-        }
-        
-        completionBlock(documentUnpublished);
-    }];
-}
-
 - (void)updateUI {
     if (self.document.fileSize > 0) {
         static NSDateFormatter *dateFormatter = nil;
@@ -305,7 +279,10 @@
         NSString *fileSize = [NSByteCountFormatter stringFromByteCount:self.document.fileSize countStyle:NSByteCountFormatterCountStyleFile];
         self.fileDescription.text = [NSString stringWithFormat:@"%@%@%@", fileSize, @" / ",shortDatestring];
     }
+    [self defineDescriptionText];
+}
 
+- (void)updateButtonUI {
     if (self.document.paid) {
         [self.downloadButton showActivityIndicator];
         [IAPController.sharedInstance fetchProductForDocument:self.document
@@ -340,11 +317,10 @@
                                                             
                                                         }];
     } else {
+        [self.downloadButton hideActivityIndicator];
         [self.downloadButton setTitle:PUBLocalize(@"Free") forState:UIControlStateNormal];
     }
-    [self defineDescriptionText];
 }
-
 
 
 - (void)defineDescriptionText {

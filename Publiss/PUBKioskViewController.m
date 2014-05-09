@@ -202,6 +202,7 @@
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
     [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:PUBApplicationWillEnterForegroundNotification object:nil];
     
+    
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIView animateWithDuration:0.25f animations:^{
         self.navigationController.navigationBar.alpha = 1.f;
@@ -242,6 +243,11 @@
                 [self.documentView removeFromSuperview];
                 self.documentView = nil;
                 self.dimView.hidden = YES;
+                
+                if (self.shouldRetrieveDocuments) {
+                    self.shouldRetrieveDocuments = NO;
+                    [self refreshDocumentsWithActivityViewAnimated:YES];
+                }
             }];
         }];
     }
@@ -257,6 +263,7 @@
     [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
     [dnc removeObserver:self name:PUBApplicationWillEnterForegroundNotification object:nil];
+    
     
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
@@ -636,6 +643,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
         PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
         pdfController.delegate = self;
+        pdfController.kioskViewController = self;
         
         UIImage *coverImage = [self imageForDocument:document];
         if (nil == coverImage) {
