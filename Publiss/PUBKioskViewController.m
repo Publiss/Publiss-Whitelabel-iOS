@@ -128,15 +128,6 @@
                                                             [self refreshDocumentsWithActivityViewAnimated:YES];
                                                         }];
     
-    REMenuItem *restoreItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Restore Purchases")
-                                                       subtitle:nil
-                                                          image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
-                                               highlightedImage:nil
-                                                         action:^(REMenuItem *item) {
-                                                             [self restorePurchases];
-
-                                                         }];
-    
 #ifdef DEBUG
     REMenuItem *clearItem = [[REMenuItem alloc] initWithTitle:@"(DEBUG) Clear"
                                                      subtitle:nil
@@ -148,12 +139,12 @@
 #endif
     
     REMenuItem *visitSiteItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Visit Publiss Website")
-                                                     subtitle:nil
-                                                        image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
-                                             highlightedImage:nil
-                                                       action:^(REMenuItem *item) {
-                                                           [self visitPublissSite];
-                                                       }];
+                                                         subtitle:nil
+                                                            image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                 highlightedImage:nil
+                                                           action:^(REMenuItem *item) {
+                                                               [self visitPublissSite];
+                                                           }];
     
     
     REMenuItem *aboutItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"About Publiss")
@@ -163,11 +154,28 @@
                                                        action:^(REMenuItem *item) {
                                                            [self showAbout];
                                                        }];
+    
+    NSMutableArray *menuItems = @[
+                                  reloadItem,
+                                  visitSiteItem,
+                                  aboutItem,
 #ifdef DEBUG
-    self.menu = [[REMenu alloc] initWithItems:@[reloadItem, restoreItem, visitSiteItem, aboutItem, clearItem]];
-#else
-    self.menu = [[REMenu alloc] initWithItems:@[reloadItem, restoreItem, visitSiteItem, aboutItem]];
+                                  clearItem
 #endif
+                                  ].mutableCopy;
+    
+    if (PUBConfig.sharedConfig.IAPActive) {
+        REMenuItem *restoreItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Restore Purchases")
+                                                           subtitle:nil
+                                                              image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                   highlightedImage:nil
+                                                             action:^(REMenuItem *item) {
+                                                                 [self restorePurchases];
+                                                             }];
+        [menuItems insertObject:restoreItem atIndex:1];
+    }
+    
+    self.menu = [[REMenu alloc] initWithItems:menuItems];
     
     self.menu.textAlignment = NSTextAlignmentLeft;
     self.menu.bounce = YES;

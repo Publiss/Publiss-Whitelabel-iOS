@@ -22,5 +22,6 @@ extern NSString *const PUBConfigDefaultAppSecret;
 - (NSString *)GATrackingCode;
 - (NSNumber *)pageTrackTime;
 - (NSURL *)webserviceBaseURL;
+- (BOOL)IAPActive;
 
 @end
