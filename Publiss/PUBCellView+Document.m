@@ -36,6 +36,7 @@
 }
 
 - (void)documentOnline {
+    self.badgeView.hidden = NO;
     self.progressView.hidden = YES;
 }
 

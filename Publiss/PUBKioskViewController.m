@@ -305,6 +305,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
+    NSInteger item = indexPath.item;
     PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     PUBDocument *document = (self.documentArray)[indexPath.item];
     [cell setupForDocument:(PUBDocument *)document];
@@ -322,14 +323,11 @@
     
     if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
-        
-        BOOL shouldHideBadgeView = (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStateUpdated || document.state == PUBDocumentPurchased);
-        [cell setBadgeViewHidden:shouldHideBadgeView animated:NO];
         [cell setNeedsLayout];
-        
     } else {
         [cell.activityIndicator startAnimating];
         cell.coverImage.hidden = YES;
+        cell.badgeView.hidden = YES;
         cell.namedBadgeView.hidden = YES;
         NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
@@ -623,7 +621,10 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if (!document) return nil;
     
     NSUInteger lastPage = document.lastViewState.page;
-    UIImage *coverImage = [PSPDFCache.sharedCache imageFromDocument:[PUBPDFDocument documentWithPUBDocument:document] page:lastPage size:UIScreen.mainScreen.bounds.size options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderQueue|PSPDFCacheOptionMemoryStoreAlways];
+    UIImage *coverImage = [PSPDFCache.sharedCache imageFromDocument:[PUBPDFDocument documentWithPUBDocument:document]
+                                                               page:lastPage
+                                                               size:UIScreen.mainScreen.bounds.size
+                                                            options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderQueue|PSPDFCacheOptionMemoryStoreAlways];
     return coverImage;
 }
 
