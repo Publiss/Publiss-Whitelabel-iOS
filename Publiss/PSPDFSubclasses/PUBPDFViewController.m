@@ -15,6 +15,7 @@
 #import "PUBSearchViewController.h"
 #import "JDStatusBarNotification.h"
 #import "PUBThumbnailGridViewCell.h"
+#import "PUBKioskViewController.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
@@ -65,7 +66,7 @@
     self.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
     self.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
     self.pageMode = PSPDFPageModeAutomatic;
-    self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class;
+    //self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
     self.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
 
     // Toolbar configuration
@@ -84,14 +85,23 @@
     }
     
     self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(close:)]];
-    // Ensure all pages are downloaded.
-    [self prefetchAllPages];
     
-    // self.initiatedDownload will be YES if any page is missing
-    if (self.initiatedDownload) {
-        self.pubDocument.state = PUBDocumentStateLoading;
-        [self showLoadingNotification];
-    }
+    [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.pubDocument competionHandler:^(BOOL unpublished) {
+        if (unpublished == YES && self.pubDocument.state != PUBDocumentStateDownloaded) {
+            self.navigationController.navigationBar.hidden = NO;
+            self.kioskViewController.shouldRetrieveDocuments = YES;
+            [self close:nil];
+        } else {
+            // Ensure all pages are downloaded.
+            [self prefetchAllPages];
+            
+            // self.initiatedDownload will be YES if any page is missing
+            if (self.initiatedDownload) {
+                self.pubDocument.state = PUBDocumentStateLoading;
+                [self showLoadingNotification];
+            }
+        }
+    }];
     
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
@@ -120,6 +130,8 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     self.navigationController.navigationBar.hidden = YES;
+    
+    
 }
 
 // Blurring of gallery

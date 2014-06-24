@@ -37,4 +37,7 @@
 // Get download status
 - (PSPDFRemoteFileObject *)remoteContentObjectForDocument:(PUBDocument *)document page:(NSUInteger)page;
 
+// Check if document is unpublished
+- (void)checkIfDocumentIsUnpublished:(PUBDocument *)document competionHandler:(void (^)(BOOL unpublished))completionBlock;
+
 @end

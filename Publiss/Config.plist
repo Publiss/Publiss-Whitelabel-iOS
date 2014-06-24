@@ -12,5 +12,7 @@
 	<string></string>
 	<key>Page Track Time</key>
 	<integer>4</integer>
+	<key>IAP Active</key>
+	<true/>
 </dict>
 </plist>

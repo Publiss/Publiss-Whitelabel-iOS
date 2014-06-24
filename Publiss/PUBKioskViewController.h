@@ -11,6 +11,8 @@
 
 @interface PUBKioskViewController : UICollectionViewController
 
+@property (nonatomic, assign) BOOL shouldRetrieveDocuments;
+- (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated;
 - (void)showDocument:(PUBDocument *)document forCell:(PUBCellView *)cell forIndex:(NSUInteger)index;
 
 @end

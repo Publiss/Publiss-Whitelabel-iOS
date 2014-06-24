@@ -18,6 +18,8 @@
 #import "JDStatusBarNotification.h"
 #import "PUBURLFactory.h"
 
+#import "PUBDocumentFetcher.h"
+
 @interface PUBParentPreviewViewController ()
 
 @end
@@ -41,7 +43,6 @@
                                        style.progressBarHeight = 20.0;
                                        return style;
                                    }];
-    
     [self updateUI];
 }
 
@@ -51,6 +52,7 @@
     if (PUBIsiPad() && !CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
         self.view.alpha = 0.f;
     }
+    [self.downloadButton showActivityIndicator];
 }
 
 
@@ -75,6 +77,20 @@
         self.recognizer.cancelsTouchesInView = NO;
         [self.view.window addGestureRecognizer:self.recognizer];
     }
+    
+    [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.document competionHandler:^(BOOL unpublished) {
+        if (unpublished) {
+            [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
+                                                              object:NULL];
+            [self dismissViewControllerAnimated:YES completion:^{
+                if (self.kioskController) {
+                    [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
+                }
+            }];
+        } else {
+            [self updateButtonUI];
+        }
+    }];
 }
 
 #pragma mark - Dismiss ViewController
@@ -263,7 +279,10 @@
         NSString *fileSize = [NSByteCountFormatter stringFromByteCount:self.document.fileSize countStyle:NSByteCountFormatterCountStyleFile];
         self.fileDescription.text = [NSString stringWithFormat:@"%@%@%@", fileSize, @" / ",shortDatestring];
     }
+    [self defineDescriptionText];
+}
 
+- (void)updateButtonUI {
     if (self.document.paid) {
         [self.downloadButton showActivityIndicator];
         [IAPController.sharedInstance fetchProductForDocument:self.document
@@ -298,11 +317,10 @@
                                                             
                                                         }];
     } else {
+        [self.downloadButton hideActivityIndicator];
         [self.downloadButton setTitle:PUBLocalize(@"Free") forState:UIControlStateNormal];
     }
-    [self defineDescriptionText];
 }
-
 
 
 - (void)defineDescriptionText {

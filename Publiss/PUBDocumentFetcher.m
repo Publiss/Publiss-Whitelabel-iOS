@@ -132,6 +132,29 @@
     });
 }
 
+- (void)checkIfDocumentIsUnpublished:(PUBDocument *)document competionHandler:(void (^)(BOOL unpublished))completionBlock {
+    [[PUBDocumentFetcher sharedFetcher] fetchDocumentList:^(BOOL success, NSError *error, NSDictionary *result) {
+        BOOL documentUnpublished = YES;
+        
+        if (success && result) {
+            if ([NSJSONSerialization isValidJSONObject:result]) {
+                NSArray *jsonData = (NSArray *)result[@"data"];
+               
+                for (NSDictionary *documentInfo in jsonData) {
+                    NSString *productID = documentInfo[@"apple_product_id"];
+                    if ([document.productID isEqualToString:productID]) {
+                        documentUnpublished = NO;
+                    }
+                }
+            }
+        } else {
+            documentUnpublished = NO;
+        }
+        
+        completionBlock(documentUnpublished);
+    }];
+}
+
 #pragma mark - helper methods
 
 - (void)setPageAlreadyExsists:(PUBDocument *)document page:(NSUInteger)page {

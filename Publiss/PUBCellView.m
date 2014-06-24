@@ -11,9 +11,7 @@
 #import <tgmath.h>
 
 @interface PUBCellView ()
-@property (nonatomic, strong) NSDictionary *documentProgress;
 @property (nonatomic, strong) UIView *overlayView;
-
 @end
 
 @implementation PUBCellView
@@ -23,15 +21,7 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [self setupViews];
-    self.contentMode = UIViewContentModeScaleAspectFit;
     
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:NULL];
-    [dnc addObserver:self selector:@selector(documentPurchasedNotification:) name:PUBDocumentPurchaseFinishedNotification object:nil];
-}
-
-- (void)setupViews {
     [self.contentView addSubview:self.coverImage];
     [self.contentView addSubview:self.badgeView];
     [self.contentView addSubview:self.deleteButton];
@@ -41,19 +31,15 @@
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
     
     self.activityIndicator.hidden = YES;
-}
-
-- (void)dealloc {
-    [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
-    [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
+    
+    self.contentMode = UIViewContentModeScaleAspectFit;
 }
 
 #pragma mark - Custom Getter
 
 - (UIActivityIndicatorView *)activityIndicator
 {
-    if (!_activityIndicator)
-    {
+    if (!_activityIndicator) {
         _activityIndicator = [UIActivityIndicatorView new];
         _activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
         _activityIndicator.color = UIColor.publissPrimaryColor;
@@ -144,7 +130,6 @@
 }
 
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
-
     [self.badgeView setNeedsDisplay];
     
     self.badgeView.alpha = animated ? 0.f : 1.f;
@@ -154,58 +139,6 @@
             self.badgeView.alpha = 1.f;
         } completion:NULL];
     }
-    
-}
-
-#pragma mark - Document Setup
-
-- (void)setupCellForDocument:(PUBDocument *)document {
-    self.document = document;
-    self.deleteButton.hidden = YES;
-    self.badgeView.hidden = YES;
-    self.namedBadgeView.hidden = YES;
-    
-    switch (document.state) {
-        case PUBDocumentStateOnline:
-            [self documentOnline];
-            break;
-        case PUBDocumentStateUpdated:
-            [self documentUpdated];
-            break;
-        case PUBDocumentStateDownloaded:
-            [self documentDownloaded];
-            break;
-        case PUBDocumentStateLoading:
-            [self documentLoading];
-            break;
-        case PUBDocumentPurchased:
-            [self documentPurchased];
-            break;
-    }
-}
-
-- (void)documentOnline {
-    self.progressView.hidden = YES;
-}
-
-- (void)documentUpdated {
-    self.progressView.hidden = YES;
-    self.namedBadgeView.hidden = NO;
-    [self.namedBadgeView setBadgeText:PUBLocalize(@"UPDATE")];
-}
-
-- (void)documentDownloaded {
-    self.progressView.hidden = YES;
-}
-
-- (void)documentLoading {
-    self.progressView.hidden = NO;
-}
-
-- (void)documentPurchased {
-    self.progressView.hidden = YES;
-    self.namedBadgeView.hidden = NO;
-    [self.namedBadgeView setBadgeText:PUBLocalize(@"PURCHASED")];
 }
 
 #pragma mark - Layout Views
@@ -298,47 +231,6 @@
         }
     }
     return [super hitTest:point withEvent:event];
-}
-
-#pragma mark - Download Progress Notifications
-
-- (void)documentPurchasedNotification:(NSNotification *)notification {
-    if (notification.userInfo[@"purchased_document"]) {
-        PUBDocument *document = notification.userInfo[@"purchased_document"];
-        if ([self.document.productID isEqualToString:document.productID])
-            [self documentPurchased];
-            [self setNeedsDisplay];
-    }
-}
-
-- (void)documentFetcherDidUpdateNotification:(NSNotification *)notification {
-    if ([notification.userInfo[self.document.productID] count] && self.document.state == PUBDocumentStateLoading) {
-        self.documentProgress = notification.userInfo[self.document.productID];
-        self.document.downloadProgress = [self.documentProgress[@"totalProgress"] floatValue];
-        [self handleProgress];
-    }
-}
-
-- (void)handleProgress {
-    self.badgeView.hidden = YES;
-    self.namedBadgeView.hidden = YES;
-    self.progressView.hidden = NO;
-    self.progressView.progress = self.document.downloadProgress;
-    if (self.document.downloadProgress >= 1.0f) {
-        [self downloadCompleted:^{
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDownloadFinished object:nil userInfo:@{@"productID": self.document.productID}];
-        }];
-    }
-}
-
-- (void)downloadCompleted:(void(^)())completionBLock {
-    if ((self.document.state == PUBDocumentStateLoading)) {
-        self.progressView.progress = 0.f;
-        self.progressView.hidden = YES;
-        self.badgeView.hidden = YES;
-        self.coverImage.alpha = 1.0f;
-    }
-    if (completionBLock) completionBLock();
 }
 
 @end
