@@ -25,6 +25,7 @@
 #import "JDStatusBarNotification.h"
 #import "UIImage+Tinting.h"
 #import "PSPDFWebViewController.h"
+#import "PUBBugFixFlowLayout.h"
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -66,6 +67,10 @@
     [self setupNavigationItems];
     self.scaleTransition = [PUBScaleTransition new];
     self.transitioningDelegate = self;
+    
+    self.collectionView.collectionViewLayout = [[PUBBugFixFlowLayout alloc] init];
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
 
@@ -313,7 +318,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
-    NSInteger item = indexPath.item;
     PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     PUBDocument *document = (self.documentArray)[indexPath.item];
     [cell setupForDocument:(PUBDocument *)document];
@@ -391,7 +395,7 @@
     return size;
 }
 
-#pragma mark CollectionView FlowLayout
+#pragma mark CollectionViewFlowLayout
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
                         layout:(UICollectionViewLayout *)collectionViewLayout
