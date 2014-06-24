@@ -55,7 +55,6 @@
 		870110DC180FCF140034B9AC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DB180FCF140034B9AC /* CoreGraphics.framework */; };
 		870110DE180FCF140034B9AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DD180FCF140034B9AC /* UIKit.framework */; };
 		870110E0180FCF140034B9AC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DF180FCF140034B9AC /* CoreData.framework */; };
-		870110E6180FCF140034B9AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 870110E4180FCF140034B9AC /* InfoPlist.strings */; };
 		870110E8180FCF140034B9AC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 870110E7180FCF140034B9AC /* main.m */; };
 		870110EC180FCF140034B9AC /* PUBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 870110EB180FCF140034B9AC /* PUBAppDelegate.m */; };
 		870110F1180FCF140034B9AC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 870110F0180FCF140034B9AC /* Images.xcassets */; };
@@ -180,7 +179,6 @@
 		870110DD180FCF140034B9AC /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		870110DF180FCF140034B9AC /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		870110E3180FCF140034B9AC /* Publiss-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Publiss-Info.plist"; sourceTree = "<group>"; };
-		870110E5180FCF140034B9AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		870110E7180FCF140034B9AC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		870110E9180FCF140034B9AC /* Publiss-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Publiss-Prefix.pch"; sourceTree = "<group>"; };
 		870110EA180FCF140034B9AC /* PUBAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PUBAppDelegate.h; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 		EF8EB7A418ABA58800F7ADA9 /* PUBDownloadButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBDownloadButton.h; sourceTree = "<group>"; };
 		EF8EB7A518ABA58800F7ADA9 /* PUBDownloadButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBDownloadButton.m; sourceTree = "<group>"; };
 		EF90699E189BC2AA008E8369 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		EF9069A0189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EF9069A1189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF9069A2189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EFA9965718449CEA0032E672 /* Config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Config.plist; sourceTree = "<group>"; };
@@ -535,7 +532,6 @@
 			isa = PBXGroup;
 			children = (
 				870110E3180FCF140034B9AC /* Publiss-Info.plist */,
-				870110E4180FCF140034B9AC /* InfoPlist.strings */,
 				870110E7180FCF140034B9AC /* main.m */,
 				870110E9180FCF140034B9AC /* Publiss-Prefix.pch */,
 				8773CCFA181902CA00B577A7 /* PUBConstants.h */,
@@ -715,7 +711,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8103B57C1846C16F00E8E77E /* PreviewCell.xib in Resources */,
-				870110E6180FCF140034B9AC /* InfoPlist.strings in Resources */,
 				8103B5791846B60E00E8E77E /* PUBPreviewViewController.xib in Resources */,
 				EFB9DB6B18509112008CEBDE /* Design.plist in Resources */,
 				EFD5DDD518D3059D007FEB58 /* Storyboard.storyboard in Resources */,
@@ -850,15 +845,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		870110E4180FCF140034B9AC /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				870110E5180FCF140034B9AC /* en */,
-				EF9069A0189BC2D0008E8369 /* de */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		87011101180FCF140034B9AC /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (

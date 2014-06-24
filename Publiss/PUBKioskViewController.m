@@ -739,7 +739,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 }
 
 - (void)showAbout {
-    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:@"%@ \n %@", PUBVersionString(), PSPDFVersionString()] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
+    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFVersionString()] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
 }
 
 #pragma mark private
