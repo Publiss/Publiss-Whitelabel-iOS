@@ -66,7 +66,7 @@
     self.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
     self.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
     self.pageMode = PSPDFPageModeAutomatic;
-    self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class;
+    //self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
     self.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
 
     // Toolbar configuration
