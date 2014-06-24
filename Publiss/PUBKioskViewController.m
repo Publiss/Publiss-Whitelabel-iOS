@@ -908,19 +908,4 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     }
 }
 
-// Limit menu options for highlight annotations (they don't use the annotation inspector)
-- (NSArray *)pdfViewController:(PSPDFViewController *)pdfController shouldShowMenuItems:(NSArray *)menuItems atSuggestedTargetRect:(CGRect)rect forAnnotations:(NSArray *)annotations inRect:(CGRect)annotationRect onPageView:(PSPDFPageView *)pageView {
-    return [menuItems filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PSPDFMenuItem *menuItem, NSDictionary *bindings) {
-        // Make sure to also enable individual colors, as this callback will be also called for sub-menus.
-        return [@[PSPDFAnnotationMenuRemove, PSPDFAnnotationMenuColor, PSPDFAnnotationMenuOpacity, PSPDFAnnotationMenuColorWhite, PSPDFAnnotationMenuColorYellow, PSPDFAnnotationMenuColorRed, PSPDFAnnotationMenuColorGreen, PSPDFAnnotationMenuColorBlue, PSPDFAnnotationMenuColorPink, PSPDFAnnotationStringInk, PSPDFAnnotationMenuHighlight] containsObject:menuItem.identifier];
-    }]];
-}
-
-// Limit the menu options when text is selected.
-- (NSArray *)pdfViewController:(PSPDFViewController *)pdfController shouldShowMenuItems:(NSArray *)menuItems atSuggestedTargetRect:(CGRect)rect forSelectedText:(NSString *)selectedText inRect:(CGRect)textRect onPageView:(PSPDFPageView *)pageView {
-    return [menuItems filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(PSPDFMenuItem *menuItem, NSDictionary *bindings) {
-        return [@[PSPDFTextMenuCopy, PSPDFTextMenuDefine, PSPDFTextMenuSearch, /*PSPDFTextMenuSpeak, PSPDFTextMenuPause,*/ PSPDFAnnotationMenuHighlight] containsObject:menuItem.identifier];
-    }]];
-}
-
 @end
