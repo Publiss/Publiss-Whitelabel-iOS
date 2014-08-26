@@ -7,7 +7,7 @@
 
 #import "PUBPDFViewController.h"
 #import "PUBDocument.h"
-#import "UIColor+Design.h"
+#import "UIColor+PUBDesign.h"
 #import "PUBDocument+Helper.h"
 #import "PUBDocumentFetcher.h"
 #import "PUBPDFDocument.h"

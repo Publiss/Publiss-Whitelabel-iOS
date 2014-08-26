@@ -7,7 +7,7 @@
 
 #import "PUBAppDelegate.h"
 #import "Publiss.h"
-#import "UIColor+Design.h"
+#import "UIColor+PUBDesign.h"
 
 @implementation PUBAppDelegate
 

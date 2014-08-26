@@ -1,9 +1,10 @@
 platform :ios, '7.1'            
-pod 'AFNetworking', '2.2.3'     
-pod 'Lockbox', '~> 1.4.6'
-pod 'PSPDFKit'
-pod 'REMenu', '~> 1.8.4'
-pod 'JDStatusBarNotification', '~> 1.4.7'
+pod 'AFNetworking', '~> 2.3'
+pod 'Lockbox', '~> 1.4'
+pod 'PSPDFKit', '~> 3.7'
+pod 'REMenu', '~> 1.9'
+pod 'JDStatusBarNotification', '~> 1.4'
+pod 'GoogleAnalytics-iOS-SDK', '~> 3.0'
 
 post_install do |installer|
 	puts "CREATING VERSION FILE"

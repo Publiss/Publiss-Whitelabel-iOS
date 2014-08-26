@@ -6,7 +6,7 @@
 //
 
 #import "PUBThumbnailGridViewCell.h"
-#import "UIColor+Design.h"
+#import "UIColor+PUBDesign.h"
 
 @implementation PUBThumbnailGridViewCell
 
