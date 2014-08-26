@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS/tree/feature/cocoapod", :tag => "cocoapod" }
+  s.source       = { :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS", :branch => "cocoapod" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
