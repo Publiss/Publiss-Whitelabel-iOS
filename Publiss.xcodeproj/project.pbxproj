@@ -65,6 +65,8 @@
 		87011103180FCF140034B9AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87011101180FCF140034B9AC /* InfoPlist.strings */; };
 		87011105180FCF140034B9AC /* PublissTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87011104180FCF140034B9AC /* PublissTests.m */; };
 		87425F6718D1935500C80E25 /* PUBThumbnailGridViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87425F6618D1935500C80E25 /* PUBThumbnailGridViewCell.m */; };
+		8776655519ACDACC000DFFF1 /* PUBCoreDataStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776655419ACDACC000DFFF1 /* PUBCoreDataStack.m */; };
+		8776655819ACDD29000DFFF1 /* Publiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776655719ACDD29000DFFF1 /* Publiss.m */; };
 		8784A72B18F5763C001DB322 /* PUBDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72A18F5763C001DB322 /* PUBDocument.m */; };
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		87AA008718D72FA600AC1019 /* PUBParentPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87AA008618D72FA600AC1019 /* PUBParentPreviewViewController.m */; };
@@ -193,6 +195,10 @@
 		87425F6618D1935500C80E25 /* PUBThumbnailGridViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBThumbnailGridViewCell.m; sourceTree = "<group>"; };
 		8766DD8D18C9C06100C650A9 /* PUBVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBVersion.h; sourceTree = "<group>"; };
 		8773CCFA181902CA00B577A7 /* PUBConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBConstants.h; sourceTree = "<group>"; };
+		8776655319ACDACC000DFFF1 /* PUBCoreDataStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBCoreDataStack.h; sourceTree = "<group>"; };
+		8776655419ACDACC000DFFF1 /* PUBCoreDataStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBCoreDataStack.m; sourceTree = "<group>"; };
+		8776655619ACDD29000DFFF1 /* Publiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Publiss.h; sourceTree = "<group>"; };
+		8776655719ACDD29000DFFF1 /* Publiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Publiss.m; sourceTree = "<group>"; };
 		8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.11.xcdatamodel; sourceTree = "<group>"; };
 		8784A72918F5763C001DB322 /* PUBDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBDocument.h; sourceTree = "<group>"; };
 		8784A72A18F5763C001DB322 /* PUBDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBDocument.m; sourceTree = "<group>"; };
@@ -341,6 +347,8 @@
 				7864703518A532030005B3B1 /* Publiss.xcdatamodeld */,
 				8110784718114AEE00281106 /* PUBDocument+Helper.h */,
 				8110784818114AEE00281106 /* PUBDocument+Helper.m */,
+				8776655319ACDACC000DFFF1 /* PUBCoreDataStack.h */,
+				8776655419ACDACC000DFFF1 /* PUBCoreDataStack.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -539,6 +547,8 @@
 				EFA9965718449CEA0032E672 /* Config.plist */,
 				EFB9DB6A18509112008CEBDE /* Design.plist */,
 				8766DD8D18C9C06100C650A9 /* PUBVersion.h */,
+				8776655619ACDD29000DFFF1 /* Publiss.h */,
+				8776655719ACDD29000DFFF1 /* Publiss.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -806,12 +816,14 @@
 				8103B5781846B60E00E8E77E /* PUBPreviewViewController.m in Sources */,
 				81B3AF3E1817B98000CB5CF1 /* UIColor+Design.m in Sources */,
 				786EC49818BE99C000788B1E /* PUBPDFDocument.m in Sources */,
+				8776655819ACDD29000DFFF1 /* Publiss.m in Sources */,
 				EF7E8D9318BF33F8002FF8CC /* IAPManager.m in Sources */,
 				5B59C3C31861FA1400191B45 /* PUBContentInsetCenteredScrollView.m in Sources */,
 				8103B5671846ACC200E8E77E /* PUBPreviewCell.m in Sources */,
 				37ADD262191764D500C2232A /* PUBNamedBadgeView.m in Sources */,
 				EF123A0918A3B4CD001A43D4 /* PUBStatisticsManager.m in Sources */,
 				783E316D18BE68FB004A49EA /* PUBProgressView.m in Sources */,
+				8776655519ACDACC000DFFF1 /* PUBCoreDataStack.m in Sources */,
 				8110783D1811493000281106 /* PUBLinkAnnotationView.m in Sources */,
 				EFAB3753185B029A002A065C /* PUBBaseTransition.m in Sources */,
 				811A8B7B1816A13A00D0F893 /* PUBKioskViewController.m in Sources */,

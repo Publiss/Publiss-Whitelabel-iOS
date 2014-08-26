@@ -18,23 +18,23 @@ PODS:
   - AFNetworking/UIKit (2.2.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - JDStatusBarNotification (1.4.7)
-  - Lockbox (1.4.6)
-  - PSPDFKit (3.7.5)
-  - REMenu (1.8.4)
+  - JDStatusBarNotification (1.4.8)
+  - Lockbox (1.4.9)
+  - PSPDFKit (3.7.11)
+  - REMenu (1.8.5)
 
 DEPENDENCIES:
   - AFNetworking (= 2.2.3)
   - JDStatusBarNotification (~> 1.4.7)
   - Lockbox (~> 1.4.6)
-  - PSPDFKit (~> 3.7.5)
+  - PSPDFKit
   - REMenu (~> 1.8.4)
 
 SPEC CHECKSUMS:
   AFNetworking: 47947303319594706f48a55185ea95a95159ab94
-  JDStatusBarNotification: ac0b8550e761a0ab01696a6592564ff17698ca43
-  Lockbox: ae0bbc651c12762d92ba1463af8ad5b2258fe097
-  PSPDFKit: 50af33cfd9980040eaebc1c76acee96bd2375733
-  REMenu: 531a8b6bc7764a2fe4ceda7a533399a09184b250
+  JDStatusBarNotification: c68611370dedc0ef865fb0fc1768dfbaf8fd961f
+  Lockbox: cfe87dbbce6b5c6d7cfeefc3fe6594ef55919b11
+  PSPDFKit: 1587f4f285ecf57a589637cf6df3c53566979612
+  REMenu: e1512b09121d3f8fd9bb533423ac467675eef95c
 
 COCOAPODS: 0.33.1

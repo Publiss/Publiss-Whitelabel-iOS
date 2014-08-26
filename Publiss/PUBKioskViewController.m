@@ -26,6 +26,7 @@
 #import "UIImage+Tinting.h"
 #import "PSPDFWebViewController.h"
 #import "PUBBugFixFlowLayout.h"
+#import "PUBCoreDataStack.h"
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -295,7 +296,7 @@
     }
     
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
-        [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+        [PUBCoreDataStack.sharedCoreDataStack saveContext];
         self.documentArray = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES];
         [self.collectionView reloadData];
         self.collectionView.userInteractionEnabled = YES;
@@ -541,7 +542,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                                                              document.state = PUBDocumentPurchased;
                                                                          }
                                                                      }
-                                                                     [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+                                                                     [PUBCoreDataStack.sharedCoreDataStack saveContext];
                                                                      [self performSelectorOnMainThread:@selector(displayRestoreSuccessMessage) withObject:nil waitUntilDone:NO];
                                                                  }
                                                              }
@@ -786,7 +787,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         
         if (document) {
             document.state = PUBDocumentStateDownloaded;
-            [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+            [PUBCoreDataStack.sharedCoreDataStack saveContext];
             
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
             [cell setupForDocument:document];
@@ -801,7 +802,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         
         if (document) {
             document.state = PUBDocumentPurchased;
-            [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+            [PUBCoreDataStack.sharedCoreDataStack saveContext];
             
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
             [cell setupForDocument:document];

@@ -11,6 +11,7 @@
 #import "PUBAppDelegate.h"
 #import "IAPController.h"
 #import "PUBURLFactory.h"
+#import "PUBCoreDataStack.h"
 
 @interface PUBDocumentFetcher () <PSPDFDownloadManagerDelegate>
 @property (nonatomic, strong) PSPDFDownloadManager *downloadManager;
@@ -192,7 +193,7 @@
             [self documentDownloadFinished:document];
         }
         document.state = PUBDocumentStateDownloaded;
-        [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+        [PUBCoreDataStack.sharedCoreDataStack saveContext];
         [self.fetchProgress removeObjectForKey:productID];
         [self.documentProductCache removeObjectForKey:productID];
         

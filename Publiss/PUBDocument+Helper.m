@@ -9,6 +9,7 @@
 #import "PUBAppDelegate.h"
 #import "PUBPDFDocument.h"
 #import "PUBThumbnailImageCache.h"
+#import "PUBCoreDataStack.h"
 
 @implementation PUBDocument (Helper)
 
@@ -19,9 +20,8 @@
 #pragma mark - data model helpers
 
 + (PUBDocument *)createEntity {
-    PUBAppDelegate *appDelegate = UIApplication.sharedApplication.delegate;
     PUBDocument *newEntity = [NSEntityDescription insertNewObjectForEntityForName:@"PUBDocument"
-                                                           inManagedObjectContext:appDelegate.managedObjectContext];
+                                                           inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
 
     return newEntity;
 }
@@ -88,13 +88,11 @@
 
 
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID {
-    PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
-
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.predicate = [NSPredicate predicateWithFormat:@"productID = %@", productID];
     fetchRequest.entity = [self getEntity];
 
-    NSArray *fetchedResults = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:NULL];
+    NSArray *fetchedResults = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:NULL];
     return fetchedResults.firstObject;
 }
 
@@ -103,8 +101,6 @@
 }
 
 + (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending {
-    PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
-
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.entity = [self getEntity];
 
@@ -112,7 +108,7 @@
     fetchRequest.sortDescriptors = @[sortDescriptor];
 
     NSError *error = nil;
-    NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSArray *results = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     
     if (error) {
         PUBLogError(@"Error while fetching documents: %@", error);
@@ -122,17 +118,14 @@
 }
 
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {
-    PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
-
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.predicate = predicate;
     fetchRequest.entity = [self getEntity];
-    return [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:NULL];
+    return [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:NULL];
 }
 
 + (NSEntityDescription *)getEntity {
-    PUBAppDelegate *appDelegate = (PUBAppDelegate *) UIApplication.sharedApplication.delegate;
-    return [NSEntityDescription entityForName:@"PUBDocument" inManagedObjectContext:appDelegate.managedObjectContext];
+    return [NSEntityDescription entityForName:@"PUBDocument" inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
 }
 
 - (void)deleteEntity {
@@ -202,7 +195,7 @@
             }
             
             document.state = PUBDocumentStateOnline;
-            [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+            [PUBCoreDataStack.sharedCoreDataStack saveContext];
             if (completionBlock) completionBlock();
         }
     }
@@ -214,7 +207,7 @@
     }
     [PSPDFCache.sharedCache clearCache];
     [PUBThumbnailImageCache.sharedInstance clearCache];
-    [(PUBAppDelegate *)UIApplication.sharedApplication.delegate saveContext];
+    [PUBCoreDataStack.sharedCoreDataStack saveContext];
 }
 
 - (NSURL *)localXFDFURL {
