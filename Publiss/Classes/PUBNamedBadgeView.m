@@ -54,7 +54,7 @@
         _updatedLabel.font = [UIFont systemFontOfSize:10];
         _updatedLabel.adjustsFontSizeToFitWidth = YES;
         _updatedLabel.textColor = [UIColor whiteColor];
-        _updatedLabel.transform = CGAffineTransformMakeRotation((45 * M_PI) / 180.0);
+        _updatedLabel.transform = CGAffineTransformMakeRotation((CGFloat)(45.0f * M_PI) / 180.0f);
         [self addSubview:_updatedLabel];
     }
     return _updatedLabel;

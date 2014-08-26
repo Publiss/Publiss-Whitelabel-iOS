@@ -945,10 +945,7 @@
 				GCC_PREFIX_HEADER = "Publiss/Publiss-Prefix.pch";
 				INFOPLIST_FILE = "Publiss/Publiss-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/GoogleAnalytics/Library",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -974,10 +971,7 @@
 				GCC_PREFIX_HEADER = "Publiss/Publiss-Prefix.pch";
 				INFOPLIST_FILE = "Publiss/Publiss-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/GoogleAnalytics/Library",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
