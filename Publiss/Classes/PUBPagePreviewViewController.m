@@ -14,6 +14,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBURLFactory.h"
+#import "PUBConstants.h"
 
 @interface PUBPagePreviewViewController () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (nonatomic, assign) NSInteger currentIndex;

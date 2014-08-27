@@ -10,6 +10,7 @@
 #import "PUBPDFDocument.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBCoreDataStack.h"
+#import "PUBConstants.h"
 
 @implementation PUBDocument (Helper)
 

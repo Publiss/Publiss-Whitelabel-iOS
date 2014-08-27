@@ -7,6 +7,7 @@
 //
 
 #import "PUBCoreDataStack.h"
+#import "PUBConstants.h"
 
 @interface PUBCoreDataStack ()
 @property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;

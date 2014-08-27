@@ -11,6 +11,7 @@
 #import "PUBDocument.h"
 #import "PUBProgressView.h"
 #import "UIImageView+AFNetworking.h"
+#import "PUBConstants.h"
 
 @interface PSPDFDocumentProvider (PUBPrivateAccess)
 - (BOOL)localFileIsMissing;

@@ -7,6 +7,7 @@
 
 #import "PUBPreviewCell.h"
 #import "PUBCenteredScrollView.h"
+#import "PUBConstants.h"
 
 @implementation PUBPreviewCell
 

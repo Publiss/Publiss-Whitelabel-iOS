@@ -7,6 +7,8 @@
 //  Partly based on the SDImageChache class (c) Olivier Poitrey <rs@dailymotion.com>
 
 #import "PUBThumbnailImageCache.h"
+#import "PSPDFKit.h"
+#import "PUBConstants.h"
 
 @interface PUBThumbnailImageCache ()
 @property (nonatomic, strong) NSString *cacheDirectory;

@@ -12,6 +12,7 @@
 #import "IAPController.h"
 #import "PUBURLFactory.h"
 #import "PUBCoreDataStack.h"
+#import "PUBConstants.h"
 
 @interface PUBDocumentFetcher () <PSPDFDownloadManagerDelegate>
 @property (nonatomic, strong) PSPDFDownloadManager *downloadManager;

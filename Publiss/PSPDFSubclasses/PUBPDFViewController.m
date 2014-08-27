@@ -17,6 +17,7 @@
 #import "PUBThumbnailGridViewCell.h"
 #import "PUBKioskViewController.h"
 #import "PUBLinkAnnotationView.h"
+#import "PUBConstants.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;

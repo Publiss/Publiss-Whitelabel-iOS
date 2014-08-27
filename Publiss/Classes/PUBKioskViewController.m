@@ -27,6 +27,8 @@
 #import "PSPDFWebViewController.h"
 #import "PUBBugFixFlowLayout.h"
 #import "PUBCoreDataStack.h"
+#import "PUBConstants.h"
+#import <PublissCore.h>
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;

@@ -6,6 +6,7 @@
 //
 
 #import "PUBScaleTransition.h"
+#import "PUBConstants.h"
 
 @interface PUBScaleTransition ()
 @property (strong, nonatomic) UIImageView *magazineImageView;

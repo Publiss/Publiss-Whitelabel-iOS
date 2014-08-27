@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
+#import "PSPDFKit.h"
 
 @class PUBDocument;
 

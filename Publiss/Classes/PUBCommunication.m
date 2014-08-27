@@ -11,6 +11,8 @@
 #import "PUBHTTPRequestManager.h"
 #import "PUBStatisticsManager.h"
 #import "PUBURLFactory.h"
+#import <PublissCore.h>
+#import "PUBConstants.h"
 
 @implementation PUBCommunication
 

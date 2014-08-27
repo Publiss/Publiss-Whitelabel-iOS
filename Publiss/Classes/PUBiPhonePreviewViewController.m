@@ -8,6 +8,7 @@
 #import "PUBiPhonePreviewViewController.h"
 #import "PUBDocument+Helper.h"
 #import "UIColor+PUBDesign.h"
+#import "PUBConstants.h"
 
 @interface PUBiPhonePreviewViewController () <UINavigationControllerDelegate, UIScrollViewDelegate>
 

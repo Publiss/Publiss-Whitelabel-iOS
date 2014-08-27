@@ -143,7 +143,6 @@
 		877665B319ACEA06000DFFF1 /* IAPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPController.m; sourceTree = "<group>"; };
 		877665B419ACEA06000DFFF1 /* IAPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPManager.h; sourceTree = "<group>"; };
 		877665B519ACEA06000DFFF1 /* IAPManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPManager.m; sourceTree = "<group>"; };
-		877665B919ACEA0C000DFFF1 /* UIColor+PUBDesign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+PUBDesign.h"; path = "../Classes/UIColor+PUBDesign.h"; sourceTree = "<group>"; };
 		877665BA19ACEA0C000DFFF1 /* PUBPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBPageView.m; sourceTree = "<group>"; };
 		877665BB19ACEA0C000DFFF1 /* PUBPDFDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBPDFDocument.h; sourceTree = "<group>"; };
 		877665BC19ACEA0C000DFFF1 /* PUBPDFDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBPDFDocument.m; sourceTree = "<group>"; };
@@ -537,7 +536,6 @@
 			children = (
 				877665CE19ACEC68000DFFF1 /* PUBLinkAnnotationView.h */,
 				877665CF19ACEC68000DFFF1 /* PUBLinkAnnotationView.m */,
-				877665B919ACEA0C000DFFF1 /* UIColor+PUBDesign.h */,
 				877665BA19ACEA0C000DFFF1 /* PUBPageView.m */,
 				877665BB19ACEA0C000DFFF1 /* PUBPDFDocument.h */,
 				877665BC19ACEA0C000DFFF1 /* PUBPDFDocument.m */,

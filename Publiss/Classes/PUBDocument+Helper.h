@@ -6,6 +6,7 @@
 //
 
 #import "PUBDocument.h"
+#import "PSPDFKit.h"
 
 typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateOnline,

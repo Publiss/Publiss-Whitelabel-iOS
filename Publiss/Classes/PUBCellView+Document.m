@@ -8,6 +8,7 @@
 
 #import "PUBCellView+Document.h"
 #import "PUBDocument+Helper.h"
+#import "PUBConstants.h"
 
 @implementation PUBCellView (Document)
 

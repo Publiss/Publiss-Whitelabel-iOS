@@ -12,6 +12,8 @@
 #import "GAIDictionaryBuilder.h"
 #import "PUBStatisticsManager.h"
 #import "UIColor+PUBDesign.h"
+#import "PUBConstants.h"
+#import <PublissCore.h>
 
 @implementation Publiss
 

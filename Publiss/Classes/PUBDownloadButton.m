@@ -8,7 +8,7 @@
 #import "PUBDocument+Helper.h"
 #import "UIColor+PUBDesign.h"
 #import "IAPController.h"
-
+#import "PUBConstants.h"
 
 @interface PUBDownloadButton ()
 @property (strong, nonatomic) PUBDocument *document;

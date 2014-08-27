@@ -6,6 +6,7 @@
 //
 
 #import "PUBVersion.h"
+#import "PUBConstants.h"
 
 id PUBSafeCast(id object, Class targetClass) {
     NSCParameterAssert(targetClass);

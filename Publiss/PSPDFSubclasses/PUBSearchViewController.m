@@ -6,6 +6,8 @@
 //
 
 #import "PUBSearchViewController.h"
+#import "PSPDFKit.h"
+#import "PUBConstants.h"
 
 @implementation PUBSearchViewController
 

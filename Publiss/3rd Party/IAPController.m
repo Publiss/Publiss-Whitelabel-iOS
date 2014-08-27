@@ -8,6 +8,8 @@
 #import "IAPController.h"
 #import "PUBDocument+Helper.h"
 #import "Lockbox.h"
+#import "PUBConstants.h"
+#import <PublissCore.h>
 
 @interface IAPController()
 

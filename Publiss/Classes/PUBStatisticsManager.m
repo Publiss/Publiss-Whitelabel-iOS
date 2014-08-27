@@ -7,6 +7,8 @@
 
 #import "PUBStatisticsManager.h"
 #import "Lockbox.h"
+#import "PUBConstants.h"
+#import <PublissCore.h>
 
 @interface PUBStatisticsManager ()
 @property (strong, nonatomic) NSMutableArray *cachedStatisticsStore;
