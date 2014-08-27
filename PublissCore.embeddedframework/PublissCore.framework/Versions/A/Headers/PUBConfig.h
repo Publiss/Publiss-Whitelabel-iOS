@@ -6,22 +6,18 @@
 //
 
 #import <Foundation/Foundation.h>
-
-extern NSString *const PUBStatisticsUserDefaultsKey;
-extern NSString *const PUBConfigDefaultWebserviceBaseURL;
-extern NSString *const PUBConfigDefaultAppToken;
-extern NSString *const PUBConfigDefaultAppSecret;
+#import <UIKit/UIKit.h>
 
 @interface PUBConfig : NSObject
 
-
 + (PUBConfig *)sharedConfig;
 
-- (NSString *)appToken;
-- (NSString *)appSecret;
-- (NSString *)GATrackingCode;
-- (NSNumber *)pageTrackTime;
-- (NSURL *)webserviceBaseURL;
-- (BOOL)IAPActive;
+@property (nonatomic, strong) NSString *appToken;
+@property (nonatomic, strong) NSString *appSecret;
+@property (nonatomic, strong) NSString *googleAnalyticsTrackingCode;
+@property (nonatomic, strong) NSNumber *pageTrackTime;
+@property (nonatomic, strong) NSURL *webserviceBaseURL;
+@property (nonatomic, assign) BOOL *inAppPurchaseActive;
+@property (nonatomic, strong) UIColor *primaryColor;
 
 @end

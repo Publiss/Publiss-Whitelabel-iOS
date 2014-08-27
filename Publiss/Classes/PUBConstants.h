@@ -21,8 +21,6 @@ static NSString *const PUBEnableUIInteractionNotification = @"PUBEnableUIInterac
 static NSString *const PUBDocumentDownloadFinished = @"PUBDocumentDownloadFinished";
 
 static NSString *const PUBApplicationDidStartNotification = @"PUBApplicationDidStartNotification";
-static NSString *const PUBApplicationWillResignActiveNotification = @"PUBApplicationWillResignActiveNotification";
-static NSString *const PUBApplicationWillEnterForegroundNotification = @"PUBApplicationWillEnterForegroundNotification";
 static NSString *const PUBDocumentDidOpenNotification = @"PUBDocumentDidOpenNotification";
 static NSString *const PUBDocumentDownloadNotification = @"PUBDocumentDownloadNotification";
 static NSString *const PUBDocumentPageTrackedNotification = @"PUBDocumentPageTracked";
@@ -40,6 +38,7 @@ static NSString *const PUBStatisticsDocumentIDKey = @"apple_product_id";
 static NSString *const PUBStatisticsTimestampKey = @"timestamp";
 static NSString *const PUBStatisticsEventTrackedPageKey = @"tracked_page_number";
 static NSString *const PUBStatisticsEventKey = @"event";
+static NSString *const PUBStatisticsUserDefaultsKey = @"PUBStatisticsUserDefaultsKey";
 
 // notfification statistic keys
 static NSString *const PUBStatisticsEventOpenKey = @"open";
@@ -56,9 +55,6 @@ static NSString *const PUBStatisticsDeletedKey = @"delete";
 static NSString *const PUBJSONAppSecretKey = @"app_secret";
 static NSString *const PUBJSONAppTokenKey = @"app_token";
 static NSString *const PUBJSONSecret = @"secret";
-
-// Navigation title
-static NSString *const PUBTitle = @"Publiss";
 
 // Core data
 static NSString *const SortOrder = @"priority";

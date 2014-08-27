@@ -10,6 +10,11 @@
 
 @interface Publiss : NSObject
 
-+ (void)setupWithLicenseKey:(NSString *)licenseString;
+@property (strong, nonatomic) NSString *googleAnalyticsTrackingCode;
+@property (strong, nonatomic) UIColor *primaryColor;
+@property (strong, nonatomic) UIColor *fontColor;
+
++ (Publiss *)staticInstance;
+- (void)setupWithLicenseKey:(NSString *)licenseString;
 
 @end

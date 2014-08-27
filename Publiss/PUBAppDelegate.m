@@ -9,29 +9,19 @@
 #import "Publiss.h"
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
+#import <PublissCore.h>
 
 @implementation PUBAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
-    // Apply global tintColor to icons, fonts in navigationbar etc
-    self.window.tintColor = UIColor.fontColor;
+    self.window.tintColor = [UIColor whiteColor];
     
-    [Publiss setupWithLicenseKey:@""];
+    PUBConfig.sharedConfig.appToken = @"1d3ae766-0206-4eb7-90e1-f2e2917a4635";
+    PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
+        
+    [Publiss.staticInstance setupWithLicenseKey:@""];
     
     return YES;
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-
-}
-
-- (void)applicationWillResignActive:(UIApplication *)application {
-    [NSNotificationCenter.defaultCenter postNotificationName:PUBApplicationWillResignActiveNotification object:nil];
-}
-
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    [NSNotificationCenter.defaultCenter postNotificationName:PUBApplicationWillEnterForegroundNotification object:nil];
 }
 
 @end

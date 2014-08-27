@@ -10,11 +10,5 @@
 @interface UIColor (PUBDesign)
 
 + (UIColor *)publissPrimaryColor;
-+ (UIColor *)publissSecondaryColor;
-+ (UIColor *)publissCoverBadgeColor;
-+ (UIColor *)publissBlueColor;
-+ (UIColor *)fontColor;
-+ (UIColor *)menuIconColor;
-
 
 @end

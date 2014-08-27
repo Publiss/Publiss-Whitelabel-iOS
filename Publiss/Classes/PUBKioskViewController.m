@@ -133,25 +133,16 @@
 - (void)setupMenu {
     REMenuItem *reloadItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Reload")
                                                       subtitle:nil
-                                                         image:[[UIImage imageNamed:@"refresh"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                         image:[[UIImage imageNamed:@"refresh"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
                                               highlightedImage:nil
                                                         action:^(REMenuItem *item) {
                                                             [self refreshDocumentsWithActivityViewAnimated:YES];
                                                         }];
     
-#ifdef DEBUG
-    REMenuItem *clearItem = [[REMenuItem alloc] initWithTitle:@"(DEBUG) Clear"
-                                                     subtitle:nil
-                                                        image:nil
-                                             highlightedImage:nil
-                                                       action:^(REMenuItem *item) {
-                                                           [self clearPurchases];
-                                                       }];
-#endif
     
     REMenuItem *visitSiteItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Visit Publiss Website")
                                                          subtitle:nil
-                                                            image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                            image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
                                                  highlightedImage:nil
                                                            action:^(REMenuItem *item) {
                                                                [self visitPublissSite];
@@ -160,7 +151,7 @@
     
     REMenuItem *aboutItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"About Publiss")
                                                      subtitle:nil
-                                                        image:[[UIImage imageNamed:@"about"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                        image:[[UIImage imageNamed:@"about"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
                                              highlightedImage:nil
                                                        action:^(REMenuItem *item) {
                                                            [self showAbout];
@@ -170,20 +161,29 @@
                                   reloadItem,
                                   visitSiteItem,
                                   aboutItem,
-#ifdef DEBUG
-                                  clearItem
-#endif
                                   ].mutableCopy;
     
-    if (PUBConfig.sharedConfig.IAPActive) {
+    if (PUBConfig.sharedConfig.inAppPurchaseActive) {
         REMenuItem *restoreItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Restore Purchases")
                                                            subtitle:nil
-                                                              image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIColor.fontColor fraction:0.f]
+                                                              image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
                                                    highlightedImage:nil
                                                              action:^(REMenuItem *item) {
                                                                  [self restorePurchases];
                                                              }];
         [menuItems insertObject:restoreItem atIndex:1];
+        
+#ifdef DEBUG
+        REMenuItem *clearItem = [[REMenuItem alloc] initWithTitle:@"(DEBUG) Clear"
+                                                         subtitle:nil
+                                                            image:nil
+                                                 highlightedImage:nil
+                                                           action:^(REMenuItem *item) {
+                                                               [self clearPurchases];
+                                                           }];
+        
+        [menuItems addObject:clearItem];
+#endif
     }
     
     self.menu = [[REMenu alloc] initWithItems:menuItems];
@@ -195,13 +195,13 @@
     self.menu.separatorHeight = 1.f;
     self.menu.separatorColor = self.menu.highlightedSeparatorColor = [[UIColor blackColor] colorWithAlphaComponent:.1f];
     self.menu.borderWidth = 0.0f;
-    self.menu.textColor = [UIColor fontColor];
+    self.menu.textColor = UIApplication.sharedApplication.delegate.window.tintColor;
     self.menu.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f];
     self.menu.textShadowOffset = CGSizeZero;
     self.menu.shadowColor = [UIColor clearColor];
     self.menu.highlightedBackgroundColor = [UIColor colorWithWhite:1.f alpha:.3f];
     self.menu.highlightedTextShadowColor = [UIColor clearColor];
-    self.menu.highlightedTextColor = [UIColor fontColor];
+    self.menu.highlightedTextColor = UIApplication.sharedApplication.delegate.window.tintColor;
     self.menu.liveBlur = YES;
     self.menu.liveBlurBackgroundStyle = REMenuLiveBackgroundStyleLight;
     self.menu.textOffset = CGSizeMake(66.f, 0.f);
@@ -215,12 +215,11 @@
 
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(enableUIInteraction:) name:PUBEnableUIInteractionNotification object:nil];
-    [dnc addObserver:self selector:@selector(trackPage) name:PUBApplicationWillResignActiveNotification object:nil];
+    [dnc addObserver:self selector:@selector(trackPage) name:UIApplicationWillResignActiveNotification object:nil];
     [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:PUBApplicationWillEnterForegroundNotification object:nil];
-    
+    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [self.navigationController setNavigationBarHidden:NO animated:animated];
     [UIView animateWithDuration:0.25f animations:^{
@@ -277,12 +276,11 @@
 
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc removeObserver:self name:PUBEnableUIInteractionNotification object:nil];
-    [dnc removeObserver:self name:PUBApplicationWillResignActiveNotification object:nil];
+    [dnc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc removeObserver:self name:PUBApplicationWillEnterForegroundNotification object:nil];
-    
+    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
@@ -740,8 +738,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 - (void)setupNavigationItems {
     self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
     self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationItem.title = PUBTitle;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIColor.whiteColor};
+    self.navigationItem.title = PUBLocalize(@"Publiss");
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
 }
 
 - (void)showAbout {

@@ -17,12 +17,40 @@
 
 @implementation Publiss
 
-+ (void)setupWithLicenseKey:(NSString *)licenseString {
++ (Publiss *)staticInstance {
+    static Publiss *staticInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        staticInstance = [[self alloc] init];
+    });
+    return staticInstance;
+}
+
+- (void)setupWithLicenseKey:(NSString *)licenseString {
 #if defined(PUBClearAllFilesOnAppStart) && PUBClearAllFilesOnAppStart
     // DEBUG: Clear all files!
     NSString *publissPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     [NSFileManager.defaultManager removeItemAtPath:publissPath error:NULL];
 #endif
+    
+    NSAssert(PUBConfig.sharedConfig.appToken != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appToken");
+    NSAssert(PUBConfig.sharedConfig.appSecret != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appSecret");
+    
+    if (PUBConfig.sharedConfig.webserviceBaseURL == nil) {
+        PUBConfig.sharedConfig.webserviceBaseURL = [NSURL URLWithString:@"https://backend.publiss.com"];
+    }
+    
+    if (PUBConfig.sharedConfig.inAppPurchaseActive == nil) {
+        PUBConfig.sharedConfig.inAppPurchaseActive = NO;
+    }
+
+    if (PUBConfig.sharedConfig.pageTrackTime == nil) {
+        PUBConfig.sharedConfig.pageTrackTime = @4;
+    }
+    
+    if (PUBConfig.sharedConfig.primaryColor == nil) {
+        PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:3/255.0f green:172/255.0f blue:193/255.0f alpha:1];
+    }
     
     if (licenseString != nil && ![licenseString isEqualToString:@""]) {
         PSPDFSetLicenseKey((char*)[licenseString UTF8String]);
@@ -32,7 +60,7 @@
     [PUBDocument restoreDocuments];
     
     // Track GA
-    [Publiss loadGoogleAnalytics];
+    [self setupGoogleAnalytics];
     
     // Start statistics async.
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -47,8 +75,8 @@
 
 #pragma mark - Google Analytics
 
-+ (void)loadGoogleAnalytics {
-    if (PUBConfig.sharedConfig.GATrackingCode.length > 0) {
+- (void)setupGoogleAnalytics {
+    if (PUBConfig.sharedConfig.googleAnalyticsTrackingCode.length > 0) {
         // Optional: automatically send uncaught exceptions to Google Analytics.
         GAI.sharedInstance.trackUncaughtExceptions = YES;
         // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
@@ -56,7 +84,7 @@
         // Optional: set Logger to VERBOSE for debug information.
         //GAI.sharedInstance.logger.logLevel = kGAILogLevelVerbose;
         
-        id<GAITracker> tracker = [GAI.sharedInstance trackerWithTrackingId:[[PUBConfig sharedConfig] GATrackingCode]];
+        id<GAITracker> tracker = [GAI.sharedInstance trackerWithTrackingId:PUBConfig.sharedConfig.googleAnalyticsTrackingCode];
         [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"App"             // Event category (required)
                                                               action:@"Start"           // Event action (required)
                                                                label:@"Start"           // Event label
