@@ -32,9 +32,9 @@
     NSString *publissPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     [NSFileManager.defaultManager removeItemAtPath:publissPath error:NULL];
 #endif
-    
-    NSAssert(PUBConfig.sharedConfig.appToken != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appToken");
-    NSAssert(PUBConfig.sharedConfig.appSecret != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appSecret");
+
+    NSAssert(PUBConfig.sharedConfig.appToken != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appToken = @\"token\"");
+    NSAssert(PUBConfig.sharedConfig.appSecret != nil, @"You need to provide an app secret setup with PUBConfig.sharedConfig.appSecret = @\"secret\"");
     
     if (PUBConfig.sharedConfig.webserviceBaseURL == nil) {
         PUBConfig.sharedConfig.webserviceBaseURL = [NSURL URLWithString:@"https://backend.publiss.com"];

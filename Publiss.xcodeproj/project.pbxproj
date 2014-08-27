@@ -135,7 +135,6 @@
 		870110F6180FCF140034B9AC /* PublissTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PublissTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		870110F7180FCF140034B9AC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		87011100180FCF140034B9AC /* PublissTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PublissTests-Info.plist"; sourceTree = "<group>"; };
-		87011102180FCF140034B9AC /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		87011104180FCF140034B9AC /* PublissTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublissTests.m; sourceTree = "<group>"; };
 		877665B219ACEA06000DFFF1 /* IAPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPController.h; sourceTree = "<group>"; };
 		877665B319ACEA06000DFFF1 /* IAPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPController.m; sourceTree = "<group>"; };
@@ -220,7 +219,6 @@
 		A7EC5682127449A88DBB3A62 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D403592118BF442100C5E72F /* Publiss_1.03.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.03.xcdatamodel; sourceTree = "<group>"; };
 		D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
-		EF90699E189BC2AA008E8369 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF9069A1189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF9069A2189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
@@ -790,7 +788,6 @@
 		87011101180FCF140034B9AC /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				87011102180FCF140034B9AC /* en */,
 				EF9069A2189BC2D0008E8369 /* de */,
 			);
 			name = InfoPlist.strings;
@@ -799,7 +796,6 @@
 		EF90699F189BC2AA008E8369 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				EF90699E189BC2AA008E8369 /* en */,
 				EF9069A1189BC2D0008E8369 /* de */,
 				EFD5DDD918D305EF007FEB58 /* Base */,
 			);
