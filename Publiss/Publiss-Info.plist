@@ -25,7 +25,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIMainStoryboardFile</key>
-	<string>Storyboard</string>
+	<string>PUBKiosk</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>Storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>

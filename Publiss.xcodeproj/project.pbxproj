@@ -75,8 +75,8 @@
 		8776661C19ACED98000DFFF1 /* PUBHTTPRequestManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776661919ACED98000DFFF1 /* PUBHTTPRequestManager.m */; };
 		8776662219ACEDBE000DFFF1 /* PUBConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776661E19ACEDBE000DFFF1 /* PUBConstants.m */; };
 		8776662319ACEDBE000DFFF1 /* Publiss.m in Sources */ = {isa = PBXBuildFile; fileRef = 8776662019ACEDBE000DFFF1 /* Publiss.m */; };
-		8776662919ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8776662719ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard */; };
-		8776662A19ADAFC8000DFFF1 /* Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8776662819ADAFC8000DFFF1 /* Storyboard.storyboard */; };
+		8776662919ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */; };
+		8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */; };
 		8776662E19ADB05E000DFFF1 /* PreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776662C19ADB05E000DFFF1 /* PreviewCell.xib */; };
 		8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */; };
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
@@ -213,8 +213,8 @@
 		8776661E19ACEDBE000DFFF1 /* PUBConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBConstants.m; path = Classes/PUBConstants.m; sourceTree = "<group>"; };
 		8776661F19ACEDBE000DFFF1 /* Publiss.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Publiss.h; path = Classes/Publiss.h; sourceTree = "<group>"; };
 		8776662019ACEDBE000DFFF1 /* Publiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Publiss.m; path = Classes/Publiss.m; sourceTree = "<group>"; };
-		8776662719ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard_iPhone.storyboard; path = Views/Storyboard_iPhone.storyboard; sourceTree = "<group>"; };
-		8776662819ADAFC8000DFFF1 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard.storyboard; path = Views/Storyboard.storyboard; sourceTree = "<group>"; };
+		8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBPreviewViewControlleriPhone.storyboard; path = Views/PUBPreviewViewControlleriPhone.storyboard; sourceTree = "<group>"; };
+		8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBKiosk.storyboard; path = Views/PUBKiosk.storyboard; sourceTree = "<group>"; };
 		8776662C19ADB05E000DFFF1 /* PreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreviewCell.xib; path = Views/PreviewCell.xib; sourceTree = "<group>"; };
 		8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PUBPreviewViewController.xib; path = Views/PUBPreviewViewController.xib; sourceTree = "<group>"; };
 		8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.11.xcdatamodel; sourceTree = "<group>"; };
@@ -352,8 +352,8 @@
 			isa = PBXGroup;
 			children = (
 				8103B57A1846C14E00E8E77E /* xib */,
-				8776662719ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard */,
-				8776662819ADAFC8000DFFF1 /* Storyboard.storyboard */,
+				8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */,
+				8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -663,9 +663,9 @@
 				EFA9965818449CEA0032E672 /* Config.plist in Resources */,
 				8776662E19ADB05E000DFFF1 /* PreviewCell.xib in Resources */,
 				870110F1180FCF140034B9AC /* Images.xcassets in Resources */,
-				8776662A19ADAFC8000DFFF1 /* Storyboard.storyboard in Resources */,
+				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
 				8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */,
-				8776662919ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard in Resources */,
+				8776662919ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard in Resources */,
 				EF90699D189BC2AA008E8369 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

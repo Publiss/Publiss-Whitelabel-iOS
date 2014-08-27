@@ -59,6 +59,10 @@
 
 #pragma mark - UIViewController
 
++ (PUBKioskViewController *)kioskViewController {
+    return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -467,7 +471,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                 self.collectionView.userInteractionEnabled = NO;
                 [self presentViewController:previewViewController animated:YES completion:nil];
             } else {
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard_iPhone" bundle:nil];
+                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBPreviewViewControlleriPhone" bundle:nil];
                 PUBiPhonePreviewViewController *previewViewController = [storyboard instantiateViewControllerWithIdentifier:@"iPhonePreviewVC"];
                 previewViewController.document = document;
                 previewViewController.kioskController = self;
