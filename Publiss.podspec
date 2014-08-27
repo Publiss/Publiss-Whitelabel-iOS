@@ -65,7 +65,8 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  s.framework  = "PublissCore"
+  s.framework  = "PublissCore", "CoreData"
+  spec.prefix_header_contents = '#import <CoreData/CoreData.h>'
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
