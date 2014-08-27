@@ -89,6 +89,4 @@ Pod::Spec.new do |s|
   s.dependency "JDStatusBarNotification"
   s.dependency "GoogleAnalytics-iOS-SDK"
 
-  s.prepare_command = "echo '#define PSPDFKIT_COMPILE_DATE @"#{DateTime.now.strftime('%b %d %Y')}\"\n#define GIT_VERSION @\"#{s.version}\"\n#define GIT_COMMIT_COUNT 0' > PSPDFKit/InfoPlist.h"
-
 end
