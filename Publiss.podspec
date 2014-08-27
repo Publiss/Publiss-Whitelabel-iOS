@@ -8,16 +8,9 @@
 
 Pod::Spec.new do |s|
 
-  # ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  These will help people to find your library, and whilst it
-  #  can feel like a chore to fill in it's definitely to your advantage. The
-  #  summary should be tweet-length, and the description more in depth.
-  #
-
   s.name         = "Publiss"
-  s.version      = "0.0.1"
-  s.summary      = "A short description of Publiss."
+  s.version      = "1.14"
+  s.summary      = "Publiss enables you to enrich PDFs with multimedia content and publish them to a high-quality iPhone and iPad App - all by yourself."
 
   s.description  = <<-DESC
                    A longer description of Publiss in Markdown format.
@@ -28,57 +21,15 @@ Pod::Spec.new do |s|
                    * Finally, don't worry about the indent, CocoaPods strips it!
                    DESC
 
-  s.homepage     = "http://EXAMPLE/Publiss"
-  # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
-
-
-  # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Licensing your code is important. See http://choosealicense.com for more info.
-  #  CocoaPods will detect a license file if there is a named LICENSE*
-  #  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.
-  #
-
-  s.license      = "MIT (example)"
-  # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
-
-
-  # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Specify the authors of the library, with email addresses. Email addresses
-  #  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also
-  #  accepts just a name if you'd rather not provide an email address.
-  #
-  #  Specify a social_media_url where others can refer to, for example a twitter
-  #  profile URL.
-  #
+  s.homepage     = "http://www.publiss.com"
+  s.screenshots  = "https://github.com/Publiss/Publiss-Whitelabel-iOS/raw/master/iPhone_iPad_Kiosk.png"
+  s.license      = "MIT"
   
-  s.author             = { "Daniel Griesser" => "daniel.griesser@bytepoets.com" }
-  # Or just: s.author    = "Daniel Griesser"
-  # s.authors            = { "Daniel Griesser" => "daniel.griesser@bytepoets.com" }
-  # s.social_media_url   = "http://twitter.com/Daniel Griesser"
+  s.author       = "Publiss GmbH"
+  
+  s.platform     = :ios, "7.1"
 
-  # ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  If this Pod runs only on iOS or OS X, then specify the platform and
-  #  the deployment target. You can optionally include the target after the platform.
-  #
-
-  # s.platform     = :ios
-  # s.platform     = :ios, "5.0"
-
-  #  When using multiple platforms
-  s.ios.deployment_target = "7.1"
-  # s.osx.deployment_target = "10.7"
-
-
-  # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
-  #
-  #  Specify the location from where the source should be retrieved.
-  #  Supports git, hg, bzr, svn and HTTP.
-  #
-
-  s.source       = { :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS", :branch => "cocoapod" }
+  s.source       = { :git => "https://bitbucket.org/bytepoets-dgr/publiss-pod-test" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,7 +40,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Publiss/**/*.{h,m}", "GoogleAnalytics/**/*.{h,m}"
+  s.source_files  = "Classes/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
@@ -104,9 +55,9 @@ Pod::Spec.new do |s|
   #
 
   # s.resource  = "icon.png"
-  s.resources = "GoogleAnalytics/**/*.a"
+  # s.resources = "GoogleAnalytics/**/*.a"
 
-  s.preserve_paths = "GoogleAnalytics"
+  # s.preserve_paths = "GoogleAnalytics"
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -131,6 +82,11 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency "PSPDFKit", "AFNetworking", "Lockbox", "REMenu", "JDStatusBarNotification"
+  s.dependency "PSPDFKit"
+  s.dependency "AFNetworking"
+  s.dependency "Lockbox"
+  s.dependency "REMenu"
+  s.dependency "JDStatusBarNotification"
+  s.dependency "GoogleAnalytics-iOS-SDK"
 
 end
