@@ -55,9 +55,8 @@ Pod::Spec.new do |s|
   #
 
   # s.resource  = "icon.png"
-  s.resources = "Publiss/Images.xcassets/**/*.png"
-
-  s.preserve_paths = "PublissCore.embeddedframework"
+  s.resources = ["Publiss/Images.xcassets/**/*.png", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}"]
+  s.preserve_paths = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld"
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -66,7 +65,7 @@ Pod::Spec.new do |s|
   #  the lib prefix of their name.
   #
 
-  # s.framework  = "SomeFramework"
+  s.framework  = "PublissCore"
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
@@ -82,6 +81,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+  s.xcconfig     = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/PublissCore"' }
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
