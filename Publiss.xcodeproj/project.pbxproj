@@ -215,7 +215,6 @@
 		8776662019ACEDBE000DFFF1 /* Publiss.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Publiss.m; path = Classes/Publiss.m; sourceTree = "<group>"; };
 		8776662719ADAFC8000DFFF1 /* Storyboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard_iPhone.storyboard; path = Views/Storyboard_iPhone.storyboard; sourceTree = "<group>"; };
 		8776662819ADAFC8000DFFF1 /* Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Storyboard.storyboard; path = Views/Storyboard.storyboard; sourceTree = "<group>"; };
-		8776662B19ADB023000DFFF1 /* PUBVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PUBVersion.h; sourceTree = "<group>"; };
 		8776662C19ADB05E000DFFF1 /* PreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreviewCell.xib; path = Views/PreviewCell.xib; sourceTree = "<group>"; };
 		8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PUBPreviewViewController.xib; path = Views/PUBPreviewViewController.xib; sourceTree = "<group>"; };
 		8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.11.xcdatamodel; sourceTree = "<group>"; };
@@ -487,7 +486,6 @@
 		870110E2180FCF140034B9AC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				8776662B19ADB023000DFFF1 /* PUBVersion.h */,
 				8776661D19ACEDBE000DFFF1 /* PUBConstants.h */,
 				8776661E19ACEDBE000DFFF1 /* PUBConstants.m */,
 				8776661F19ACEDBE000DFFF1 /* Publiss.h */,
@@ -582,7 +580,6 @@
 			buildConfigurationList = 87011108180FCF140034B9AC /* Build configuration list for PBXNativeTarget "Publiss" */;
 			buildPhases = (
 				6D4E58FE7AB045BB85A3B374 /* Check Pods Manifest.lock */,
-				8741F04218C9C89B0033CBF0 /* ShellScript */,
 				870110D2180FCF140034B9AC /* Sources */,
 				870110D3180FCF140034B9AC /* Frameworks */,
 				870110D4180FCF140034B9AC /* Resources */,
@@ -698,19 +695,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
-		};
-		8741F04218C9C89B0033CBF0 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "git --version 2>&1 >/dev/null\nGIT_IS_AVAILABLE=$?\nFILE=\"$SRCROOT/Publiss/PUBVersion.h\"\n\nif [ $GIT_IS_AVAILABLE -eq 0 ]; then\n    GIT_COMMIT_COUNT=`git rev-list HEAD --count`\n    GIT_COMMIT=`git describe --always --tags`\n    echo -e \"#define PUB_GIT_VERSION @\\\"$GIT_COMMIT ($GIT_COMMIT_COUNT)\\\"\" > $FILE\nfi";
 		};
 		95F619981DC14D3ABEE84409 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

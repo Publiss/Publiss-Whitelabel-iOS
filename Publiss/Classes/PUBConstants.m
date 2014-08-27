@@ -5,7 +5,6 @@
 //  Copyright (c) 2014 Publiss GmbH. All rights reserved.
 //
 
-#import "PUBVersion.h"
 #import "PUBConstants.h"
 
 id PUBSafeCast(id object, Class targetClass) {
@@ -18,5 +17,5 @@ void PUBAssertIfNotMainThread(void) {
 }
 
 NSString *PUBVersionString(void) {
-    return [NSString stringWithFormat:@"Version %@", PUB_GIT_VERSION];
+    return [NSString stringWithFormat:@"Version %@", @"TODO Version"];
 }

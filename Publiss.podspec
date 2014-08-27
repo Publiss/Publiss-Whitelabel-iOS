@@ -40,10 +40,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Publiss/Classes/*.{h,m}"
+  s.source_files  = "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
   # s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "Publiss/PUBVersion.h"
+  # s.public_header_files = 
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -81,12 +81,14 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.xcconfig     = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/PublissCore"' }
+  s.xcconfig     = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/PublissCore.embeddedframework"' }
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
   s.dependency "REMenu"
   s.dependency "JDStatusBarNotification"
   s.dependency "GoogleAnalytics-iOS-SDK"
+
+  s.prepare_command = "echo '#define PSPDFKIT_COMPILE_DATE @"#{DateTime.now.strftime('%b %d %Y')}\"\n#define GIT_VERSION @\"#{s.version}\"\n#define GIT_COMMIT_COUNT 0' > PSPDFKit/InfoPlist.h"
 
 end
