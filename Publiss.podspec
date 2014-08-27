@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   
   s.platform     = :ios, "7.1"
 
-  s.source       = { :git => "https://bitbucket.org/bytepoets-dgr/publiss-pod-test" }
+  s.source       = { :git => "git@bitbucket.org:bytepoets-dgr/publiss-pod-test.git" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Classes/*.{h,m}"
+  s.source_files  = "Publiss/Classes/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = "Classes/**/*.h"
@@ -55,9 +55,9 @@ Pod::Spec.new do |s|
   #
 
   # s.resource  = "icon.png"
-  # s.resources = "GoogleAnalytics/**/*.a"
+  s.resources = "Publiss/Images.xcassets/**/*.png"
 
-  # s.preserve_paths = "GoogleAnalytics"
+  s.preserve_paths = "PublissCore.embeddedframework"
 
 
   # ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
