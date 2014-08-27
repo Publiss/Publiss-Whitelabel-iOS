@@ -6,7 +6,6 @@
 //
 
 #import "PUBDocument+Helper.h"
-#import "PUBAppDelegate.h"
 #import "PUBPDFDocument.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBCoreDataStack.h"

@@ -13,7 +13,6 @@
 #import "PUBDocumentFetcher.h"
 #import "UIColor+PUBDesign.h"
 #import "PUBScaleTransition.h"
-#import "PUBAppDelegate.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBPDFViewController.h"
 #import "PUBiPhonePreviewViewController.h"

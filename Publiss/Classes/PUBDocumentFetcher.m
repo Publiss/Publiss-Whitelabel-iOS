@@ -8,7 +8,6 @@
 #import "PUBDocumentFetcher.h"
 #import "PUBHTTPRequestManager.h"
 #import "PUBDocument+Helper.h"
-#import "PUBAppDelegate.h"
 #import "IAPController.h"
 #import "PUBURLFactory.h"
 #import "PUBCoreDataStack.h"
