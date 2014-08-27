@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.platform                  = :ios, "7.1"
   s.source                    = { :git => "git@bitbucket.org:bytepoets-dgr/publiss-pod-test.git" }
   s.source_files              = "Publiss/3rd Party/*.{h,m}", "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
-  s.resources                 = ["Publiss/Images.xcassets/**/*.png", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}, "Publiss/**/*.strings}"]
+  s.resources                 = ["Publiss/Images.xcassets/**/*.png", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}, "Publiss/**/*.strings"]
   s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld", "Publiss/Base.lproj", "Publiss/de.lproj"
   s.framework                 = "CoreData"
   s.vendored_frameworks       = 'PublissCore.embeddedframework/PublissCore.framework'
