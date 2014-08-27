@@ -40,7 +40,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
+  s.source_files  = "Publiss/3rd Party/*.{h,m}", "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
   # s.exclude_files = "Classes/Exclude"
 
   # s.public_header_files = 
