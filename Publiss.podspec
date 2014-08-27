@@ -43,7 +43,7 @@ Pod::Spec.new do |s|
   s.source_files  = "Publiss/Classes/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "Classes/**/*.h"
+  s.public_header_files = "Publiss/PUBVersion.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
