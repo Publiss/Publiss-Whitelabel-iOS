@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
   #
 
   s.framework  = "PublissCore", "CoreData"
-  spec.prefix_header_contents = '#import <CoreData/CoreData.h>'
+  s.prefix_header_contents = '#import <CoreData/CoreData.h>'
   # s.frameworks = "SomeFramework", "AnotherFramework"
 
   # s.library   = "iconv"
