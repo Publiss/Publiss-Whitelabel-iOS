@@ -17,7 +17,7 @@
 @property (nonatomic, strong) NSString *googleAnalyticsTrackingCode;
 @property (nonatomic, strong) NSNumber *pageTrackTime;
 @property (nonatomic, strong) NSURL *webserviceBaseURL;
-@property (nonatomic, assign) BOOL *inAppPurchaseActive;
+@property (nonatomic, assign) BOOL inAppPurchaseActive;
 @property (nonatomic, strong) UIColor *primaryColor;
 
 @end
