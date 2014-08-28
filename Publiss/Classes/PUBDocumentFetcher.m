@@ -228,17 +228,21 @@
 #pragma mark - Image Helper
 
 - (NSURL *)imageForDocumentOptimized:(PUBDocument *)document page:(NSUInteger)page {
-    NSString *imageURLString = [PUBURLFactory createImageURLStringForDocument:document.publishedID page:page parameters: @{@"optimized" : @"1"}];
+    NSString *imageURLString = [PUBURLFactory createImageURLStringForDocument:document.publishedID page:page parameters:@{@"optimized" : @"1"}];
     return [NSURL URLWithString:imageURLString];
 }
 
-- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size {
-    return [self imageForDocument:document page:page size:size contentMode:UIViewContentModeCenter];
+- (NSURL *)coverImageForDocument:(PUBDocument *)document withSize:(CGSize)size {
+    return [self imageForDocument:document page:0 size:size contentMode:UIViewContentModeCenter coverImage:YES];
 }
 
-- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size contentMode:(UIViewContentMode)contentMode {
+- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size {
+    return [self imageForDocument:document page:page size:size contentMode:UIViewContentModeCenter coverImage:NO];
+}
+
+- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size contentMode:(UIViewContentMode)contentMode coverImage:(BOOL)coverImage {
     // If we have a size, generate the correct string
-    NSMutableDictionary *sizeParameter = [NSMutableDictionary dictionary];
+    NSMutableDictionary *parameter = [NSMutableDictionary dictionary];
     
     if (!CGSizeEqualToSize(size, CGSizeZero)) {
 
@@ -255,9 +259,12 @@
         }
         CGFloat screenScale = UIScreen.mainScreen.scale;
         NSString *sizeParam = [NSString stringWithFormat:@"%.0fx%.0f%@", size.width * screenScale, size.height * screenScale, cropMode];
-        [sizeParameter setObject:sizeParam forKey:@"dim"];
+        [parameter setObject:sizeParam forKey:@"dim"];
     }
-    NSString *imageURLString = [PUBURLFactory createImageURLStringForDocument:document.publishedID page:page parameters: sizeParameter];
+    if (page == 0 && coverImage == YES) {
+        [parameter setObject:@"true" forKey:@"cover"];
+    }
+    NSString *imageURLString = [PUBURLFactory createImageURLStringForDocument:document.publishedID page:page parameters:parameter];
     return [NSURL URLWithString:imageURLString];
 }
 

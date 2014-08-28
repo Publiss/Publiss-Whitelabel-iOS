@@ -331,7 +331,7 @@
     
     
     // first look in cover image cache if there is already a preprocessed cover image
-    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher imageForDocument:document page:0 size:cell.bounds.size];
+    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
     UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
     NSString *cachedImageURL = [PUBThumbnailImageCache.sharedInstance cacheFilePathForURLString:thumbnailURL.absoluteString];
     

@@ -30,8 +30,9 @@
 
 // If `size` is zero, the default server size will be sent.
 // Only a subset of `UIViewContentMode` is supported: UIViewContentModeScaleAspectFill, UIViewContentModeScaleAspectFit, UIViewContentModeScaleToFill and UIViewContentModeCenter. The latter will return an image cropped to the smaller dimension of the size.
-- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size contentMode:(UIViewContentMode)contentMode;
+- (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size contentMode:(UIViewContentMode)contentMode coverImage:(BOOL)coverImage;
 - (NSURL *)imageForDocument:(PUBDocument *)document page:(NSUInteger)page size:(CGSize)size;
+- (NSURL *)coverImageForDocument:(PUBDocument *)document withSize:(CGSize)size;
 // webserver optimized version for partial rendering (50% size, quality 5%, precached)
 - (NSURL *)imageForDocumentOptimized:(PUBDocument *)document page:(NSUInteger)page;
 
