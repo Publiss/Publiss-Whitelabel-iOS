@@ -15,6 +15,6 @@
 @property (strong, nonatomic) UIColor *fontColor;
 
 + (Publiss *)staticInstance;
-- (void)setupWithLicenseKey:(NSString *)licenseString;
+- (void)setupWithLicenseKey:(const char *)licenseKey;
 
 @end

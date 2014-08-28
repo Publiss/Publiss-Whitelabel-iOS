@@ -26,13 +26,13 @@
     return staticInstance;
 }
 
-- (void)setupWithLicenseKey:(NSString *)licenseString {
+- (void)setupWithLicenseKey:(const char *)licenseKey {
 #if defined(PUBClearAllFilesOnAppStart) && PUBClearAllFilesOnAppStart
     // DEBUG: Clear all files!
     NSString *publissPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
     [NSFileManager.defaultManager removeItemAtPath:publissPath error:NULL];
 #endif
-
+    
     NSAssert(PUBConfig.sharedConfig.appToken != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appToken = @\"token\"");
     NSAssert(PUBConfig.sharedConfig.appSecret != nil, @"You need to provide an app secret setup with PUBConfig.sharedConfig.appSecret = @\"secret\"");
     
@@ -40,10 +40,6 @@
         PUBConfig.sharedConfig.webserviceBaseURL = [NSURL URLWithString:@"https://backend.publiss.com"];
     }
     
-    if (PUBConfig.sharedConfig.inAppPurchaseActive == nil) {
-        PUBConfig.sharedConfig.inAppPurchaseActive = NO;
-    }
-
     if (PUBConfig.sharedConfig.pageTrackTime == nil) {
         PUBConfig.sharedConfig.pageTrackTime = @4;
     }
@@ -52,8 +48,8 @@
         PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:3/255.0f green:172/255.0f blue:193/255.0f alpha:1];
     }
     
-    if (licenseString != nil && ![licenseString isEqualToString:@""]) {
-        PSPDFSetLicenseKey((char*)[licenseString UTF8String]);
+    if (licenseKey != nil) {
+        PSPDFSetLicenseKey(licenseKey);
     }
     
     // Reset data model

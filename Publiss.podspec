@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
 
   s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld", "Publiss/Base.lproj", "Publiss/de.lproj"
   s.framework                 = "CoreData"
-  s.vendored_frameworks       = 'PublissCore.embeddedframework/PublissCore.framework'
+  s.vendored_frameworks       = 'Publiss/PublissCore.embeddedframework/PublissCore.framework'
   s.prefix_header_contents    = '#import <CoreData/CoreData.h>'
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/PublissCore.embeddedframework"' }
