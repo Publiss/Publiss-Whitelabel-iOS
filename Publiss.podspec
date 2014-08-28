@@ -21,12 +21,13 @@ Pod::Spec.new do |s|
   
   s.resources                 = ["Publiss/Images.xcassets/**/*.png", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}"]
 
-  s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld", "Publiss/Base.lproj", "Publiss/de.lproj"
+  s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld"
   s.framework                 = "CoreData"
   s.vendored_frameworks       = 'PublissCore.embeddedframework/PublissCore.framework'
   s.prefix_header_contents    = '#import <CoreData/CoreData.h>'
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Publiss/PublissCore.embeddedframework"' }
+  s.resource_bundle           = { 'Publiss' => ["Publiss/Base.lproj", "Publiss/de.lproj"] }
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
