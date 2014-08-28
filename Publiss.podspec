@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.source                    = { :git => "git@bitbucket.org:bytepoets-dgr/publiss-pod-test.git" }
   s.source_files              = "Publiss/3rd Party/*.{h,m}", "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
   
-  s.resources                 = ["Publiss/Images.xcassets/**/*.png", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}"]
+  s.resources                 = ["Publiss/Images.xcassets", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}", "Publiss/Publiss.bundle"]
 
   s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld"
   s.framework                 = "CoreData"
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.prefix_header_contents    = '#import <CoreData/CoreData.h>'
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Publiss/PublissCore.embeddedframework"' }
-  s.resource_bundle           = { 'Publiss' => ["Publiss/Base.lproj", "Publiss/de.lproj"] }
+
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
