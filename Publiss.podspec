@@ -27,6 +27,7 @@ Pod::Spec.new do |s|
   s.prefix_header_contents    = '#import <CoreData/CoreData.h>'
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Publiss/PublissCore.embeddedframework"' }
+  s.resource_bundle           = { 'Publiss' => ["Publiss/Base.lproj", "Publiss/de.lproj"] }
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
