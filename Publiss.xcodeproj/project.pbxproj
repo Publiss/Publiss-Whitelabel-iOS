@@ -79,10 +79,10 @@
 		8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */; };
 		8776662E19ADB05E000DFFF1 /* PreviewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776662C19ADB05E000DFFF1 /* PreviewCell.xib */; };
 		8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */; };
+		877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 877666AA19AF6DD0000DFFF1 /* Publiss.bundle */; };
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		D4BCC0C418FFD35F00C06F9D /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */; };
 		EB07BD7ACAD44CFFA2E7A71C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7EC5682127449A88DBB3A62 /* libPods.a */; };
-		EF90699D189BC2AA008E8369 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = EF90699F189BC2AA008E8369 /* Localizable.strings */; };
 		EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */; };
 		EFBA434318E07FAA00BC738B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFBA434218E07FAA00BC738B /* StoreKit.framework */; };
 		EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */; };
@@ -214,18 +214,17 @@
 		8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBKiosk.storyboard; path = Views/PUBKiosk.storyboard; sourceTree = "<group>"; };
 		8776662C19ADB05E000DFFF1 /* PreviewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreviewCell.xib; path = Views/PreviewCell.xib; sourceTree = "<group>"; };
 		8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PUBPreviewViewController.xib; path = Views/PUBPreviewViewController.xib; sourceTree = "<group>"; };
+		877666AA19AF6DD0000DFFF1 /* Publiss.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Publiss.bundle; sourceTree = "<group>"; };
 		8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.11.xcdatamodel; sourceTree = "<group>"; };
 		8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBURLFactoryTest.m; sourceTree = "<group>"; };
 		A7EC5682127449A88DBB3A62 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D403592118BF442100C5E72F /* Publiss_1.03.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.03.xcdatamodel; sourceTree = "<group>"; };
 		D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
-		EF9069A1189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EF9069A2189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		EFBA434218E07FAA00BC738B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		EFC288A418A0ED5500D74A1C /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		EFD5DDD918D305EF007FEB58 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +460,7 @@
 		870110E1180FCF140034B9AC /* Publiss */ = {
 			isa = PBXGroup;
 			children = (
+				877666AA19AF6DD0000DFFF1 /* Publiss.bundle */,
 				877665B119ACEA06000DFFF1 /* 3rd Party */,
 				877665B819ACEA0C000DFFF1 /* PSPDFSubclasses */,
 				81B3AF3B1817B71D00CB5CF1 /* Design */,
@@ -472,7 +472,6 @@
 				811078351811368200281106 /* Model */,
 				8110782F1811355D00281106 /* Networking */,
 				870110E2180FCF140034B9AC /* Supporting Files */,
-				EF90699F189BC2AA008E8369 /* Localizable.strings */,
 			);
 			path = Publiss;
 			sourceTree = "<group>";
@@ -654,10 +653,10 @@
 			files = (
 				8776662E19ADB05E000DFFF1 /* PreviewCell.xib in Resources */,
 				870110F1180FCF140034B9AC /* Images.xcassets in Resources */,
+				877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */,
 				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
 				8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */,
 				8776662919ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard in Resources */,
-				EF90699D189BC2AA008E8369 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,15 +790,6 @@
 				EF9069A2189BC2D0008E8369 /* de */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		EF90699F189BC2AA008E8369 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				EF9069A1189BC2D0008E8369 /* de */,
-				EFD5DDD918D305EF007FEB58 /* Base */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
