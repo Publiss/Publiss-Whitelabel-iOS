@@ -26,6 +26,19 @@
     return staticInstance;
 }
 
+- (NSBundle *)bundle
+{
+    NSBundle *bundle;
+    
+    if (self.alwaysUseMainBundleForLocalization) {
+        bundle = [NSBundle mainBundle];
+    } else {
+        bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"Publiss" withExtension:@"bundle"]];
+    }
+    
+    return bundle;
+}
+
 - (void)setupWithLicenseKey:(const char *)licenseKey {
 #if defined(PUBClearAllFilesOnAppStart) && PUBClearAllFilesOnAppStart
     // DEBUG: Clear all files!

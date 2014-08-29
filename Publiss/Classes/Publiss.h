@@ -10,11 +10,14 @@
 
 @interface Publiss : NSObject
 
+@property (assign, nonatomic) BOOL alwaysUseMainBundleForLocalization;
+
 @property (strong, nonatomic) NSString *googleAnalyticsTrackingCode;
 @property (strong, nonatomic) UIColor *primaryColor;
 @property (strong, nonatomic) UIColor *fontColor;
 
 + (Publiss *)staticInstance;
+- (NSBundle *)bundle;
 - (void)setupWithLicenseKey:(const char *)licenseKey;
 
 @end
