@@ -1,0 +1,33 @@
+/****************************************************************************/
+/* Localization file */
+
+
+"Response: %@" = "Response: %@";
+"Downloading Document %@" = "Lädt Dokument %@";
+"Read" = "Lesen";
+"Free" = "Gratis";
+"Description" = "Beschreibung";
+"Loading" = "Lädt";
+"Fetching..." = "Aktualisiere...";
+"Preview Page %d of %d" = "Vorschau Seite %d von %d";
+"Download stopped" = "Download abgebrochen";
+"Downloading..." = "Lädt...";
+"Close" = "Schließen";
+"Logout" = "Abmelden";
+"Switch User Account" = "Benutzerkonto wechseln";
+"Cancel" = "Abbrechen";
+"Reload" = "Kiosk aktualisieren";
+"Restore Purchases" = "Einkäufe wiederherstellen";
+"About Publiss" = "Über Publiss";
+"Purchases" = "Einkäufe";
+"PURCHASED" = "GEKAUFT";
+"Your purchases have been restored." = "Deine Einkäufe wurden wiederhergestellt.";
+"Your purchases could not be restored. Please try again later." = "Deine Einkäufe konnten nicht wiederhergestellt werden, bitte versuche es später noch einmal.";
+"Page %tu of %tu done." = "Seite %tu von %tu geladen.";
+"Visit Publiss Website" = "Publiss Website besuchen";
+"Processing Purchase..." = "Einkauf wird bearbeitet...";
+"PDF is being downloaded ..." = "PDF wird geladen ...";
+"No active internet connection." = "Keine aktive Internetverbindung.";
+"UPDATE" = "UPDATE";
+"Update" = "Update";
+"About Publiss %@ \n %@" = "%@ \n %@";

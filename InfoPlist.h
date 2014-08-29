@@ -1,3 +1,0 @@
-#define PSPDFKIT_COMPILE_DATE @"Dec 18 2013"
-#define GIT_VERSION @"4d83157"
-#define GIT_COMMIT_COUNT      237

@@ -1,40 +1,45 @@
 PODS:
-  - AFNetworking (2.2.3):
+  - AFNetworking (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
     - AFNetworking/UIKit
-  - AFNetworking/NSURLConnection (2.2.3):
+  - AFNetworking/NSURLConnection (2.3.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.2.3):
-    - AFNetworking/NSURLConnection
-  - AFNetworking/Reachability (2.2.3)
-  - AFNetworking/Security (2.2.3)
-  - AFNetworking/Serialization (2.2.3)
-  - AFNetworking/UIKit (2.2.3):
+  - AFNetworking/NSURLSession (2.3.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.3.1)
+  - AFNetworking/Security (2.3.1)
+  - AFNetworking/Serialization (2.3.1)
+  - AFNetworking/UIKit (2.3.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - JDStatusBarNotification (1.4.7)
-  - Lockbox (1.4.6)
-  - PSPDFKit (3.7.5)
-  - REMenu (1.8.4)
+  - GoogleAnalytics-iOS-SDK (3.0.9)
+  - JDStatusBarNotification (1.4.8)
+  - Lockbox (1.4.9)
+  - PSPDFKit (3.7.11)
+  - REMenu (1.9)
 
 DEPENDENCIES:
-  - AFNetworking (= 2.2.3)
-  - JDStatusBarNotification (~> 1.4.7)
-  - Lockbox (~> 1.4.6)
-  - PSPDFKit (~> 3.7.5)
-  - REMenu (~> 1.8.4)
+  - AFNetworking (~> 2.2)
+  - GoogleAnalytics-iOS-SDK (~> 3.0)
+  - JDStatusBarNotification (~> 1.4)
+  - Lockbox (~> 1.4)
+  - PSPDFKit (~> 3.7)
+  - REMenu (~> 1.8)
 
 SPEC CHECKSUMS:
-  AFNetworking: 47947303319594706f48a55185ea95a95159ab94
-  JDStatusBarNotification: ac0b8550e761a0ab01696a6592564ff17698ca43
-  Lockbox: ae0bbc651c12762d92ba1463af8ad5b2258fe097
-  PSPDFKit: 50af33cfd9980040eaebc1c76acee96bd2375733
-  REMenu: 531a8b6bc7764a2fe4ceda7a533399a09184b250
+  AFNetworking: 6d7b76aa5d04c8c37daad3eef4b7e3f2a7620da3
+  GoogleAnalytics-iOS-SDK: d9e198b1f955259a72886769be7377cdfcdb2250
+  JDStatusBarNotification: c68611370dedc0ef865fb0fc1768dfbaf8fd961f
+  Lockbox: cfe87dbbce6b5c6d7cfeefc3fe6594ef55919b11
+  PSPDFKit: 1587f4f285ecf57a589637cf6df3c53566979612
+  REMenu: b2e2ff55c00e7e6a190b7bedf16ca928e836fc5e
 
 COCOAPODS: 0.33.1
