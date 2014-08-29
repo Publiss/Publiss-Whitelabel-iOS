@@ -703,7 +703,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "git --version 2>&1 >/dev/null\nGIT_IS_AVAILABLE=$?\n\nFILE=\"$SRCROOT/Publiss/Classes/PUBConstants.m\"\nINFO_PLIST=\"$SRCROOT/Publiss/Publiss-Info.plist\"\n\nif [ $GIT_IS_AVAILABLE -eq 0 ]; then\n    GIT_COMMIT_COUNT=`git rev-list HEAD --count`\n    defaults write $INFO_PLIST CFBundleVersion $GIT_COMMIT_COUNT\n    VERSION=`defaults read $INFO_PLIST CFBundleShortVersionString`\n    CONTENT=`sed \"s/@\\\"Publiss %@\\\", @\\\"[^\\\"]*\\\"\\];$/\\@\\\"Publiss %@\\\", @\\\"${VERSION} (${GIT_COMMIT_COUNT})\\\"];/g\" $FILE`\nif [ -z \"CONTENT\" ]; then\n    CONTENT | tee $FILE\nfi\nfi\n";
+			shellScript = "git --version 2>&1 >/dev/null\nGIT_IS_AVAILABLE=$?\n\nFILE=\"$SRCROOT/Publiss/Classes/PUBConstants.m\"\nINFO_PLIST=\"$SRCROOT/Publiss/Publiss-Info.plist\"\n\nif [ $GIT_IS_AVAILABLE -eq 0 ]; then\n    GIT_COMMIT_COUNT=`git rev-list HEAD --count`\n    defaults write $INFO_PLIST CFBundleVersion $GIT_COMMIT_COUNT\n    VERSION=`defaults read $INFO_PLIST CFBundleShortVersionString`\n    CONTENT=`sed \"s/@\\\"Publiss %@\\\", @\\\"[^\\\"]*\\\"\\];$/\\@\\\"Publiss %@\\\", @\\\"${VERSION} (${GIT_COMMIT_COUNT})\\\"];/g\" $FILE`\necho $CONTENT\nif [ ! -z \"$CONTENT\" ]; then\n    echo \"$CONTENT\" > $FILE\nfi\nfi\n";
 		};
 		95F619981DC14D3ABEE84409 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;

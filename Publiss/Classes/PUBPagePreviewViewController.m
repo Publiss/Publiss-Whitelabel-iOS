@@ -201,7 +201,7 @@
 
 - (void)updateTitle {
     self.navigationItem.title =
-        [NSString stringWithFormat:PUBLocalize(@"Preview Page %d of %d"), self.currentPage + 1, MIN(5,self.document.pageCount + 1)];
+        [NSString stringWithFormat:PUBLocalize(@"Preview Page %ld of %ld"), (long)self.currentPage + 1, (long)MIN(5,self.document.pageCount + 1)];
      self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
 
