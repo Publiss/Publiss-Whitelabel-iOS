@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.license                   = "MIT"
   s.author                    = "Publiss GmbH"
   s.platform                  = :ios, "7.1"
-  s.source                    = { :git => "git@bitbucket.org:bytepoets-dgr/publiss-pod-test.git" }
+  s.source                    = { :git => "git@github.com:Publiss/Publiss-Whitelabel-iOS.git" }
   s.source_files              = "Publiss/3rd Party/*.{h,m}", "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
   
   s.resources                 = ["Publiss/Images.xcassets", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}", "Publiss/Publiss.bundle"]
