@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+
+extern NSString *PUBLocalize(NSString *stringToken) NS_FORMAT_ARGUMENT(1);
+extern void PUBSetLocalizationBlock(NSString *(^localizationBlock)(NSString *stringToLocalize));
+extern void PUBSetLocalizationDictionary(NSDictionary *localizationDict);
+
 @interface Publiss : NSObject
 
 @property (assign, nonatomic) BOOL alwaysUseMainBundleForLocalization;
@@ -17,7 +22,6 @@
 @property (strong, nonatomic) UIColor *fontColor;
 
 + (Publiss *)staticInstance;
-- (NSBundle *)bundle;
 - (void)setupWithLicenseKey:(const char *)licenseKey;
 
 @end

@@ -73,9 +73,6 @@ static NSString *const PurchasedMenuStyle = @"PurchasedMenuStyle";
 #define PUBIsiPad() UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad
 #define PUBIsiPhone5() (([[UIScreen mainScreen] bounds].size.height - 568) ? NO : YES)
 
-// Localization
-#define PUBLocalize(string) NSLocalizedStringFromTableInBundle(string, @"PublissLocalizable", Publiss.staticInstance.bundle, nil)
-
 // Cast Helper
 extern id PUBSafeCast(id object, Class targetClass);
 

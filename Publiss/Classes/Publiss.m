@@ -36,6 +36,7 @@
         bundle = [NSBundle bundleWithURL:[[NSBundle mainBundle] URLForResource:@"Publiss" withExtension:@"bundle"]];
     }
     
+    NSLog(@"%@", NSLocalizedStringFromTableInBundle(@"Downloading Document %@", @"PublissLocalizable", bundle, nil));
     return bundle;
 }
 
@@ -101,5 +102,90 @@
     }
 }
 
+- (void)customizeLocalization {
+    // Either use the block-based system.
+    PUBSetLocalizationBlock(^NSString *(NSString *stringToLocalize) {
+        // This will look up strings in language/PSPDFKit.strings inside resources.
+        // (In PSPDFCatalog, there are no such files, this is just to demonstrate best practice)
+        return NSLocalizedStringFromTable(stringToLocalize, @"PSPDFKit", nil);
+        //return [NSString stringWithFormat:@"_____%@_____", stringToLocalize];
+    });
+    
+    // Or override via dictionary.
+    // See PSPDFKit.bundle/en.lproj/PSPDFKit.strings for all available strings.
+    PUBSetLocalizationDictionary(@{@"en" : @{@"%d of %d" : @"Page %d of %d",
+                                               @"%d-%d of %d" : @"Pages %d-%d of %d"}});
+}
 
 @end
+
+#pragma mark Localization
+
+static __strong NSString *(^_localizationBlock)(NSString *stringToLocalize) = nil;
+static __strong NSDictionary *_localizationDict = nil;
+
+NSBundle *PublissBundle(void) {
+    static __strong NSBundle *publiss_bundle;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        publiss_bundle = [NSBundle bundleWithPath:[NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:@"Publiss.bundle"]];
+
+        if (!publiss_bundle) {
+            PUBLogError(@"Error! Publiss.bundle not found.");
+        }
+    });
+    
+    return publiss_bundle;
+}
+
+static NSString *PUBPreferredLocale(void) {
+    static NSString *locale = nil;
+    if (!locale) {
+        locale = NSLocale.preferredLanguages.firstObject;
+        if (!locale) {
+            PUBLogWarning(@"No preferred language? `[NSLocale preferredLanguages]` returned nil. Defaulting to english.");
+            locale = @"en";
+        }
+    }
+    return locale;
+}
+
+void PUBSetLocalizationBlock(NSString *(^localizationBlock)(NSString *stringToLocalize)) {
+    _localizationBlock = [localizationBlock copy];
+}
+
+void PUBSetLocalizationDictionary(NSDictionary *localizationDict) {
+    @synchronized(UIApplication.sharedApplication) {
+        if (localizationDict != _localizationDict) {
+            _localizationDict = [localizationDict copy];
+        }
+    }
+    PUBLogVerbose(@"new localization dictionary set. locale: %@; dict: %@", PUBPreferredLocale(), localizationDict);
+}
+
+NSString *PUBLocalize(NSString *stringToken) {
+    NSCParameterAssert(stringToken);
+    
+    // Call the block. (#1 Priority)
+    NSString *localization = _localizationBlock ? _localizationBlock(stringToken) : nil;
+    
+    // Load language from bundle.
+    if (!localization) {
+        localization = [PublissBundle() localizedStringForKey:stringToken value:@"" table:@"PublissLocalizable"] ?: stringToken;
+
+        // Try loading from the global translation dict.
+        NSString *replLocale = nil;
+        if (_localizationDict) {
+            NSString *language = PUBPreferredLocale();
+            NSDictionary *languageDict = _localizationDict[language];
+            replLocale = languageDict[stringToken];
+            if (!replLocale && !languageDict && ![language isEqualToString:@"en"]) {
+                replLocale = _localizationDict[@"en"][stringToken];
+            }
+            if (replLocale) localization = replLocale;
+        }
+    }
+    
+    return localization;
+}
+

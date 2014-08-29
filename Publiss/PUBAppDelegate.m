@@ -20,7 +20,7 @@
     PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
     
     [Publiss.staticInstance setupWithLicenseKey:nil];
-    
+
     return YES;
 }
 

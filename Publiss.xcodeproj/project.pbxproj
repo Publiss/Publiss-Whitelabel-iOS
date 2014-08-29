@@ -38,6 +38,7 @@
 		870110FB180FCF140034B9AC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DF180FCF140034B9AC /* CoreData.framework */; };
 		87011103180FCF140034B9AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87011101180FCF140034B9AC /* InfoPlist.strings */; };
 		87011105180FCF140034B9AC /* PublissTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87011104180FCF140034B9AC /* PublissTests.m */; };
+		8749898319B07668006ABCA3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8749898519B07668006ABCA3 /* Localizable.strings */; };
 		877665B619ACEA06000DFFF1 /* IAPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 877665B319ACEA06000DFFF1 /* IAPController.m */; };
 		877665B719ACEA06000DFFF1 /* IAPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 877665B519ACEA06000DFFF1 /* IAPManager.m */; };
 		877665C319ACEA0C000DFFF1 /* PUBPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 877665BA19ACEA0C000DFFF1 /* PUBPageView.m */; };
@@ -136,6 +137,9 @@
 		870110F7180FCF140034B9AC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		87011100180FCF140034B9AC /* PublissTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PublissTests-Info.plist"; sourceTree = "<group>"; };
 		87011104180FCF140034B9AC /* PublissTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublissTests.m; sourceTree = "<group>"; };
+		8749896F19B06313006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		8749898419B07668006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8749898619B0766A006ABCA3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		877665B219ACEA06000DFFF1 /* IAPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPController.h; sourceTree = "<group>"; };
 		877665B319ACEA06000DFFF1 /* IAPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAPController.m; sourceTree = "<group>"; };
 		877665B419ACEA06000DFFF1 /* IAPManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAPManager.h; sourceTree = "<group>"; };
@@ -486,6 +490,7 @@
 				870110E3180FCF140034B9AC /* Publiss-Info.plist */,
 				870110E7180FCF140034B9AC /* main.m */,
 				870110E9180FCF140034B9AC /* Publiss-Prefix.pch */,
+				8749898519B07668006ABCA3 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -655,6 +660,7 @@
 				870110F1180FCF140034B9AC /* Images.xcassets in Resources */,
 				877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */,
 				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
+				8749898319B07668006ABCA3 /* Localizable.strings in Resources */,
 				8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */,
 				8776662919ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard in Resources */,
 			);
@@ -697,7 +703,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "git --version 2>&1 >/dev/null\nGIT_IS_AVAILABLE=$?\n\nFILE=\"$SRCROOT/Publiss/Classes/PUBConstants.m\"\nINFO_PLIST=\"$SRCROOT/Publiss/Publiss-Info.plist\"\n\nif [ $GIT_IS_AVAILABLE -eq 0 ]; then\n    GIT_COMMIT_COUNT=`git rev-list HEAD --count`\n    defaults write $INFO_PLIST CFBundleVersion $GIT_COMMIT_COUNT\n    VERSION=`defaults read $INFO_PLIST CFBundleShortVersionString`\n    sed \"s/@\\\"Publiss %@\\\", @\\\"[^\\\"]*\\\"\\];$/\\@\\\"Publiss %@\\\", @\\\"${VERSION} (${GIT_COMMIT_COUNT})\\\"];/g\" $FILE | tee $FILE\nfi\n";
+			shellScript = "git --version 2>&1 >/dev/null\nGIT_IS_AVAILABLE=$?\n\nFILE=\"$SRCROOT/Publiss/Classes/PUBConstants.m\"\nINFO_PLIST=\"$SRCROOT/Publiss/Publiss-Info.plist\"\n\nif [ $GIT_IS_AVAILABLE -eq 0 ]; then\n    GIT_COMMIT_COUNT=`git rev-list HEAD --count`\n    defaults write $INFO_PLIST CFBundleVersion $GIT_COMMIT_COUNT\n    VERSION=`defaults read $INFO_PLIST CFBundleShortVersionString`\n    CONTENT=`sed \"s/@\\\"Publiss %@\\\", @\\\"[^\\\"]*\\\"\\];$/\\@\\\"Publiss %@\\\", @\\\"${VERSION} (${GIT_COMMIT_COUNT})\\\"];/g\" $FILE`\nif [ -z \"CONTENT\" ]; then\n    CONTENT | tee $FILE\nfi\nfi\n";
 		};
 		95F619981DC14D3ABEE84409 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -788,8 +794,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				EF9069A2189BC2D0008E8369 /* de */,
+				8749896F19B06313006ABCA3 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		8749898519B07668006ABCA3 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8749898419B07668006ABCA3 /* en */,
+				8749898619B0766A006ABCA3 /* de */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
