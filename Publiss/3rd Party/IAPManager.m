@@ -8,6 +8,7 @@
 
 #import "IAPManager.h"
 #import <Lockbox/Lockbox.h>
+#import "PUBConstants.h"
 
 @interface IAPManager () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @property (strong) NSMutableDictionary *products;

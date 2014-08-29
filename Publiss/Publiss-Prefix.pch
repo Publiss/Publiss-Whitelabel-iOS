@@ -14,7 +14,5 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import <CoreData/CoreData.h>
-    #import "PUBConstants.h"
-    #import "PSPDFKit.h"
-    #import <PublissCore.h>
+    #import "Publiss.h"
 #endif

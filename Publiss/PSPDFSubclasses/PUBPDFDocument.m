@@ -7,6 +7,7 @@
 
 #import "PUBPDFDocument.h"
 #import "PUBDocument+Helper.h"
+#import "PUBConstants.h"
 
 @interface PUBDocumentProvider : PSPDFDocumentProvider
 @end

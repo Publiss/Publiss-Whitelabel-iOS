@@ -7,7 +7,7 @@
 
 #import "PUBPDFViewController.h"
 #import "PUBDocument.h"
-#import "UIColor+Design.h"
+#import "UIColor+PUBDesign.h"
 #import "PUBDocument+Helper.h"
 #import "PUBDocumentFetcher.h"
 #import "PUBPDFDocument.h"
@@ -16,6 +16,8 @@
 #import "JDStatusBarNotification.h"
 #import "PUBThumbnailGridViewCell.h"
 #import "PUBKioskViewController.h"
+#import "PUBLinkAnnotationView.h"
+#import "PUBConstants.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
@@ -39,7 +41,7 @@
     self.backgroundColor = UIColor.blackColor;
     
     // Customize PSPDFKit defaults.
-   // [self overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
+    [self overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
     [self overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
     [self overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
 
