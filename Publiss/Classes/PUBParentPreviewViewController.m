@@ -255,7 +255,7 @@
         self.oldViewFrame = self.view.frame;
     }
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Storyboard" bundle:nil];
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil];
     PUBPagePreviewViewController *pagePreviewController = [storyboard instantiateViewControllerWithIdentifier:@"PagePreview"];
     pagePreviewController.document = self.document;
     pagePreviewController.initialPage = indexPath.row;
