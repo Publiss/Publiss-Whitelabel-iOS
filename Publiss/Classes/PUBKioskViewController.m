@@ -749,7 +749,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 #pragma mark private
 
 - (void)visitPublissSite {
-    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc]initWithURL:[NSURL URLWithString:PUBWebsiteURL]];
+    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
     [self.navigationController pushViewController:webViewController animated:YES];
 }
 

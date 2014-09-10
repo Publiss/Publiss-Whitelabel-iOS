@@ -40,10 +40,69 @@ Publiss enables you to enrich PDFs with multimedia content and publish them to a
  - Login at https://backend.publiss.com/
  - Select "Apps" button (left side menu)
  - Click on your app
- - Copy the "App Secret", "App Token"
- - Edit the Config.plist found in "Supporting Files" Folder in Xcode with "App Secret" & "App Token"
- - Optional: edit the Design.plist file to customize the look & feel
+ - Copy the "App Secret", "App Token" and your PSDPDFKit License Key (if you already have paid account)
+ - In your `AppDelegate.m` setup the PUBConfig accordingly (see `PUBAppDelegate.m`)
  - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
+
+## Setup with Cocoapods
+ - Create your own XCode Project
+ - Install CocoaPods http://guides.cocoapods.org/using/getting-started.html 
+ - Add a file called `Podfile` to your folder
+ - Paste these lines into the `Podfile`
+
+```
+platform :ios, '7.1'
+pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
+```
+ - Install dependencies with CocoaPods in your project root folder with `$ pod install`
+ - Open your *.xcworkspace file in Xcode 5.1 or newer
+ - Login at https://backend.publiss.com/
+ - Select "Apps" button (left side menu)
+ - Click on your app
+ - Copy the "App Secret", "App Token" and your PSDPDFKit License Key (if you already have paid account)
+ - In your `AppDelegate.m` setup the PUBConfig accordingly (see `PUBAppDelegate.m`)
+ - To make Publiss Kiosk your rootViewController add these lines in your AppDelegate in `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions` 
+ 
+ Example of AppDelegate:
+ 
+ ```
+#import "AppDelegate.h"
+#import "PUBConfig.h"
+#import "Publiss.h"
+#import "PUBKioskViewController.h"
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.tintColor = [UIColor whiteColor];
+    
+    PUBConfig.sharedConfig.appToken = @"--- YOUR APP TOKEN ---";
+    PUBConfig.sharedConfig.appSecret = @"--- YOUR APP SECRET ---";
+    PUBConfig.sharedConfig.googleAnalyticsTrackingCode = nil;
+    PUBConfig.sharedConfig.inAppPurchaseActive = NO;
+    PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:0.0f green:134/255.0f blue:204/255.0f alpha:1];
+    
+    // Demo how to make custom translation
+    PUBSetLocalizationDictionary(@{@"en" :
+                                       @{@"Visit Publiss Website" : @"Visit Example Publiss",
+                                         @"Publiss" : @"Example Publiss",
+                                         @"Menu Website URL" : @"http://www.apple.com/"
+                                         }});
+
+  
+    [Publiss.staticInstance setupWithLicenseKey:nil];
+    
+    self.window.rootViewController = PUBKioskViewController.kioskViewController;
+    [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+ ```
+ 
+ - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
+
  
 ###Requirements:
  - Publiss requires Xcode 5.1 or higher, targeting iOS 7 (iPad and iPhone) and above.
