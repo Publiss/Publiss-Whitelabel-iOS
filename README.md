@@ -40,10 +40,53 @@ Publiss enables you to enrich PDFs with multimedia content and publish them to a
  - Login at https://backend.publiss.com/
  - Select "Apps" button (left side menu)
  - Click on your app
- - Copy the "App Secret", "App Token"
- - Edit the Config.plist found in "Supporting Files" Folder in Xcode with "App Secret" & "App Token"
- - Optional: edit the Design.plist file to customize the look & feel
+ - Copy the "App Secret", "App Token" and your PSDPDFKit License Key (if you already have paid account)
+ - In your `AppDelegate.m` setup the PUBConfig accordingly (see `PUBAppDelegate.m`)
  - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
+
+## Setup with Cocoapods
+ - Create your own XCode Project
+ - Install CocoaPods http://guides.cocoapods.org/using/getting-started.html 
+ - Add a file called `Podfile` to your folder
+ - Paste these lines into the `Podfile`
+
+```
+platform :ios, '7.1'
+pod 'Publiss', :git => "git@github.com:Publiss/Publiss-Whitelabel-iOS.git"
+```
+ - Install dependencies with CocoaPods in your project root folder with `$ pod install`
+ - Open your *.xcworkspace file in Xcode 5.1 or newer
+ - Login at https://backend.publiss.com/
+ - Select "Apps" button (left side menu)
+ - Click on your app
+ - Copy the "App Secret", "App Token" and your PSDPDFKit License Key (if you already have paid account)
+ - In your `AppDelegate.m` setup the PUBConfig accordingly (see `PUBAppDelegate.m`)
+ - To make Publiss Kiosk your rootViewController add these lines in your AppDelegate in `- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions` 
+ 
+ Example of AppDelegate:
+ 
+ ```
+ - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.tintColor = [UIColor whiteColor];
+    
+    PUBConfig.sharedConfig.appToken = @"Your App Token";
+    PUBConfig.sharedConfig.appSecret = @"Your App Secret";
+    PUBConfig.sharedConfig.googleAnalyticsTrackingCode = nil;
+    PUBConfig.sharedConfig.inAppPurchaseActive = NO;
+    
+    [Publiss.staticInstance setupWithLicenseKey:""];
+    
+    self.window.rootViewController = PublissDemoKisokViewController.kioskViewController;
+    [self.window makeKeyAndVisible];
+    
+    return YES;
+}
+ ```
+ 
+ - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
+
  
 ###Requirements:
  - Publiss requires Xcode 5.1 or higher, targeting iOS 7 (iPad and iPhone) and above.
