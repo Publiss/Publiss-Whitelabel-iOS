@@ -52,7 +52,7 @@ Publiss enables you to enrich PDFs with multimedia content and publish them to a
 
 ```
 platform :ios, '7.1'
-pod 'Publiss', :git => "git@github.com:Publiss/Publiss-Whitelabel-iOS.git"
+pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
 ```
  - Install dependencies with CocoaPods in your project root folder with `$ pod install`
  - Open your *.xcworkspace file in Xcode 5.1 or newer
@@ -66,19 +66,35 @@ pod 'Publiss', :git => "git@github.com:Publiss/Publiss-Whitelabel-iOS.git"
  Example of AppDelegate:
  
  ```
- - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+#import "AppDelegate.h"
+#import "PUBConfig.h"
+#import "Publiss.h"
+#import "PUBKioskViewController.h"
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.tintColor = [UIColor whiteColor];
     
-    PUBConfig.sharedConfig.appToken = @"Your App Token";
-    PUBConfig.sharedConfig.appSecret = @"Your App Secret";
+    PUBConfig.sharedConfig.appToken = @"--- YOUR APP TOKEN ---";
+    PUBConfig.sharedConfig.appSecret = @"--- YOUR APP SECRET ---";
     PUBConfig.sharedConfig.googleAnalyticsTrackingCode = nil;
     PUBConfig.sharedConfig.inAppPurchaseActive = NO;
+    PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:0.0f green:134/255.0f blue:204/255.0f alpha:1];
     
-    [Publiss.staticInstance setupWithLicenseKey:""];
+    // Demo how to make custom translation
+    PUBSetLocalizationDictionary(@{@"en" :
+                                       @{@"Visit Publiss Website" : @"Visit Example Publiss",
+                                         @"Publiss" : @"Example Publiss",
+                                         @"Menu Website URL" : @"http://www.apple.com/"
+                                         }});
+
+  
+    [Publiss.staticInstance setupWithLicenseKey:nil];
     
-    self.window.rootViewController = PublissDemoKisokViewController.kioskViewController;
+    self.window.rootViewController = PUBKioskViewController.kioskViewController;
     [self.window makeKeyAndVisible];
     
     return YES;
