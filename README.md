@@ -92,7 +92,7 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
                                          }});
 
   
-    [Publiss.staticInstance setupWithLicenseKey:nil];
+    [Publiss.staticInstance setupWithLicenseKey:""];
     
     self.window.rootViewController = PUBKioskViewController.kioskViewController;
     [self.window makeKeyAndVisible];

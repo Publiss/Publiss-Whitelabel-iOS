@@ -17,5 +17,5 @@ void PUBAssertIfNotMainThread(void) {
 }
 
 NSString *PUBVersionString(void) {
-    return [NSString stringWithFormat:@"Publiss %@", @"1.15.2 (108)"];
+    return [NSString stringWithFormat:@"Publiss %@", @"1.15.3 (109)"];
 }

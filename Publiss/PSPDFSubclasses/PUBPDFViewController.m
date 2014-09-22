@@ -17,6 +17,7 @@
 #import "PUBThumbnailGridViewCell.h"
 #import "PUBKioskViewController.h"
 #import "PUBLinkAnnotationView.h"
+#import "PSPDFSpeechSynthesizer.h"
 #import "PUBConstants.h"
 
 @interface PUBPDFViewController ()
@@ -33,6 +34,10 @@
 
 - (void)commonInitWithDocument:(PSPDFDocument *)document {
     [super commonInitWithDocument:document];
+    
+    // setup Speechsynthesizer so its slower
+    PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
+    speechSynthesizer.speakRate = 0.1f;
     
     self.documentProgress = [NSDictionary dictionary];
     self.downloadFinished = NO;
