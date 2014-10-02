@@ -23,7 +23,7 @@ PODS:
   - GoogleAnalytics-iOS-SDK (3.0.9)
   - JDStatusBarNotification (1.4.8)
   - Lockbox (1.4.9)
-  - PSPDFKit (4.0.1)
+  - PSPDFKit (4.0.2)
   - REMenu (1.10)
 
 DEPENDENCIES:
@@ -39,7 +39,7 @@ SPEC CHECKSUMS:
   GoogleAnalytics-iOS-SDK: d9e198b1f955259a72886769be7377cdfcdb2250
   JDStatusBarNotification: c68611370dedc0ef865fb0fc1768dfbaf8fd961f
   Lockbox: cfe87dbbce6b5c6d7cfeefc3fe6594ef55919b11
-  PSPDFKit: eaa9cde8f58d8411dad5a65233bdd6b640dfaf3e
+  PSPDFKit: 7ba6db22ac0b37fac68ceeb8f1e49fd9a6b1866f
   REMenu: e3988747d83f9e8f49f244bd3f1fb8b0900e8741
 
-COCOAPODS: 0.33.1
+COCOAPODS: 0.34.1
