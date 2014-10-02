@@ -697,7 +697,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
             self.navigationController.navigationBar.alpha = 0.f;
             self.dimView.alpha = 1.0f;
-            _animationDoubleWithPageCurl = pdfController.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
+            _animationDoubleWithPageCurl = pdfController.configuration.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
             CGRect newFrame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
             coverImageView.frame = newFrame;
             targetPageImageView.alpha = 1.f;
@@ -743,7 +743,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 }
 
 - (void)showAbout {
-    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFVersionString()] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil]show];
+    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
 }
 
 #pragma mark private

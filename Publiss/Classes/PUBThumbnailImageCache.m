@@ -9,6 +9,7 @@
 #import "PUBThumbnailImageCache.h"
 #import "PSPDFKit.h"
 #import "PUBConstants.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @interface PUBThumbnailImageCache ()
 @property (nonatomic, strong) NSString *cacheDirectory;

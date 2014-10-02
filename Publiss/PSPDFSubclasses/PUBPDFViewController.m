@@ -32,8 +32,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - PSPDFViewController
 
-- (void)commonInitWithDocument:(PSPDFDocument *)document {
-    [super commonInitWithDocument:document];
+- (instancetype)initWithDocument:(PSPDFDocument *)document {
+    self = [super initWithDocument:document];
     
     // setup Speechsynthesizer so its slower
     PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
@@ -43,39 +43,42 @@
     self.downloadFinished = NO;
     self.initiatedDownload = NO;
     
-    self.backgroundColor = UIColor.blackColor;
-    
-    // Customize PSPDFKit defaults.
-    [self overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
-    [self overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
-    [self overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
-
-    // Appearance only needs to be set up once.
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [[PSPDFTextSelectionView appearance] setSelectionColor:UIColor.publissPrimaryColor];
-    });
-
-    // HUD style
     self.navigationItem.title = PUBIsiPad() ? document.title : nil;
-    self.allowToolbarTitleChange = NO;
-    self.statusBarStyleSetting = PSPDFStatusBarStyleDefault;
-    self.shouldHideNavigationBarWithHUD = YES;
-    self.shouldHideStatusBarWithHUD = YES;
-    self.transparentHUD = YES;
-    self.statusBarStyle = UIStatusBarStyleLightContent;
-    self.backgroundColor = UIColor.clearColor;
-
-    self.allowBackgroundSaving = YES;
-    self.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
-    self.pageTransition = PSPDFPageTransitionCurl;
-    //self.pageTransition = PSPDFPageTransitionScrollPerPage;
-    self.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
-    self.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
-    self.pageMode = PSPDFPageModeAutomatic;
-    //self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
-    self.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
-
+    [self.pdfController updateConfigurationWithBuilder:^(PSPDFConfigurationBuilder *builder) {
+        builder.backgroundColor = UIColor.blackColor;
+        
+        // Customize PSPDFKit defaults.
+        [builder overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
+        [builder overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
+        [builder overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
+        
+        // Appearance only needs to be set up once.
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            [[PSPDFTextSelectionView appearance] setSelectionColor:UIColor.publissPrimaryColor];
+        });
+        
+        // HUD style
+        
+        builder.allowToolbarTitleChange = NO;
+        
+        builder.shouldHideNavigationBarWithHUD = YES;
+        builder.shouldHideStatusBarWithHUD = YES;
+        
+        
+        builder.backgroundColor = UIColor.clearColor;
+        
+        builder.allowBackgroundSaving = YES;
+        builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
+        builder.pageTransition = PSPDFPageTransitionCurl;
+        //self.pageTransition = PSPDFPageTransitionScrollPerPage;
+        builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
+        builder.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
+        builder.pageMode = PSPDFPageModeAutomatic;
+        //self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
+        builder.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
+    }];
+    
     // Toolbar configuration
     if (PUBIsiPad()) {
         self.rightBarButtonItems = @[self.annotationButtonItem, self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
@@ -113,6 +116,8 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
     [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
+    
+    return self;
 }
 
 - (void)close:(id)sender {
