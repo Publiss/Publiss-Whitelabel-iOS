@@ -64,19 +64,18 @@
         
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
-        
-        
         builder.backgroundColor = UIColor.clearColor;
+
         
         builder.allowBackgroundSaving = YES;
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
         builder.pageTransition = PSPDFPageTransitionCurl;
         //self.pageTransition = PSPDFPageTransitionScrollPerPage;
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
-        builder.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
+        builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
-        //self.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
-        builder.shouldShowHUDOnViewWillAppear = NO; // Hide HUD initially.
+//        builder.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
+        builder.shouldShowHUDOnViewWillAppear = YES; // Hide HUD initially.
     }];
     
     // Toolbar configuration
@@ -123,6 +122,7 @@
 - (void)close:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:NO];
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIViewController

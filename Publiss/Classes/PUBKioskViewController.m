@@ -65,7 +65,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     self.coverImageDictionary = [NSMutableDictionary dictionary];
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
     self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"ipad_background_portrait"]] colorWithAlphaComponent:1.0f];

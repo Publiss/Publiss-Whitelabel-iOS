@@ -34,7 +34,6 @@
         [documentProvider setValue:@YES forKey:@"checkIfFileExists"];
         // Disable PDF annotation parsing (we use the file provider as a simple *container* that saves)
         documentProvider.annotationManager.fileAnnotationProvider.parsableTypes = PSPDFAnnotationTypeNone;
-
         // TODO: Currently annotation providers all point to the same file, which effectively loads all annotations on all pages.
         // We manually set the path here to work around this issue.
         PSPDFDocument *pdfDocument = documentProvider.document;
@@ -46,7 +45,7 @@
     //PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeAll;
     PDFDocument.annotationSaveMode = PSPDFAnnotationSaveModeExternalFile;
 //    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
-
+    PDFDocument.diskCacheStrategy = PSPDFDiskCacheStrategyEverything;
     [PDFDocument loadAnnotationsFromXFDF];
 
     return PDFDocument;
@@ -113,7 +112,7 @@
         NSArray *pageSize = dimensions[dimensions.count > absolutePage ? absolutePage : 0];
         CGRect pageRect = CGRectMake(0.f, 0.f, [pageSize[0] floatValue], [pageSize[1] floatValue]);
         return [[PSPDFPageInfo alloc] initWithPage:page rect:pageRect rotation:0 documentProvider:self];
-    }else {
+    } else {
         return [super pageInfoForPage:page pageRef:pageRef]; // fallback
     }
 }
