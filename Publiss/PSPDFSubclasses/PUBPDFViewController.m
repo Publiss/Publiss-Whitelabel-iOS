@@ -78,6 +78,8 @@
         builder.shouldShowHUDOnViewWillAppear = YES; // Hide HUD initially.
     }];
     
+    self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
+    
     // Toolbar configuration
     if (PUBIsiPad()) {
         self.rightBarButtonItems = @[self.annotationButtonItem, self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
@@ -92,7 +94,7 @@
     if (self.pubDocument) {
         [self setViewState:self.pubDocument.lastViewState];
     }
-    
+
     self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(close:)]];
     
     [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.pubDocument competionHandler:^(BOOL unpublished) {
@@ -181,6 +183,11 @@
         self.initiatedDownload = YES;
         [PUBDocumentFetcher.sharedFetcher fetchDocument:self.pubDocument page:page enqueueAtFront:enqueueAtFront completionHandler:^(NSString *productID, NSUInteger pageIndex) {
             [weakSelf updatePage:page animated:YES];
+            if (self.HUDView.thumbnailBar.visibleCells.count) {
+                for (PSPDFThumbnailGridViewCell *cell in self.HUDView.thumbnailBar.visibleCells) {
+                    [cell updateCell];
+                }
+            }
         }];
     } else {
         // needed for correct progress calculation
