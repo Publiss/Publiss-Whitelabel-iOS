@@ -18,6 +18,7 @@
 @dynamic identifier;
 @dynamic pageCount;
 @dynamic paid;
+@dynamic featured;
 @dynamic priority;
 @dynamic productID;
 @dynamic publishedID;

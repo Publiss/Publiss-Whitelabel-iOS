@@ -71,6 +71,7 @@
             document.fileDescription = PUBSafeCast(dictionary[@"description"], NSString.class);
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
             document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
+            document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
             
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);

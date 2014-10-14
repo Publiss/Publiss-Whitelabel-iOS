@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSString * identifier;
 @property (nonatomic) uint16_t pageCount;
 @property (nonatomic) BOOL paid;
+@property (nonatomic) BOOL featured;
 @property (nonatomic) uint16_t priority;
 @property (nonatomic, retain) NSString * productID;
 @property (nonatomic) uint64_t publishedID;
