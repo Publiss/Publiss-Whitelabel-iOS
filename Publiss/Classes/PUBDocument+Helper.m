@@ -48,8 +48,10 @@
         document = [PUBDocument createEntity];
         shouldUpdateValues = YES;
     } else {
-        //check if exsisting document should be updated
+        // Check if exsisting document should be updated
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
+        
+        // Save local annotations and delete PDF on update.
         if (shouldUpdateValues && document.state == PUBDocumentStateDownloaded) {
             PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
             [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
@@ -57,6 +59,12 @@
                 document.state = PUBDocumentStateUpdated;
             }];
         }
+        
+        // Update values if remote featured is different to local.
+        BOOL remoteFeatured = [[dictionary valueForKeyPath:@"featured"] boolValue];
+        BOOL localFeatured = document.featured;
+        
+        shouldUpdateValues = remoteFeatured != localFeatured;
     }
     
     if (shouldUpdateValues) {
@@ -80,8 +88,6 @@
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
         }
-        
-        
     }
 
     return document;
