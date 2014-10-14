@@ -268,6 +268,11 @@
     return [NSURL URLWithString:imageURLString];
 }
 
+- (NSURL *)featuredImageForPublishedDocument:(NSUInteger)publishedDocumentId {
+    NSString *imageURLString = [PUBURLFactory createFeatureImageURLForDocument:publishedDocumentId];
+    return [NSURL URLWithString:imageURLString];
+}
+
 #pragma mark - exclude file from iCloud Backup
 
 - (BOOL)addSkipBackupAttributeToItemAtURL:(NSString *)URL {

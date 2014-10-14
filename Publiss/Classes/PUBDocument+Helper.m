@@ -70,8 +70,8 @@
     if (shouldUpdateValues) {
         // Never trust external content.
         @try {
-            document.productID = PUBSafeCast(dictionary[@"apple_product_id"], NSString.class);
             document.publishedID = (uint16_t)[dictionary[@"id"] integerValue];
+            document.productID = PUBSafeCast(dictionary[@"apple_product_id"], NSString.class);
             document.updatedAt = onlineUpdatedAt;
             document.priority = (uint16_t)[dictionary[@"priority"] integerValue];
             document.title = PUBSafeCast(dictionary[@"name"], NSString.class);
@@ -107,13 +107,17 @@
     return [self findWithPredicate:nil];
 }
 
-+ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending {
++ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.entity = [self getEntity];
 
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending];
     fetchRequest.sortDescriptors = @[sortDescriptor];
 
+    if (predicate != nil) {
+        fetchRequest.predicate = predicate;
+    }
+    
     NSError *error = nil;
     NSArray *results = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     

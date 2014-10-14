@@ -23,7 +23,7 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 // Fetch helper
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID;
 + (NSArray *)findAll;
-+ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending;
++ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
 + (PUBDocument *)createPUBDocumentWithDictionary:(NSDictionary *)dictionary;
 
 /// deletes the file of the document and pspdfcache

@@ -28,6 +28,8 @@
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
+#import "PUBImageReusableView+Document.h"
+#import "PUBKioskLayout.h"
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -37,7 +39,8 @@
 
 @property (nonatomic, assign) BOOL isOpening;
 @property (nonatomic, strong) PUBScaleTransition *scaleTransition;
-@property (nonatomic, copy) NSArray *documentArray;
+@property (nonatomic, copy) NSArray *featuredDocuments;
+@property (nonatomic, copy) NSArray *publishedDocuments;
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
@@ -63,29 +66,20 @@
     return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
 }
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.coverImageDictionary = [NSMutableDictionary dictionary];
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"ipad_background_portrait"]] colorWithAlphaComponent:1.0f];
     self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:1.0f];
-    [self setupNavigationItems];
+    
     self.scaleTransition = [PUBScaleTransition new];
     self.transitioningDelegate = self;
     
-    self.collectionView.collectionViewLayout = [[PUBBugFixFlowLayout alloc] init];
-    [self.collectionView.collectionViewLayout invalidateLayout];
+    self.coverImageDictionary = [NSMutableDictionary dictionary];
     
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-
-    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"]
-                                                                 style:UIBarButtonItemStylePlain
-                                                                target:self
-                                                                action:@selector(showMenu:)];
-    
-    self.navigationItem.leftBarButtonItems = @[menuItem];
+    [self setupNavigationItems];
+    [self setupCollectionView];
     [self setupMenu];
 
     self.dimView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -113,12 +107,21 @@
                                        return style;
                                    }];
     
+    [self refreshDocumentsWithActivityViewAnimated:YES];
+}
+
+- (void)setupCollectionView {
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"ipad_background_portrait"]] colorWithAlphaComponent:1.0f];
+    self.collectionView.collectionViewLayout = [[PUBKioskLayout alloc] init];
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView registerClass:[PUBImageReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBImageReusableView"];
+    
     UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
     longpressGesture.delegate = self;
-
     [self.collectionView addGestureRecognizer:longpressGesture];
     
-    [self refreshDocumentsWithActivityViewAnimated:YES];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
 }
 
 - (void)showMenu:(id)sender {
@@ -131,6 +134,12 @@
 }
 
 - (void)setupMenu {
+    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"]
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(showMenu:)];
+    self.navigationItem.leftBarButtonItems = @[menuItem];
+    
     REMenuItem *reloadItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Reload")
                                                       subtitle:nil
                                                          image:[[UIImage imageNamed:@"refresh"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
@@ -300,11 +309,12 @@
     
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
-        self.documentArray = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES];
+        self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured != YES"]];
+        self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        
         [self.collectionView reloadData];
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
-        
         [self.spinner stopAnimating];
     }];
 }
@@ -316,19 +326,26 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.documentArray.count;
+    return self.publishedDocuments.count;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    PUBImageReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                           withReuseIdentifier:@"PUBImageReusableView"
+                                                                                                  forIndexPath:indexPath];
+    [header setupWithDocument:self.featuredDocuments.firstObject];
+    return header;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
     PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    PUBDocument *document = (self.documentArray)[indexPath.item];
+    PUBDocument *document = (self.publishedDocuments)[indexPath.item];
     [cell setupForDocument:(PUBDocument *)document];
     [cell.deleteButton addTarget:self
                           action:@selector(deleteButtonClicked:)
                 forControlEvents:UIControlEventTouchUpInside];
-    
     
     // first look in cover image cache if there is already a preprocessed cover image
     NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
@@ -345,7 +362,7 @@
         cell.coverImage.hidden = YES;
         cell.badgeView.hidden = YES;
         cell.namedBadgeView.hidden = YES;
-        NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
+        NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
         __weak PUBCellView *weakCell = cell;
         __weak PUBDocument *weakDocument = document;
@@ -385,62 +402,10 @@
     return cell;
 }
 
-#pragma mark - UICollectionView Delegate
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize size = CGSizeZero;
-    if (PUBIsiPad()) {
-        size = CGSizeMake(160.0f, 160.0f);
-    } else {
-        size = CGSizeMake(140.f, 140.f);
-    }
-    return size;
-}
-
-#pragma mark CollectionViewFlowLayout
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout *)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    if (PUBIsiPad()) {
-        insets = UIEdgeInsetsMake(LINE_HEIGHT, 30.0f, 30.0f, 30.0f);
-    } else {
-        insets = UIEdgeInsetsMake(50.f, 15.f, 50.8f, 15.f);
-    }
-    return insets;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout *)collectionViewLayout
-minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    CGFloat space = 0.0f;
-    if (PUBIsiPad()) {
-        space = 20.0f;
-    } else {
-        space = 10.f;
-    }
-    return space;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout *)collectionViewLayout
-minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    CGFloat space = 0.0f;
-    if (PUBIsiPad()) {
-        space = LINE_HEIGHT + 1.f;
-    } else {
-        space = 51.f;
-    }
-    return space;
-}
-
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = self.documentArray[indexPath.item];
+    PUBDocument *document = self.publishedDocuments[indexPath.item];
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
     
     switch (document.state) {
@@ -508,7 +473,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([button isKindOfClass:UIButton.class]) {
         NSIndexPath *indexPath = [self.collectionView
                                   indexPathForItemAtPoint:[self.collectionView convertPoint:button.center fromView:button.superview]];
-        PUBDocument *document = (self.documentArray)[indexPath.row];
+        PUBDocument *document = (self.publishedDocuments)[indexPath.row];
         [document deleteDocument:^{
             [NSNotificationCenter.defaultCenter postNotificationName:PUBStatisticsDocumentDeletedNotification
                                                               object:nil
@@ -591,7 +556,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         
         if (indexPath) {
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            PUBDocument *document = self.documentArray[indexPath.item];
+            PUBDocument *document = self.publishedDocuments[indexPath.item];
             
             CGFloat endAlpha;
             CGAffineTransform endTransform;
@@ -770,7 +735,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [[notification.userInfo allKeys] firstObject];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document && document.state == PUBDocumentStateLoading) {
             NSDictionary *documentProgress = notification.userInfo[document.productID];
@@ -786,7 +751,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [notification.userInfo objectForKey:PUBStatisticsDocumentIDKey];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document) {
             document.state = PUBDocumentStateDownloaded;
@@ -801,7 +766,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 - (void)documentPurchased:(NSNotification *)notification {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSIndexPath *indexPath = [self indexPathForProductID:notification.userInfo[@"productID"]];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document) {
             document.state = PUBDocumentPurchased;
@@ -820,8 +785,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     
     NSIndexPath *indexPath = self.indexPathsForDocuments[productID];
     if (!indexPath) {
-        for (NSInteger i = 0; i < self.documentArray.count; i++) {
-            PUBDocument *document = self.documentArray[i];
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
             if ([document.productID isEqualToString:productID]) {
                 indexPath = [NSIndexPath indexPathForItem:i inSection:0];
                 
@@ -836,8 +801,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return indexPath;
 }
 
-- (void)setDocumentArray:(NSArray *)documentArray {
-    _documentArray = documentArray;
+- (void)setPublishedDocuments:(NSArray *)documentArray {
+    _publishedDocuments = documentArray;
     self.indexPathsForDocuments = nil;
 }
 
