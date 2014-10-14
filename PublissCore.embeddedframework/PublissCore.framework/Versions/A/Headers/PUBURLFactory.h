@@ -15,6 +15,8 @@
 + (NSString *)createImageURLStringForDocument:(uint64_t)publishedDocumentId page:(uint64_t)pageIndex parameters:(NSDictionary *)parameters;
 + (NSURL *)createDownloadURLForDocument:(uint64_t)publishedDocumentId page:(NSUInteger)pageIndex iapSecret:(NSString *)iapSecret productId:(NSString*)productId;
 
++ (NSString *)createFeatureImageURLForDocument:(uint64_t)publishedDocumentId;
+
 + (NSString *)createPublishedDocumentsPath;
 
 + (NSString *)createTrackingPathForPayload:(NSDictionary *)payload;

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37B57E9B19ECFC76000B893A /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B57E9919ECFC76000B893A /* PublissCore.framework */; };
 		7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7864703518A532030005B3B1 /* Publiss.xcdatamodeld */; };
 		8110780C18112E2000281106 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780B18112E2000281106 /* AudioToolbox.framework */; };
 		8110780E18112E4100281106 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780D18112E4100281106 /* CoreAudio.framework */; };
@@ -84,12 +85,10 @@
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
 		87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F1294419E2850300A082E2 /* PUBNavigationViewController.m */; };
-		D4BCC0C418FFD35F00C06F9D /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */; };
 		EB07BD7ACAD44CFFA2E7A71C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7EC5682127449A88DBB3A62 /* libPods.a */; };
 		EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */; };
 		EFBA434318E07FAA00BC738B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFBA434218E07FAA00BC738B /* StoreKit.framework */; };
 		EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */; };
-		EFC7FC2518FFDD48001FF5EB /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +102,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		37B57E9919ECFC76000B893A /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
 		462072B4D22FBED0967E830D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7864703618A532030005B3B1 /* Publiss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss.xcdatamodel; sourceTree = "<group>"; };
 		7864703718A532030005B3B1 /* Publiss_1.01.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.01.xcdatamodel; sourceTree = "<group>"; };
@@ -229,7 +229,6 @@
 		A7EC5682127449A88DBB3A62 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACC07DEE8AD97811741438B8 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D403592118BF442100C5E72F /* Publiss_1.03.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.03.xcdatamodel; sourceTree = "<group>"; };
-		D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
 		EF9069A2189BC2D0008E8369 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		EFBA434218E07FAA00BC738B /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -249,7 +248,6 @@
 				8110782A1811300900281106 /* QuickLook.framework in Frameworks */,
 				811078281811300000281106 /* Security.framework in Frameworks */,
 				8110782618112FF900281106 /* AssetsLibrary.framework in Frameworks */,
-				D4BCC0C418FFD35F00C06F9D /* PublissCore.framework in Frameworks */,
 				8110782418112FE400281106 /* AVFoundation.framework in Frameworks */,
 				8110782218112FDC00281106 /* CFNetwork.framework in Frameworks */,
 				8110782018112FCE00281106 /* CoreMedia.framework in Frameworks */,
@@ -261,6 +259,7 @@
 				8110781818112E8200281106 /* ImageIO.framework in Frameworks */,
 				8110781618112E7900281106 /* CoreText.framework in Frameworks */,
 				8110781418112E6800281106 /* QuartzCore.framework in Frameworks */,
+				37B57E9B19ECFC76000B893A /* PublissCore.framework in Frameworks */,
 				8110781218112E5C00281106 /* MediaPlayer.framework in Frameworks */,
 				8110781018112E5200281106 /* CoreImage.framework in Frameworks */,
 				870110DC180FCF140034B9AC /* CoreGraphics.framework in Frameworks */,
@@ -279,7 +278,6 @@
 				870110FB180FCF140034B9AC /* CoreData.framework in Frameworks */,
 				870110FA180FCF140034B9AC /* UIKit.framework in Frameworks */,
 				870110F9180FCF140034B9AC /* Foundation.framework in Frameworks */,
-				EFC7FC2518FFDD48001FF5EB /* PublissCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +291,22 @@
 				ACC07DEE8AD97811741438B8 /* Pods.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		37B57E9819ECFC76000B893A /* PublissCore.embeddedframework */ = {
+			isa = PBXGroup;
+			children = (
+				37B57E9919ECFC76000B893A /* PublissCore.framework */,
+				37B57E9A19ECFC76000B893A /* Resources */,
+			);
+			path = PublissCore.embeddedframework;
+			sourceTree = "<group>";
+		};
+		37B57E9A19ECFC76000B893A /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		8103B57A1846C14E00E8E77E /* xib */ = {
@@ -446,7 +460,7 @@
 		870110D8180FCF140034B9AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D4BCC0C118FFD35F00C06F9D /* PublissCore.embeddedframework */,
+				37B57E9819ECFC76000B893A /* PublissCore.embeddedframework */,
 				EFBA434218E07FAA00BC738B /* StoreKit.framework */,
 				EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */,
 				EFC288A418A0ED5500D74A1C /* AdSupport.framework */,
@@ -559,22 +573,6 @@
 				877665C219ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.m */,
 			);
 			path = PSPDFSubclasses;
-			sourceTree = "<group>";
-		};
-		D4BCC0C118FFD35F00C06F9D /* PublissCore.embeddedframework */ = {
-			isa = PBXGroup;
-			children = (
-				D4BCC0C218FFD35F00C06F9D /* PublissCore.framework */,
-				D4BCC0C318FFD35F00C06F9D /* Resources */,
-			);
-			path = PublissCore.embeddedframework;
-			sourceTree = "<group>";
-		};
-		D4BCC0C318FFD35F00C06F9D /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Resources;
 			sourceTree = "<group>";
 		};
 		EF123A0618A3B4AA001A43D4 /* Statistics */ = {
