@@ -617,7 +617,11 @@
 }
 
 - (void)showAbout {
-    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss")
+                                message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version]
+                               delegate:self
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
 }
 
 #pragma mark private
@@ -787,7 +791,6 @@
 }
 
 #pragma mark - Show Preview/Document
-
 
 - (void)showPreviewForDocument:(PUBDocument *)document {
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];

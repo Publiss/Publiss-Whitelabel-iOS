@@ -10,27 +10,39 @@
 #import "PUBDocument+Helper.h"
 #import "UIIMageView+AFNetworking.h"
 #import "PUBDocumentFetcher.h"
+#import "PUBThumbnailImageCache.h"
 
 @implementation PUBHeaderReusableView (Documents)
 
 - (void)setupWithDocuments:(NSArray *)documents {
     PUBDocument *document = documents.firstObject;
     
+    
     if (document && [document isKindOfClass:[PUBDocument class]]) {
         NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:document.publishedID];
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:featuredImageUrl];
+        UIImage *featuredImage = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:featuredImageUrl.absoluteString];
+        
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
         
-        __weak typeof(self) welf = self;
-        [self.imageView setImageWithURLRequest:urlRequest
-                              placeholderImage:nil
-                                       success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                           __strong PUBHeaderReusableView *stelf = welf;
-                                           //[stelf animateImageWhenLoaded:stelf.imageView];
-                                           stelf.imageView.image = image;
-                                       } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                           
-                                       }];
+        if (featuredImage) {
+            self.imageView.image = featuredImage;
+        }
+        else {
+            __weak typeof(self) welf = self;
+            [self.imageView setImageWithURLRequest:urlRequest
+                                  placeholderImage:nil
+                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                               __strong PUBHeaderReusableView *stelf = welf;
+                                               //[stelf animateImageWhenLoaded:stelf.imageView];
+                                               
+                                               stelf.imageView.image = image;
+                                               [PUBThumbnailImageCache.sharedInstance setImage:image
+                                                                                  forURLString:featuredImageUrl.absoluteString];
+                                           } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                               
+                                           }];
+        }
     }
 }
 
