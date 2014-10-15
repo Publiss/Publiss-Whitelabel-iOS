@@ -24,9 +24,9 @@
     UIView *toView = toVC.view;
 
     __block UIView *move = nil;
-    CGRect beginFrame = [container convertRect:self.cell.coverImage.bounds fromView:self.cell.coverImage];
+    CGRect beginFrame = self.transitionSourceView.frame;//[container convertRect:self.transitionSourceView.bounds fromView:self.transitionSourceView];
     CGRect endFrame = toView.bounds;
-    CGFloat navBarHeight = self.navigationBar.bounds.size.height + 20.f;
+    CGFloat navBarHeight = self.navigationBar.bounds.size.height + 20.f; // TODO: No magic number for status bar
     
     if (self.targetImage) {
         self.magazineImageView = [[UIImageView alloc]initWithImage:self.targetImage];
@@ -35,7 +35,6 @@
         self.magazineImageView.frame = self.magazinePageFrame;
         self.magazineImageView.center = toView.center;
     }
-    
 
     if (self.modal) {
         CGFloat width;
@@ -57,7 +56,7 @@
     
     switch (self.transitionMode) {
         case TransitionModePresent: {
-            self.cell.hidden = YES;
+            self.transitionSourceView.hidden = YES;
             toView.frame = endFrame;
             
             if (!self.modal) {
@@ -80,7 +79,7 @@
                       initialSpringVelocity:17.f
                                     options:UIViewAnimationOptionCurveEaseInOut
                                  animations:^{
-                                     self.cell.alpha = 0.f;
+                                     self.transitionSourceView.alpha = 0.f;
                                      move.frame = endFrame;
                                      self.dimView.alpha = 0.3f;
                                  }
@@ -99,7 +98,7 @@
                                               self.navigationBar.transform = CGAffineTransformMakeTranslation(0.f, -navBarHeight);
                                               self.collectionView.transform = CGAffineTransformMakeScale(.95f, .95f);
                                               self.collectionView.alpha = .0f;
-                                              self.cell.alpha = 0.f;
+                                              self.transitionSourceView.alpha = 0.f;
                                               
                                               if ([self isPortrait]) {
                                                   move.frame = self.magazineImageView.frame;
@@ -138,12 +137,12 @@
                                           animations:^{
                                               move.alpha = 0.f;
                                               move.frame = beginFrame;
-                                              self.cell.alpha = 1.f;
+                                              self.transitionSourceView.alpha = 1.f;
                                               self.dimView.alpha = 0.;
-                                              self.cell.hidden = NO;
+                                              self.transitionSourceView.hidden = NO;
                                               
                                           } completion:^(BOOL finished) {
-                                              self.cell.hidden = NO;
+                                              self.transitionSourceView.hidden = NO;
                                               self.dimView.hidden = YES;
                                               [move removeFromSuperview];
                                               [transitionContext completeTransition:YES];
@@ -155,11 +154,11 @@
                                           animations:^{
                                               move.alpha = 1.f;
                                               move.frame = beginFrame;
-                                              self.cell.alpha = 1.f;
+                                              self.transitionSourceView.alpha = 1.f;
                                               self.collectionView.alpha = 1.f;
                                           } completion:^(BOOL finished) {
-                                              self.cell.hidden = NO;
-                                              [UIView transitionWithView:self.cell.coverImage
+                                              self.transitionSourceView.hidden = NO;
+                                              [UIView transitionWithView:self.transitionSourceView
                                                                 duration:0.25f
                                                                  options:UIViewAnimationOptionTransitionCrossDissolve
                                                               animations:^{ move.alpha = 0.f; }

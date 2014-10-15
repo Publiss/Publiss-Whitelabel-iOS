@@ -11,7 +11,7 @@
 
 @interface PUBScaleTransition : PUBBaseTransition
 
-@property (nonatomic, strong) UICollectionViewCell<PUBCoverImageCell> *cell;
+@property (nonatomic, strong) UIView *transitionSourceView;
 @property (nonatomic, assign) BOOL modal;
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) PUBPageView *pageView;

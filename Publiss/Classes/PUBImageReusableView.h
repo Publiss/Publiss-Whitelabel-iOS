@@ -12,4 +12,6 @@
 
 @property(nonatomic, strong) UIImageView *imageView;
 
++ (NSString *)kind;
+
 @end

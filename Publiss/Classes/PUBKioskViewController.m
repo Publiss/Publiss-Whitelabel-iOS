@@ -28,8 +28,8 @@
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
-#import "PUBImageReusableView+Document.h"
 #import "PUBKioskLayout.h"
+#import "PUBHeaderReusableView+Documents.h"
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -65,8 +65,6 @@
 + (PUBKioskViewController *)kioskViewController {
     return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
 }
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -111,10 +109,10 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"ipad_background_portrait"]] colorWithAlphaComponent:1.0f];
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
     self.collectionView.collectionViewLayout = [[PUBKioskLayout alloc] init];
     [self.collectionView.collectionViewLayout invalidateLayout];
-    [self.collectionView registerClass:[PUBImageReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBImageReusableView"];
+    [self.collectionView registerClass:[PUBHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBHeaderReusableView"];
     
     UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
     longpressGesture.delegate = self;
@@ -330,12 +328,23 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    PUBImageReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                           withReuseIdentifier:@"PUBImageReusableView"
+    PUBHeaderReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                           withReuseIdentifier:@"PUBHeaderReusableView"
                                                                                                   forIndexPath:indexPath];
-    [header setupWithDocument:self.featuredDocuments.firstObject];
+    [header setupWithDocuments:self.featuredDocuments];
+    
+    header.singleTapBlock = ^() {
+        [self showPreviewForDocument:self.featuredDocuments.firstObject];
+    };
+    
+    header.longPressBlock = ^() {
+        
+    };
+    
     return header;
 }
+
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -418,40 +427,13 @@
             break;
             
         default:
-            self.scaleTransition.cell = cell;
-            
-            if (PUBIsiPad()) {
-                PUBPreviewViewController *previewViewController = [[PUBPreviewViewController alloc] initWithNibName:@"PUBPreviewViewController" bundle:nil];
-                previewViewController.document = document;
-                previewViewController.kioskController = self;
-                previewViewController.cell = cell;
-                previewViewController.selectedIndex = indexPath.row;
-                self.scaleTransition.modal = YES;
-                self.scaleTransition.dimView = self.dimView;
-                previewViewController.modalPresentationStyle = UIModalPresentationCustom;
-                previewViewController.transitioningDelegate = self;
-                self.view.userInteractionEnabled = NO;
-                self.collectionView.userInteractionEnabled = NO;
-                [self presentViewController:previewViewController animated:YES completion:nil];
-            } else {
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBPreviewViewControlleriPhone" bundle:nil];
-                PUBiPhonePreviewViewController *previewViewController = [storyboard instantiateViewControllerWithIdentifier:@"iPhonePreviewVC"];
-                previewViewController.document = document;
-                previewViewController.kioskController = self;
-                previewViewController.cell = cell;
-                previewViewController.selectedIndex = indexPath.row;
-                self.scaleTransition.modal = YES;
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:previewViewController];
-                navController.modalPresentationStyle = UIModalPresentationCustom;
-                navController.transitioningDelegate = self;
-                self.view.userInteractionEnabled = NO;
-                self.collectionView.userInteractionEnabled = NO;
-                [self presentViewController:navController animated:YES completion:nil];
-            }
-            
+            self.scaleTransition.transitionSourceView = cell;
+            [self showPreviewForDocument:document];
             break;
     }
 }
+
+
 
 #pragma mark - UIViewControllerAnimatedTransitioning delegate
 
@@ -609,80 +591,7 @@
     return coverImage;
 }
 
-- (void)showDocument:(PUBDocument *)document forCell:(PUBCellView *)cell forIndex:(NSUInteger)index {
-    NSURL *URL = document.localDocumentURL;
-    if (!URL) {
-        PUBLogError(@"Failed loading local document: %@", URL.absoluteString);
-    } else {
-        if (self.isOpening) {
-            return;
-        }
-        self.view.userInteractionEnabled = NO;
-        self.collectionView.userInteractionEnabled = NO;
-        self.isOpening = YES;
-        self.lastOpenedDocument = document;
-        PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
-        [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
-        PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
-        pdfController.delegate = self;
-        pdfController.kioskViewController = self;
-        
-        UIImage *coverImage = [self imageForDocument:document];
-        if (nil == coverImage) {
-            coverImage = cell.coverImage.image;
-        }
-        CGRect cellCoords = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
-        UIImageView *coverImageView = [[UIImageView alloc] initWithImage:coverImage];
-        coverImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        coverImageView.frame = cellCoords;
-        coverImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:coverImageView];
-        self.documentView = coverImageView;
-        _animationCellIndex = index;
-        
-        if (!PUBIsiPad()) {
-            [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-        }
 
-        // If we have a different page, fade to that page.
-        UIImageView *targetPageImageView = nil;
-        if (pdfController.page != 0 && !pdfController.isDoublePageMode) {
-            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument page:pdfController.page size:UIScreen.mainScreen.bounds.size options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
-            if (targetPageImage) {
-                targetPageImageView = [[UIImageView alloc] initWithImage:targetPageImage];
-                targetPageImageView.frame = self.documentView.bounds;
-                targetPageImageView.contentMode = UIViewContentModeScaleAspectFit;
-                targetPageImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-                targetPageImageView.alpha = 0.f;
-                [self.documentView addSubview:targetPageImageView];
-            }
-        }
-        cell.hidden = YES;
-        self.dimView.hidden = NO;
-        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
-            self.navigationController.navigationBar.alpha = 0.f;
-            self.dimView.alpha = 1.0f;
-            _animationDoubleWithPageCurl = pdfController.configuration.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
-            CGRect newFrame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
-            coverImageView.frame = newFrame;
-            targetPageImageView.alpha = 1.f;
-        } completion:^(BOOL finished) {
-            CATransition *transition = [CATransition animation];
-            transition.duration = 0.25f;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = kCATransitionFade;
-            [self.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
-            self.isOpening = NO;
-            self.view.userInteractionEnabled = YES;
-            self.collectionView.userInteractionEnabled = YES;
-            [self.navigationController pushViewController:pdfController animated:NO];
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
-                                                              object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
-                                                                                    PUBStatisticsDocumentIDKey: document.productID,
-                                                                                    PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
-        }];
-    }
-}
 
 // Calculates where the document view will be on screen.
 - (CGRect)magazinePageCoordinatesWithDoublePageCurl:(BOOL)doublePageCurl onFirstPage:(BOOL)firstPage {
@@ -874,6 +783,119 @@
                                                               object:nil
                                                             userInfo:pageTrack];
         }
+    }
+}
+
+#pragma mark - Show Preview/Document
+
+
+- (void)showPreviewForDocument:(PUBDocument *)document {
+    PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
+    previewViewController.document = document;
+    previewViewController.kioskController = self;
+    previewViewController.modalPresentationStyle = UIModalPresentationCustom;
+    previewViewController.transitioningDelegate = self;
+    
+    self.scaleTransition.modal = YES;
+    self.scaleTransition.dimView = self.dimView;
+    
+    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    if (indexPath) {
+        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        self.scaleTransition.transitionSourceView = cell;
+        previewViewController.cell = cell;
+        previewViewController.selectedIndex = indexPath.row;
+    }
+    else {
+        CGRect frame = CGRectMake(self.collectionView.bounds.size.width/2, self.collectionView.bounds.size.height, 2, 2);
+        self.scaleTransition.transitionSourceView = [[UIView alloc] initWithFrame:frame];
+    }
+    
+    UIViewController *controllerToPresent = previewViewController;
+    if (!PUBIsiPad()) {
+        controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
+    }
+    
+    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+    controllerToPresent.transitioningDelegate = self;
+    
+    self.view.userInteractionEnabled = NO;
+    self.collectionView.userInteractionEnabled = NO;
+    [self presentViewController:controllerToPresent animated:YES completion:nil];
+}
+
+- (void)showDocument:(PUBDocument *)document forCell:(PUBCellView *)cell forIndex:(NSUInteger)index {
+    NSURL *URL = document.localDocumentURL;
+    if (!URL) {
+        PUBLogError(@"Failed loading local document: %@", URL.absoluteString);
+    } else {
+        if (self.isOpening) {
+            return;
+        }
+        self.view.userInteractionEnabled = NO;
+        self.collectionView.userInteractionEnabled = NO;
+        self.isOpening = YES;
+        self.lastOpenedDocument = document;
+        PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
+        [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
+        PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
+        pdfController.delegate = self;
+        pdfController.kioskViewController = self;
+        
+        UIImage *coverImage = [self imageForDocument:document];
+        if (nil == coverImage) {
+            coverImage = cell.coverImage.image;
+        }
+        CGRect cellCoords = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
+        UIImageView *coverImageView = [[UIImageView alloc] initWithImage:coverImage];
+        coverImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+        coverImageView.frame = cellCoords;
+        coverImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:coverImageView];
+        self.documentView = coverImageView;
+        _animationCellIndex = index;
+        
+        if (!PUBIsiPad()) {
+            [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        }
+        
+        // If we have a different page, fade to that page.
+        UIImageView *targetPageImageView = nil;
+        if (pdfController.page != 0 && !pdfController.isDoublePageMode) {
+            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument page:pdfController.page size:UIScreen.mainScreen.bounds.size options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+            if (targetPageImage) {
+                targetPageImageView = [[UIImageView alloc] initWithImage:targetPageImage];
+                targetPageImageView.frame = self.documentView.bounds;
+                targetPageImageView.contentMode = UIViewContentModeScaleAspectFit;
+                targetPageImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+                targetPageImageView.alpha = 0.f;
+                [self.documentView addSubview:targetPageImageView];
+            }
+        }
+        cell.hidden = YES;
+        self.dimView.hidden = NO;
+        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
+            self.navigationController.navigationBar.alpha = 0.f;
+            self.dimView.alpha = 1.0f;
+            _animationDoubleWithPageCurl = pdfController.configuration.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
+            CGRect newFrame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
+            coverImageView.frame = newFrame;
+            targetPageImageView.alpha = 1.f;
+        } completion:^(BOOL finished) {
+            CATransition *transition = [CATransition animation];
+            transition.duration = 0.25f;
+            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+            transition.type = kCATransitionFade;
+            [self.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
+            self.isOpening = NO;
+            self.view.userInteractionEnabled = YES;
+            self.collectionView.userInteractionEnabled = YES;
+            [self.navigationController pushViewController:pdfController animated:NO];
+            [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
+                                                              object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
+                                                                                    PUBStatisticsDocumentIDKey: document.productID,
+                                                                                    PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
+        }];
     }
 }
 

@@ -8,6 +8,12 @@
 
 #import "PUBKioskLayout.h"
 #import "PUBConstants.h"
+#import "PUBImageReusableView.h"
+
+@interface PUBKioskLayout()
+
+@property (nonatomic, strong) NSDictionary *shelfRects;
+@end
 
 @implementation PUBKioskLayout
 
@@ -15,6 +21,7 @@
     self = [super init];
     if (self) {
         [self updateSizesAndSpacings];
+        [self registerClass:[PUBImageReusableView class] forDecorationViewOfKind:[PUBImageReusableView kind]];
     }
     return self;
 }
@@ -30,8 +37,86 @@
 - (void)prepareLayout {
     [super prepareLayout];
     [self updateSizesAndSpacings];
+    self.shelfRects = [self calculateShelveRects];
 }
 
+- (NSDictionary *)calculateShelveRects {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+    
+    // Calculate where shelves go in a vertical layout.
+    if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+        NSInteger sectionCount = [self.collectionView numberOfSections];
+        
+        CGFloat y = 0;
+        CGFloat availableWidth = self.collectionViewContentSize.width - (self.sectionInset.left + self.sectionInset.right);
+        NSInteger itemsAcross = (NSInteger)floor((availableWidth + self.minimumInteritemSpacing) / (self.itemSize.width + self.minimumInteritemSpacing));
+        
+        for (int section = 0; section < sectionCount; section++) {
+            y += self.headerReferenceSize.height;
+            y += self.sectionInset.top;
+            
+            NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
+            NSInteger rows = (NSInteger)ceilf(itemCount/(float)itemsAcross);
+            for (int row = 0; row < rows; row++) {
+                
+                dictionary[[NSIndexPath indexPathForItem:row inSection:section]] = [NSValue valueWithCGRect:CGRectMake(0, y - self.minimumLineSpacing + 1, self.collectionViewContentSize.width, self.itemSize.height + self.minimumLineSpacing)];
+                y += self.itemSize.height;
+                
+                if (row < rows - 1)
+                    y += self.minimumLineSpacing;
+            }
+            
+            y += self.sectionInset.bottom;
+            y += self.footerReferenceSize.height;
+        }
+    }
+    
+    return [NSDictionary dictionaryWithDictionary:dictionary];
+}
+
+
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+    NSArray *array = [super layoutAttributesForElementsInRect:rect];
+
+    for (UICollectionViewLayoutAttributes *attributes in array) {
+        attributes.zIndex = 1;
+    }
+    
+    NSMutableArray *newArray = [array mutableCopy];
+    
+    [self.shelfRects enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if (CGRectIntersectsRect([obj CGRectValue], rect)) {
+            UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:[PUBImageReusableView kind] withIndexPath:key];
+            attributes.frame = [obj CGRectValue];
+            attributes.zIndex = 0;
+            [newArray addObject:attributes];
+        }
+    }];
+    
+    return [NSArray arrayWithArray:newArray];
+}
+
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:indexPath];
+    attributes.zIndex = 1;
+    return attributes;
+}
+
+- (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
+    id shelfRect = self.shelfRects[indexPath];
+    if (!shelfRect)
+        return nil;
+    UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:[PUBImageReusableView kind]
+                                                                                                               withIndexPath:indexPath];
+    attributes.frame = [shelfRect CGRectValue];
+    attributes.zIndex = 0;
+    
+    return attributes;
+}
+
+/*
 // Code from: https://openradar.appspot.com/12433891
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSArray *unfilteredPoses = [super layoutAttributesForElementsInRect:rect];
@@ -45,6 +130,7 @@
     }
     return [NSArray arrayWithObjects:filteredPoses count:filteredPosesCount];
 }
+ */
 
 - (void)updateSizesAndSpacings {
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
