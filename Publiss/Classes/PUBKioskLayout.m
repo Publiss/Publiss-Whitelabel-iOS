@@ -116,21 +116,6 @@
     return attributes;
 }
 
-/*
-// Code from: https://openradar.appspot.com/12433891
-- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSArray *unfilteredPoses = [super layoutAttributesForElementsInRect:rect];
-    id filteredPoses[unfilteredPoses.count];
-    NSUInteger filteredPosesCount = 0;
-    for (UICollectionViewLayoutAttributes *pose in unfilteredPoses) {
-        CGRect frame = pose.frame;
-        if (frame.origin.x + frame.size.width <= rect.size.width) {
-            filteredPoses[filteredPosesCount++] = pose;
-        }
-    }
-    return [NSArray arrayWithObjects:filteredPoses count:filteredPosesCount];
-}
- */
 
 - (void)updateSizesAndSpacings {
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -141,11 +126,36 @@
     self.minimumLineSpacing = PUBIsiPad() ? 31.0f : 51.0f;
     
     CGFloat fraction = UIInterfaceOrientationIsPortrait([self orientation]) ? 2 : 3;
-    self.headerReferenceSize = CGSizeMake(self.collectionView.bounds.size.width, self.collectionView.bounds.size.width/fraction);
+    
+    if (self.showsHeader) {
+        self.headerReferenceSize = CGSizeMake(self.collectionView.bounds.size.width, self.collectionView.bounds.size.width/fraction);
+    }
+    else {
+        self.headerReferenceSize = CGSizeZero;
+    }
 }
 
 - (UIInterfaceOrientation)orientation {
     return [[UIApplication sharedApplication] statusBarOrientation];
 }
+
+// Layout fix.
+
+/*
+ // Code from: https://openradar.appspot.com/12433891
+ - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
+ NSArray *unfilteredPoses = [super layoutAttributesForElementsInRect:rect];
+ id filteredPoses[unfilteredPoses.count];
+ NSUInteger filteredPosesCount = 0;
+ for (UICollectionViewLayoutAttributes *pose in unfilteredPoses) {
+ CGRect frame = pose.frame;
+ if (frame.origin.x + frame.size.width <= rect.size.width) {
+ filteredPoses[filteredPosesCount++] = pose;
+ }
+ }
+ return [NSArray arrayWithObjects:filteredPoses count:filteredPosesCount];
+ }
+ */
+
 
 @end

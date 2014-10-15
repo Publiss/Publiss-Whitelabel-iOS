@@ -37,20 +37,24 @@
     BOOL _animateViewWillAppearWithFade;
 }
 
-@property (nonatomic, assign) BOOL isOpening;
-@property (nonatomic, strong) PUBScaleTransition *scaleTransition;
-@property (nonatomic, copy) NSArray *featuredDocuments;
-@property (nonatomic, copy) NSArray *publishedDocuments;
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, strong) PUBKioskLayout *kioskLayout;
+@property (nonatomic, strong) PUBScaleTransition *scaleTransition;
 @property (nonatomic, strong) UIView *dimView;
-@property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
-@property (nonatomic, strong) NSTimer *pageTracker;
 @property (nonatomic, strong) REMenu *menu;
 @property (nonatomic, strong) UIImageView *documentView;
-@property (nonatomic, strong) PUBDocument *lastOpenedDocument;
 
+@property (nonatomic, assign) BOOL isOpening;
+
+@property (nonatomic, copy) NSArray *featuredDocuments;
+@property (nonatomic, copy) NSArray *publishedDocuments;
+
+@property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
+
+@property (nonatomic, strong) PUBDocument *lastOpenedDocument;
+@property (nonatomic, strong) NSTimer *pageTracker;
 
 @end
 
@@ -110,7 +114,8 @@
 
 - (void)setupCollectionView {
     self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
-    self.collectionView.collectionViewLayout = [[PUBKioskLayout alloc] init];
+    self.kioskLayout = [[PUBKioskLayout alloc] init];
+    self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
     [self.collectionView registerClass:[PUBHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBHeaderReusableView"];
     
@@ -310,6 +315,8 @@
         self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured != YES"]];
         self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         
+        self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
+        
         [self.collectionView reloadData];
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
@@ -343,8 +350,6 @@
     
     return header;
 }
-
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -432,8 +437,6 @@
             break;
     }
 }
-
-
 
 #pragma mark - UIViewControllerAnimatedTransitioning delegate
 

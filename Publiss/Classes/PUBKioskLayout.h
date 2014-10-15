@@ -10,4 +10,6 @@
 
 @interface PUBKioskLayout : UICollectionViewFlowLayout
 
+@property (nonatomic, assign) BOOL showsHeader;
+
 @end
