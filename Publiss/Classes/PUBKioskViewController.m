@@ -351,9 +351,9 @@
         
         if (document.state == PUBDocumentStateDownloaded) {
             [UIActionSheet showInView:self.view
-                            withTitle:@"Do you want to remove the PDF for this document?"
+                            withTitle:PUBLocalize(@"Do you want to remove the PDF for this document?")
                     cancelButtonTitle:PUBLocalize(@"Cancel")
-               destructiveButtonTitle:PUBLocalize(@"YES, remove PDF")
+               destructiveButtonTitle:PUBLocalize(@"Yes, remove PDF")
                     otherButtonTitles:nil
                              tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
                                  if (buttonIndex == actionSheet.destructiveButtonIndex) {
