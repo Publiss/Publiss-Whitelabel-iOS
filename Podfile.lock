@@ -25,6 +25,7 @@ PODS:
   - Lockbox (1.4.9)
   - PSPDFKit (4.0.3)
   - REMenu (1.10)
+  - UIActionSheet+Blocks (0.8.1)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.3)
@@ -33,6 +34,7 @@ DEPENDENCIES:
   - Lockbox (~> 1.4)
   - PSPDFKit
   - REMenu (~> 1.9)
+  - UIActionSheet+Blocks
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
@@ -41,5 +43,6 @@ SPEC CHECKSUMS:
   Lockbox: cfe87dbbce6b5c6d7cfeefc3fe6594ef55919b11
   PSPDFKit: e375ca11ab4a5f5d7f568841c7e934bb934dd0ba
   REMenu: e3988747d83f9e8f49f244bd3f1fb8b0900e8741
+  UIActionSheet+Blocks: c8b9c02f3d08964e8f7a4202f004a639c15eab80
 
 COCOAPODS: 0.34.2

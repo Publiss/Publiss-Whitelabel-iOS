@@ -30,6 +30,7 @@
 #import <PublissCore.h>
 #import "PUBKioskLayout.h"
 #import "PUBHeaderReusableView+Documents.h"
+#import "UIActionSheet+Blocks.h"
 
 @interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -346,10 +347,26 @@
     
     header.longPressBlock = ^() {
         
+        PUBDocument *document = self.featuredDocuments.firstObject;
+        
+        if (document.state == PUBDocumentStateDownloaded) {
+            [UIActionSheet showInView:self.view
+                            withTitle:@"Do you want to remove the PDF for this document?"
+                    cancelButtonTitle:PUBLocalize(@"Cancel")
+               destructiveButtonTitle:PUBLocalize(@"YES, remove PDF")
+                    otherButtonTitles:nil
+                             tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
+                                 if (buttonIndex == actionSheet.destructiveButtonIndex) {
+                                     [self removePdfForDocument:document];
+                                 }
+                             }];
+        }
     };
     
     return header;
 }
+
+
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -459,15 +476,7 @@
         NSIndexPath *indexPath = [self.collectionView
                                   indexPathForItemAtPoint:[self.collectionView convertPoint:button.center fromView:button.superview]];
         PUBDocument *document = (self.publishedDocuments)[indexPath.row];
-        [document deleteDocument:^{
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBStatisticsDocumentDeletedNotification
-                                                              object:nil
-                                                            userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f",
-                                                                                                   NSDate.date.timeIntervalSince1970],
-                                                                       PUBStatisticsDocumentIDKey: document.productID,
-                                                                       PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
-            [self.collectionView reloadData];
-        }];
+        [self removePdfForDocument:document];
     }
 }
 
@@ -594,7 +603,17 @@
     return coverImage;
 }
 
-
+- (void)removePdfForDocument:(PUBDocument *)document {
+    [document deleteDocument:^{
+        [NSNotificationCenter.defaultCenter postNotificationName:PUBStatisticsDocumentDeletedNotification
+                                                          object:nil
+                                                        userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f",
+                                                                                               NSDate.date.timeIntervalSince1970],
+                                                                   PUBStatisticsDocumentIDKey: document.productID,
+                                                                   PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
+        [self.collectionView reloadData];
+    }];
+}
 
 // Calculates where the document view will be on screen.
 - (CGRect)magazinePageCoordinatesWithDoublePageCurl:(BOOL)doublePageCurl onFirstPage:(BOOL)firstPage {
@@ -626,8 +645,6 @@
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
 }
-
-#pragma mark private
 
 - (void)visitPublissSite {
     PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];

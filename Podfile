@@ -5,6 +5,7 @@ pod 'PSPDFKit'
 pod 'REMenu', '~> 1.9'
 pod 'JDStatusBarNotification', '~> 1.4'
 pod 'GoogleAnalytics-iOS-SDK', '~> 3.0'
+pod 'UIActionSheet+Blocks'
 
 post_install do |installer|
 	puts "CREATING VERSION FILE"

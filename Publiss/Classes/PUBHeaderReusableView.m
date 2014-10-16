@@ -43,33 +43,41 @@
 
 - (void)setup {
     self.imageView.image = [UIImage imageNamed:@"HeaderBackground"];
+    
+    [self removeGestureRecognizer:self.singleTapRecognizer];
+    [self removeGestureRecognizer:self.longPressRecognizer];
+    
     [self addGestureRecognizer:self.singleTapRecognizer];
     [self addGestureRecognizer:self.longPressRecognizer];
 }
 
 - (UITapGestureRecognizer *)singleTapRecognizer {
     if (!_singleTapRecognizer) {
-        _singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction)];
+        _singleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                                       action:@selector(singleTapAction)];
     }
     return _singleTapRecognizer;
 }
 
 - (UILongPressGestureRecognizer *)longPressRecognizer {
     if (!_longPressRecognizer) {
-        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressAction)];
+        _longPressRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                             action:@selector(longPressAction:)];
     }
     return _longPressRecognizer;
 }
 
 - (void)singleTapAction {
     if (self.singleTapBlock) {
-        self.singleTapBlock(0);
+        self.singleTapBlock();
     }
 }
 
-- (void)longPressAction {
-    if (self.longPressBlock) {
-        self.longPressBlock(0);
+- (void)longPressAction:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan){
+        if (self.longPressBlock) {
+            self.longPressBlock();
+        }
     }
 }
 
