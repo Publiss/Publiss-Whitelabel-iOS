@@ -32,7 +32,9 @@
 #import "PUBHeaderReusableView+Documents.h"
 #import "UIActionSheet+Blocks.h"
 
-@interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
+#import "PUBTransitioningDelegate.h"
+
+@interface PUBKioskViewController () <PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
     BOOL _animationDoubleWithPageCurl;
     BOOL _animateViewWillAppearWithFade;
@@ -40,7 +42,7 @@
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
-@property (nonatomic, strong) PUBScaleTransition *scaleTransition;
+
 @property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) REMenu *menu;
@@ -56,6 +58,8 @@
 
 @property (nonatomic, strong) PUBDocument *lastOpenedDocument;
 @property (nonatomic, strong) NSTimer *pageTracker;
+
+@property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
 
 @end
 
@@ -75,9 +79,6 @@
     [super viewDidLoad];
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
     self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:1.0f];
-    
-    self.scaleTransition = [PUBScaleTransition new];
-    self.transitioningDelegate = self;
     
     self.coverImageDictionary = [NSMutableDictionary dictionary];
     
@@ -111,6 +112,8 @@
                                    }];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
+    
+    self.transitioningDelegate = [PUBTransitioningDelegate new];
 }
 
 - (void)setupCollectionView {
@@ -449,24 +452,10 @@
             break;
             
         default:
-            self.scaleTransition.transitionSourceView = cell;
+            self.transitioningDelegate.scaleTransition.transitionSourceView = cell;
             [self showPreviewForDocument:document];
             break;
     }
-}
-
-#pragma mark - UIViewControllerAnimatedTransitioning delegate
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    self.scaleTransition.transitionMode = TransitionModePresent;
-    return self.scaleTransition;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    self.scaleTransition.transitionMode = TransitionModeDismiss;
-    return self.scaleTransition;
 }
 
 #pragma mark - Actions
@@ -755,7 +744,7 @@
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didLoadPageView:(PSPDFPageView *)pageView  {
-    self.scaleTransition.pageView = (PUBPageView *)pageView;
+    self.transitioningDelegate.scaleTransition.pageView = (PUBPageView *)pageView;
     [self trackPage];
 }
 
@@ -816,22 +805,21 @@
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
     previewViewController.document = document;
     previewViewController.kioskController = self;
-    previewViewController.modalPresentationStyle = UIModalPresentationCustom;
-    previewViewController.transitioningDelegate = self;
-    
-    self.scaleTransition.modal = YES;
-    self.scaleTransition.dimView = self.dimView;
     
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        self.scaleTransition.transitionSourceView = cell;
+        
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
+        self.transitioningDelegate.scaleTransition.modal = YES;
+        self.transitioningDelegate.scaleTransition.dimView = self.dimView;
+        self.transitioningDelegate.scaleTransition.transitionSourceView = cell;
+        
         previewViewController.cell = cell;
         previewViewController.selectedIndex = indexPath.row;
     }
     else {
-        CGRect frame = CGRectMake(self.collectionView.bounds.size.width/2, self.collectionView.bounds.size.height, 2, 2);
-        self.scaleTransition.transitionSourceView = [[UIView alloc] initWithFrame:frame];
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionCrossfade;
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -840,7 +828,7 @@
     }
     
     controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-    controllerToPresent.transitioningDelegate = self;
+    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     
     self.view.userInteractionEnabled = NO;
     self.collectionView.userInteractionEnabled = NO;

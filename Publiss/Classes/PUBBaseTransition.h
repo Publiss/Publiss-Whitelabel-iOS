@@ -9,6 +9,7 @@
 
 typedef NS_ENUM(NSInteger, TransitionMode) { TransitionModePresent = 0, TransitionModeDismiss };
 
+
 @interface PUBBaseTransition : NSObject <UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, assign) TransitionMode transitionMode;
