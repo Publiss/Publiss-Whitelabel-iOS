@@ -64,7 +64,7 @@
         
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
-        builder.backgroundColor = UIColor.clearColor;
+        builder.backgroundColor = [UIColor blackColor];
 
         
         builder.allowBackgroundSaving = YES;
@@ -74,8 +74,7 @@
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
-//        builder.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
-        builder.shouldShowHUDOnViewWillAppear = YES; // Hide HUD initially.
+        builder.shouldShowHUDOnViewWillAppear = YES;
     }];
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
@@ -122,12 +121,17 @@
 }
 
 - (void)close:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupUserInterface];
+}
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -143,9 +147,13 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-    
-    
+}
+
+- (void)setupUserInterface {
+    UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
+    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
 }
 
 // Blurring of gallery

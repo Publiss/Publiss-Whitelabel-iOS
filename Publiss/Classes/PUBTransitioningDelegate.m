@@ -10,11 +10,13 @@
 #import "PUBBaseTransition.h"
 #import "PUBCrossfadeTransition.h"
 #import "PUBScaleTransition.h"
+#import "PUBDocumentTransition.h"
 
 @interface PUBTransitioningDelegate ()
 
 @property (nonatomic, strong, readwrite) PUBScaleTransition *scaleTransition;
 @property (nonatomic, strong, readwrite) PUBCrossfadeTransition *crossfadeTransition;
+@property (nonatomic, strong, readwrite) PUBDocumentTransition *documentTransition;
 
 @end
 
@@ -36,14 +38,24 @@
     return _scaleTransition;
 }
 
+- (PUBDocumentTransition *)documentTransition {
+    if (!_documentTransition) {
+        _documentTransition = [PUBDocumentTransition new];
+    }
+    return _documentTransition;
+}
+
 #pragma mark - Help
 
 - (PUBBaseTransition *)currentTransition {
-    if (self.selectedTransition == PUBSelectedTransitionCrossfade) {
-        return self.crossfadeTransition;
+    if (self.selectedTransition == PUBSelectedTransitionScale) {
+        return self.scaleTransition;
+    }
+    else if (self.selectedTransition == PUBSelectedTransitionDocument) {
+        return self.documentTransition;
     }
     else {
-        return self.scaleTransition;
+        return self.crossfadeTransition;
     }
 }
 

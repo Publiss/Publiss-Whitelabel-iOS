@@ -195,7 +195,7 @@
 - (void)openPDFWithWithDocument:(PUBDocument *)document {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.kioskController) {
-            [self.kioskController showDocument:document forCell:self.cell forIndex:self.selectedIndex];
+            [self.kioskController presentDocument:document];
         }
     }];
 }

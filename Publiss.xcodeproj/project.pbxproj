@@ -15,6 +15,7 @@
 		37F2F9B419F11037003E344D /* PUBCrossfadeTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B319F11037003E344D /* PUBCrossfadeTransition.m */; };
 		37F2F9B719F11CF6003E344D /* PUBTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B619F11CF6003E344D /* PUBTransitioningDelegate.m */; };
 		37F2F9BA19F13004003E344D /* PUBDimmView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B919F13004003E344D /* PUBDimmView.m */; };
+		37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */; };
 		7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7864703518A532030005B3B1 /* Publiss.xcdatamodeld */; };
 		8110780C18112E2000281106 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780B18112E2000281106 /* AudioToolbox.framework */; };
 		8110780E18112E4100281106 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780D18112E4100281106 /* CoreAudio.framework */; };
@@ -125,6 +126,8 @@
 		37F2F9B619F11CF6003E344D /* PUBTransitioningDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBTransitioningDelegate.m; path = Classes/PUBTransitioningDelegate.m; sourceTree = "<group>"; };
 		37F2F9B819F13004003E344D /* PUBDimmView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBDimmView.h; path = Classes/PUBDimmView.h; sourceTree = "<group>"; };
 		37F2F9B919F13004003E344D /* PUBDimmView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDimmView.m; path = Classes/PUBDimmView.m; sourceTree = "<group>"; };
+		37F2F9BB19F137C4003E344D /* PUBDocumentTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBDocumentTransition.h; path = Classes/PUBDocumentTransition.h; sourceTree = "<group>"; };
+		37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDocumentTransition.m; path = Classes/PUBDocumentTransition.m; sourceTree = "<group>"; };
 		462072B4D22FBED0967E830D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7864703618A532030005B3B1 /* Publiss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss.xcdatamodel; sourceTree = "<group>"; };
 		7864703718A532030005B3B1 /* Publiss_1.01.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.01.xcdatamodel; sourceTree = "<group>"; };
@@ -468,6 +471,8 @@
 				877665F419ACED17000DFFF1 /* PUBScaleTransition.m */,
 				37F2F9B219F11037003E344D /* PUBCrossfadeTransition.h */,
 				37F2F9B319F11037003E344D /* PUBCrossfadeTransition.m */,
+				37F2F9BB19F137C4003E344D /* PUBDocumentTransition.h */,
+				37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */,
 			);
 			name = Transistions;
 			sourceTree = "<group>";
@@ -821,6 +826,7 @@
 				8776660A19ACED71000DFFF1 /* PUBStatisticsManager.m in Sources */,
 				8776661119ACED83000DFFF1 /* PUBCoreDataStack.m in Sources */,
 				8776660719ACED64000DFFF1 /* PUBThumbnailImageCache.m in Sources */,
+				37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */,
 				877665B619ACEA06000DFFF1 /* IAPController.m in Sources */,
 				877665D919ACEC8E000DFFF1 /* PUBDownloadButton.m in Sources */,
 				877665EF19ACECF4000DFFF1 /* PUBBugFixFlowLayout.m in Sources */,

@@ -33,6 +33,7 @@
 #import "UIActionSheet+Blocks.h"
 
 #import "PUBTransitioningDelegate.h"
+#import "PUBDocumentTransition.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
     NSUInteger _animationCellIndex;
@@ -43,7 +44,6 @@
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
 
-@property (nonatomic, strong) UIView *dimView;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) REMenu *menu;
 @property (nonatomic, strong) UIImageView *documentView;
@@ -85,23 +85,8 @@
     [self setupNavigationItems];
     [self setupCollectionView];
     [self setupMenu];
+    [self setupSpinner];
 
-    self.dimView = [[UIView alloc] initWithFrame:self.view.bounds];
-    self.dimView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.dimView.userInteractionEnabled = NO;
-    self.dimView.backgroundColor = [UIColor blackColor];
-    self.dimView.alpha = 0.0f;
-    self.dimView.hidden = YES;
-    [self.view addSubview:self.dimView];
-    
-    self.spinner = [UIActivityIndicatorView new];
-    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-    self.spinner.color = [UIColor publissPrimaryColor];
-    self.spinner.frame = CGRectMake(self.view.center.x - 10.f, self.view.center.y - 10.f, 20.f, 20.f);
-    self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [self.collectionView addSubview:self.spinner];
-    self.spinner.hidden = YES;
-    
     [JDStatusBarNotification addStyleNamed:PurchasedMenuStyle
                                    prepare:^JDStatusBarStyle *(JDStatusBarStyle *style) {
                                        style.barColor = [UIColor whiteColor];
@@ -129,6 +114,16 @@
     
     self.collectionView.delegate = self;
     self.collectionView.dataSource = self;
+}
+
+- (void)setupSpinner {
+    self.spinner = [UIActivityIndicatorView new];
+    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+    self.spinner.color = [UIColor publissPrimaryColor];
+    self.spinner.frame = CGRectMake(self.view.center.x - 10.f, self.view.center.y - 10.f, 20.f, 20.f);
+    self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+    [self.collectionView addSubview:self.spinner];
+    self.spinner.hidden = YES;
 }
 
 - (void)showMenu:(id)sender {
@@ -247,43 +242,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    // Animate back to grid cell?
-    if (self.documentView) {
-        [self.collectionView layoutSubviews]; // ensure cells are laid out
-        
-        // Convert the coordinates into view coordinate system.
-        // We can't remember those, because the device might has been rotated.
-        PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:_animationCellIndex inSection:0]];
-        [cell setupForDocument:self.lastOpenedDocument];
-        CGRect relativeCellRect = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
-        
-        self.documentView.frame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
-        
-        // Update image for a nicer animation (get the correct page)
-        UIImage *coverImage = [self imageForDocument:self.lastOpenedDocument];
-        if (coverImage) self.documentView.image = coverImage;
-        
-        // Start animation!
-        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
-            self.documentView.frame = relativeCellRect;
-            [self.documentView.subviews.lastObject setAlpha:0.f];
-            self.dimView.alpha = 0.0f;
-        } completion:^(BOOL finished) {
-            cell.hidden = NO;
-            [UIView transitionWithView:self.documentView duration:0.25f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                self.documentView.alpha = 0.0f;
-            } completion:^(BOOL finish) {
-                [self.documentView removeFromSuperview];
-                self.documentView = nil;
-                self.dimView.hidden = YES;
-                
-                if (self.shouldRetrieveDocuments) {
-                    self.shouldRetrieveDocuments = NO;
-                    [self refreshDocumentsWithActivityViewAnimated:YES];
-                }
-            }];
-        }];
+
+    if (self.shouldRetrieveDocuments) {
+        self.shouldRetrieveDocuments = NO;
+        [self refreshDocumentsWithActivityViewAnimated:YES];
     }
 }
 
@@ -444,11 +406,11 @@
     
     switch (document.state) {
         case PUBDocumentStateDownloaded:
-            [self showDocument:document forCell:cell forIndex:indexPath.row];
+            [self presentDocument:document];
             break;
             
         case PUBDocumentPurchased:
-            [self showDocument:document forCell:cell forIndex:indexPath.row];
+            [self presentDocument:document];
             break;
             
         default:
@@ -602,22 +564,6 @@
                                                                    PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
         [self.collectionView reloadData];
     }];
-}
-
-// Calculates where the document view will be on screen.
-- (CGRect)magazinePageCoordinatesWithDoublePageCurl:(BOOL)doublePageCurl onFirstPage:(BOOL)firstPage {
-    CGRect newFrame = self.view.frame;
-
-    // Animation needs to be different if we are in pageCurl mode.
-    if (doublePageCurl) {
-        newFrame.size.width /= 2;
-        if (firstPage) {
-            newFrame.origin.x += newFrame.size.width;
-        } else {
-            newFrame.origin.x = 0;
-        }
-    }
-    return newFrame;
 }
 
 - (void)setupNavigationItems {
@@ -812,7 +758,6 @@
         
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
         self.transitioningDelegate.scaleTransition.modal = YES;
-        self.transitioningDelegate.scaleTransition.dimView = self.dimView;
         self.transitioningDelegate.scaleTransition.transitionSourceView = cell;
         
         previewViewController.cell = cell;
@@ -826,87 +771,57 @@
     if (!PUBIsiPad()) {
         controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
     }
-    
     controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
     controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     
-    self.view.userInteractionEnabled = NO;
-    self.collectionView.userInteractionEnabled = NO;
     [self presentViewController:controllerToPresent animated:YES completion:nil];
 }
 
-- (void)showDocument:(PUBDocument *)document forCell:(PUBCellView *)cell forIndex:(NSUInteger)index {
-    NSURL *URL = document.localDocumentURL;
-    if (!URL) {
-        PUBLogError(@"Failed loading local document: %@", URL.absoluteString);
-    } else {
-        if (self.isOpening) {
-            return;
-        }
-        self.view.userInteractionEnabled = NO;
-        self.collectionView.userInteractionEnabled = NO;
-        self.isOpening = YES;
-        self.lastOpenedDocument = document;
+- (void)presentDocument:(PUBDocument *)document {
+    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    if (indexPath) {
+        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        
         PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
         [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
         PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
         pdfController.delegate = self;
         pdfController.kioskViewController = self;
         
-        UIImage *coverImage = [self imageForDocument:document];
-        if (nil == coverImage) {
-            coverImage = cell.coverImage.image;
-        }
-        CGRect cellCoords = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
-        UIImageView *coverImageView = [[UIImageView alloc] initWithImage:coverImage];
-        coverImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        coverImageView.frame = cellCoords;
-        coverImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:coverImageView];
-        self.documentView = coverImageView;
-        _animationCellIndex = index;
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
+        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+        self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
         
-        if (!PUBIsiPad()) {
-            [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+        // FIXME: Animate to target left or target right.
+        // [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
+        if (pdfController.isDoublePageMode && pdfController.page % 2 == 0) {
+            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionRight;
+        }
+        else if (pdfController.isDoublePageMode && pdfController.page % 2 == 1) {
+            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionLeft;
+        }
+        else {
+            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionCenter;
         }
         
-        // If we have a different page, fade to that page.
-        UIImageView *targetPageImageView = nil;
+        // FIXME: Animate with last opened page.
         if (pdfController.page != 0 && !pdfController.isDoublePageMode) {
-            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument page:pdfController.page size:UIScreen.mainScreen.bounds.size options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument
+                                                                            page:pdfController.page
+                                                                            size:UIScreen.mainScreen.bounds.size
+                                                                         options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
             if (targetPageImage) {
-                targetPageImageView = [[UIImageView alloc] initWithImage:targetPageImage];
-                targetPageImageView.frame = self.documentView.bounds;
-                targetPageImageView.contentMode = UIViewContentModeScaleAspectFit;
-                targetPageImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-                targetPageImageView.alpha = 0.f;
-                [self.documentView addSubview:targetPageImageView];
+                self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
             }
         }
-        cell.hidden = YES;
-        self.dimView.hidden = NO;
-        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
-            self.navigationController.navigationBar.alpha = 0.f;
-            self.dimView.alpha = 1.0f;
-            _animationDoubleWithPageCurl = pdfController.configuration.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
-            CGRect newFrame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
-            coverImageView.frame = newFrame;
-            targetPageImageView.alpha = 1.f;
-        } completion:^(BOOL finished) {
-            CATransition *transition = [CATransition animation];
-            transition.duration = 0.25f;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = kCATransitionFade;
-            [self.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
-            self.isOpening = NO;
-            self.view.userInteractionEnabled = YES;
-            self.collectionView.userInteractionEnabled = YES;
-            [self.navigationController pushViewController:pdfController animated:NO];
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
-                                                              object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
-                                                                                    PUBStatisticsDocumentIDKey: document.productID,
-                                                                                    PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
-        }];
+        
+        // TODO: Add statistics for openend page.
+        
+        UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
+        controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+        controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+
+        [self presentViewController:controllerToPresent animated:YES completion:nil];
     }
 }
 
