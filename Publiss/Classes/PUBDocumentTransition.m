@@ -9,8 +9,6 @@
 #import "PUBDocumentTransition.h"
 #import "PUBDimmView.h"
 
-const CGFloat TRANSITION_DURATION = .45f;
-
 @implementation PUBDocumentTransition
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -43,7 +41,7 @@ const CGFloat TRANSITION_DURATION = .45f;
         documentImageView.frame = startFrame;
         [container addSubview:documentImageView];
         
-        [UIView animateWithDuration:TRANSITION_DURATION
+        [UIView animateWithDuration:DURATION_PRESENT
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -71,9 +69,7 @@ const CGFloat TRANSITION_DURATION = .45f;
         documentImageView.frame = startFrame;
         [container addSubview:documentImageView];
         
-        
-        
-        [UIView animateWithDuration:TRANSITION_DURATION
+        [UIView animateWithDuration:DURATION_DISMISS
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{

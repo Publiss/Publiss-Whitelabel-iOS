@@ -690,7 +690,7 @@
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didLoadPageView:(PSPDFPageView *)pageView  {
-    self.transitioningDelegate.scaleTransition.pageView = (PUBPageView *)pageView;
+    //self.transitioningDelegate.scaleTransition.pageView = (PUBPageView *)pageView; //TODO: Add image of page.
     [self trackPage];
 }
 
@@ -745,7 +745,7 @@
     }
 }
 
-#pragma mark - Show Preview/Document
+#pragma mark - Present Preview/Document
 
 - (void)showPreviewForDocument:(PUBDocument *)document {
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
@@ -757,8 +757,7 @@
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
-        self.transitioningDelegate.scaleTransition.modal = YES;
-        self.transitioningDelegate.scaleTransition.transitionSourceView = cell;
+        self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
         
         previewViewController.cell = cell;
         previewViewController.selectedIndex = indexPath.row;
@@ -792,8 +791,6 @@
         self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
         self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
         
-        // FIXME: Animate to target left or target right.
-        // [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
         if (pdfController.isDoublePageMode && pdfController.page % 2 == 0) {
             self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionRight;
         }
@@ -805,7 +802,7 @@
         }
         
         // FIXME: Animate with last opened page.
-        if (pdfController.page != 0 && !pdfController.isDoublePageMode) {
+        if (pdfController.page != 0) {
             UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument
                                                                             page:pdfController.page
                                                                             size:UIScreen.mainScreen.bounds.size

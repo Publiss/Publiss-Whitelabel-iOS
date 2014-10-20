@@ -9,9 +9,6 @@
 #import "PUBCrossfadeTransition.h"
 #import "PUBDimmView.h"
 
-const CGFloat DURATION_PRESENT = 0.25f;
-const CGFloat DURATION_DISMISS = 0.25f;
-
 @implementation PUBCrossfadeTransition
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {

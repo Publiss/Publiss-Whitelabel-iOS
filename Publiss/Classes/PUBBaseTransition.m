@@ -7,9 +7,6 @@
 
 #import "PUBBaseTransition.h"
 
-const CGFloat DURATION_PRESENT = 3.0f;
-const CGFloat DURATION_DISMISS = 3.0f;
-
 @implementation PUBBaseTransition
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
@@ -17,19 +14,7 @@ const CGFloat DURATION_DISMISS = 3.0f;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    NSAssert(NO, @"needs to be overwritten");
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    _transitionMode = TransitionModePresent;
-    return self;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    _transitionMode = TransitionModeDismiss;
-    return self;
+    NSAssert(NO, @"Needs to be overwritten.");
 }
 
 @end
