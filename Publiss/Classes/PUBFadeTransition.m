@@ -6,10 +6,16 @@
 //  Copyright (c) 2014 Publiss GmbH. All rights reserved.
 //
 
-#import "PUBCrossfadeTransition.h"
+#import "PUBFadeTransition.h"
 #import "PUBDimmView.h"
 
-@implementation PUBCrossfadeTransition
+@interface PUBFadeTransition ()
+
+@property (nonatomic, strong) PUBDimmView *dimmView;
+
+@end
+
+@implementation PUBFadeTransition
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
     UIView *container = transitionContext.containerView;
@@ -20,45 +26,44 @@
     UIView *toView = toVC.view;
     
     if (self.transitionMode == TransitionModePresent) {
-        UIView *dimView;
-        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-            dimView = [[PUBDimmView alloc] initWithFrame:container.frame];
-            dimView.alpha = 0.0;
-            
-            [container addSubview:dimView];
-        }
         
-        [container addSubview:toView];
+        if (UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+            self.dimmView = [[PUBDimmView alloc] initWithFrame:container.frame];
+            self.dimmView.alpha = 0.0;
+            [container addSubview:self.dimmView];
+        }
         
         toView.alpha = 0.0f;
         toView.frame = [self endFrameForController:toVC inContainer:container];
+        [container addSubview:toView];
         
         [UIView animateWithDuration:DURATION_PRESENT
                               delay:0
-                            options:UIViewAnimationOptionTransitionCrossDissolve
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              toView.alpha = 1.0;
-                             dimView.alpha = DIMM_VIEW_ALPHA;
+                             self.dimmView.alpha = DIMM_VIEW_ALPHA;
                          }
                          completion:^(BOOL finished) {
+                             
                              [transitionContext completeTransition:YES];
                          }];
     }
     else {
         fromView.alpha = 1.0;
-        
-        UIView *dimView = [container viewWithTag:DIMM_VIEW_TAG];
-        dimView.alpha = DIMM_VIEW_ALPHA;
+        self.dimmView.alpha = DIMM_VIEW_ALPHA;
         
         [UIView animateWithDuration:DURATION_DISMISS
                               delay:0
-                            options:UIViewAnimationOptionTransitionCrossDissolve
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              fromView.alpha = 0.0;
-                             dimView.alpha = 0.0;
+                             self.dimmView.alpha = 0.0;
                          }
                          completion:^(BOOL finished) {
-                             [dimView removeFromSuperview];
+                             [self.dimmView removeFromSuperview];
+                             self.dimmView = nil;
+                             
                              [transitionContext completeTransition:YES];
                          }];
     }

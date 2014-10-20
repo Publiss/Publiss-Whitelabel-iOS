@@ -69,11 +69,11 @@
     NSNumber *trackedPageTime;
 }
 
-#pragma mark - UIViewController
-
 + (PUBKioskViewController *)kioskViewController {
     return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
 }
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -96,9 +96,18 @@
                                        return style;
                                    }];
     
-    [self refreshDocumentsWithActivityViewAnimated:YES];
-    
     self.transitioningDelegate = [PUBTransitioningDelegate new];
+    
+    [self refreshDocumentsWithActivityViewAnimated:YES];
+}
+
+#pragma mark - Setup
+
+- (void)setupNavigationItems {
+    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
+    self.navigationItem.title = PUBLocalize(@"Publiss");
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
 }
 
 - (void)setupCollectionView {
@@ -124,15 +133,6 @@
     self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     [self.collectionView addSubview:self.spinner];
     self.spinner.hidden = YES;
-}
-
-- (void)showMenu:(id)sender {
-    if (!self.menu.isOpen) {
-        [self.menu showFromNavigationController:self.navigationController];
-    }
-    else {
-        [self.menu close];
-    }
 }
 
 - (void)setupMenu {
@@ -225,19 +225,12 @@
     [super viewWillAppear:animated];
 
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(enableUIInteraction:) name:PUBEnableUIInteractionNotification object:nil];
     [dnc addObserver:self selector:@selector(trackPage) name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [UIView animateWithDuration:0.25f animations:^{
-        self.navigationController.navigationBar.alpha = 1.f;
-    }];
-    [UIApplication.sharedApplication setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -253,12 +246,12 @@
     [super viewDidDisappear:animated];
 
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc removeObserver:self name:PUBEnableUIInteractionNotification object:nil];
     [dnc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
@@ -266,7 +259,7 @@
     }
 }
 
-#pragma mark - Private
+#pragma mark - Actions
 
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated {    
     self.collectionView.userInteractionEnabled = NO;
@@ -284,13 +277,36 @@
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
         
         [self.collectionView reloadData];
+        [self.spinner stopAnimating];
+        
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
-        [self.spinner stopAnimating];
     }];
 }
 
-#pragma mark - CollectionView DataSoure
+- (void)showMenu:(id)sender {
+    if (!self.menu.isOpen) {
+        [self.menu showFromNavigationController:self.navigationController];
+    }
+    else {
+        [self.menu close];
+    }
+}
+
+- (void)showAbout {
+    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss")
+                                message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version]
+                               delegate:self
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
+}
+
+- (void)visitPublissSite {
+    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
+    [self.navigationController pushViewController:webViewController animated:YES];
+}
+
+#pragma mark - UICollectionView DataSoure
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
@@ -537,34 +553,7 @@
     }];
 }
 
-- (void)setupNavigationItems {
-    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationItem.title = PUBLocalize(@"Publiss");
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
-}
-
-- (void)showAbout {
-    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss")
-                                message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version]
-                               delegate:self
-                      cancelButtonTitle:@"OK"
-                      otherButtonTitles:nil] show];
-}
-
-- (void)visitPublissSite {
-    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
-    [self.navigationController pushViewController:webViewController animated:YES];
-}
-
 #pragma mark - Notifications
-
-- (void)enableUIInteraction:(NSNotification *)notification {
-    if (!self.view.userInteractionEnabled) {
-        self.collectionView.userInteractionEnabled = YES;
-        self.view.userInteractionEnabled = YES;
-    }
-}
 
 - (void)trackPage {
     [self.pageTracker fire];
@@ -665,7 +654,6 @@
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didShowPageView:(PSPDFPageView *)pageView {
-    
     self.transitioningDelegate.documentTransition.transitionImage = pageView.contentView.image;
     
     if (self.pageTracker.isValid) {
@@ -746,15 +734,11 @@
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
         self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
-        
-        previewViewController.cell = cell;
-        previewViewController.selectedIndex = indexPath.row;
     }
     else {
-        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionCrossfade;
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -774,6 +758,8 @@
     pdfController.delegate = self;
     pdfController.kioskViewController = self;
     
+    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
+    
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -781,16 +767,8 @@
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
         self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
         self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
-        
-        if (pdfController.isDoublePageMode && pdfController.page % 2 == 0) {
-            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionRight;
-        }
-        else if (pdfController.isDoublePageMode && pdfController.page % 2 == 1) {
-            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionLeft;
-        }
-        else {
-            self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionCenter;
-        }
+        self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:pdfController.page
+                                                                                                      isDoubleModeActive:pdfController.isDoublePageMode];
         
         if (pdfController.page != 0) {
             UIImage *targetPageImage = [self targetImageForDocument:pdfDocument page:pdfController.page];
@@ -798,14 +776,13 @@
                 self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
             }
         }
-    }
-    else {
-        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionCrossfade;
+        
+        controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+        controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     }
     
-    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
-    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    // NOTE: Fade transition did not work on iPad for some obscure reason.
+    //       NO custom transition for header.
     
     [self presentViewController:controllerToPresent animated:YES completion:^{
         [self dispatchStatisticsDocumentDidOpen:document];

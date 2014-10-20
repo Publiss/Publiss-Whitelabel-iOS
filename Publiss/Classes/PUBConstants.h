@@ -17,7 +17,6 @@ static NSString *const PUBUpdatePreviewNotification = @"PUBUpdatePreviewNotifica
 static NSString *const PUB_NOTIFICATION_RELOAD_CELL = @"Reload_Cell_PUBPreviewViewController";
 static NSString *const PUB_NOTIFICATION_DISMISS_POPOVER = @"Dismiss_Popover_PUPPreviewViewController";
 static NSString *const PUB_NOTIFICATION_RELOAD_UI = @"Update_UI_PUBCellView";
-static NSString *const PUBEnableUIInteractionNotification = @"PUBEnableUIInteractionNotification";
 static NSString *const PUBDocumentDownloadFinished = @"PUBDocumentDownloadFinished";
 
 static NSString *const PUBApplicationDidStartNotification = @"PUBApplicationDidStartNotification";

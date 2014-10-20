@@ -8,14 +8,14 @@
 
 #import "PUBTransitioningDelegate.h"
 #import "PUBBaseTransition.h"
-#import "PUBCrossfadeTransition.h"
+#import "PUBFadeTransition.h"
 #import "PUBScaleTransition.h"
 #import "PUBDocumentTransition.h"
 
 @interface PUBTransitioningDelegate ()
 
 @property (nonatomic, strong, readwrite) PUBScaleTransition *scaleTransition;
-@property (nonatomic, strong, readwrite) PUBCrossfadeTransition *crossfadeTransition;
+@property (nonatomic, strong, readwrite) PUBFadeTransition *fadeTransition;
 @property (nonatomic, strong, readwrite) PUBDocumentTransition *documentTransition;
 
 @end
@@ -24,11 +24,11 @@
 
 #pragma mark - Getter
 
-- (PUBCrossfadeTransition *)crossfadeTransition {
-    if (!_crossfadeTransition) {
-        _crossfadeTransition = [PUBCrossfadeTransition new];
+- (PUBFadeTransition *)fadeTransition {
+    if (!_fadeTransition) {
+        _fadeTransition = [PUBFadeTransition new];
     }
-    return _crossfadeTransition;
+    return _fadeTransition;
 }
 
 - (PUBScaleTransition *)scaleTransition {
@@ -55,7 +55,7 @@
         return self.documentTransition;
     }
     else {
-        return self.crossfadeTransition;
+        return self.fadeTransition;
     }
 }
 

@@ -49,6 +49,7 @@
         [container addSubview:transitionImageView];
         
         toView.hidden = YES;
+        
         self.transitionSourceView.hidden = YES;
         self.transitionSourceView.superview.hidden = YES;
         
@@ -90,6 +91,7 @@
                              dimView.alpha = 0.0;
                          }
                          completion:^(BOOL finished) {
+                             
                              [transitionImageView removeFromSuperview];
                              [dimView removeFromSuperview];
                              [transitionContext completeTransition:YES];

@@ -151,6 +151,7 @@
 
 - (void)setupUserInterface {
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
     self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};

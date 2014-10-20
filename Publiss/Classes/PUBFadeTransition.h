@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "PUBBaseTransition.h"
 
-@interface PUBCrossfadeTransition : PUBBaseTransition
+@interface PUBFadeTransition : PUBBaseTransition
 
 @end

@@ -80,8 +80,6 @@
     
     [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.document competionHandler:^(BOOL unpublished) {
         if (unpublished) {
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                              object:NULL];
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.kioskController) {
                     [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
@@ -101,8 +99,6 @@
         if (sender.state == UIGestureRecognizerStateEnded) {
             CGPoint location = [sender locationInView:nil];
             if (![self.view pointInside:[self.view convertPoint:location fromView:self.view.window] withEvent:nil]) {
-                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                                  object:NULL];
                 [self dismissViewControllerAnimated:YES completion:NULL];
             }
         }

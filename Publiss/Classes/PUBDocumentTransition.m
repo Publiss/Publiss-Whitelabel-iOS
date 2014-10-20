@@ -77,6 +77,7 @@
                          }
                          completion:^(BOOL finished) {
                              self.transitionSourceView.hidden = NO;
+                             
                              [dimView removeFromSuperview];
                              [documentImageView removeFromSuperview];
                              [transitionContext completeTransition:YES];
@@ -130,6 +131,19 @@
     CGFloat scaleAspectFit = MIN(widthScale, heightScale);
     
     return scaleAspectFit;
+}
+
++ (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
+                               isDoubleModeActive:(BOOL)doubleModeActive {
+    if (doubleModeActive && pageIndex % 2 == 0) {
+        return PUBTargetPositionRight;
+    }
+    else if (doubleModeActive && pageIndex % 2 == 1) {
+        return PUBTargetPositionLeft;
+    }
+    else {
+        return PUBTargetPositionCenter;
+    }
 }
 
 @end

@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@class PUBScaleTransition, PUBCrossfadeTransition, PUBDocumentTransition;
+@class PUBScaleTransition, PUBFadeTransition, PUBDocumentTransition;
 
 typedef NS_ENUM(NSInteger, PUBSelectedTransition) {
-    PUBSelectedTransitionCrossfade = 0,
+    PUBSelectedTransitionFade = 0,
     PUBSelectedTransitionScale,
     PUBSelectedTransitionDocument,
 };
@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, PUBSelectedTransition) {
 @interface PUBTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate>
 
 @property (nonatomic, strong, readonly) PUBScaleTransition *scaleTransition;
-@property (nonatomic, strong, readonly) PUBCrossfadeTransition *crossfadeTransition;
+@property (nonatomic, strong, readonly) PUBFadeTransition *fadeTransition;
 @property (nonatomic, strong, readonly) PUBDocumentTransition *documentTransition;
 
 @property (nonatomic, assign) PUBSelectedTransition selectedTransition;

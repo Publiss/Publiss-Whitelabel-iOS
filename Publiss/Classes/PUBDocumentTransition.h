@@ -21,4 +21,7 @@ typedef NS_ENUM(NSInteger, PUBTargetPosition) {
 
 @property (nonatomic, assign) PUBTargetPosition targetPosition;
 
++ (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
+                             isDoubleModeActive:(BOOL)doubleModeActive;
+
 @end
