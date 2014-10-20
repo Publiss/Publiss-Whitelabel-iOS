@@ -23,7 +23,6 @@
     CGRect endFrame;
     
     UIImageView *documentImageView = [[UIImageView alloc] initWithImage:self.transitionImage];
-    
     PUBDimmView *dimView = [[PUBDimmView alloc] initWithFrame:container.frame];
     
     if (self.transitionMode == TransitionModePresent) {
@@ -131,10 +130,6 @@
     CGFloat scaleAspectFit = MIN(widthScale, heightScale);
     
     return scaleAspectFit;
-}
-
-- (BOOL)viewIsLandscape:(UIView *)view {
-    return view.frame.size.width >= view.frame.size.height;
 }
 
 @end

@@ -18,6 +18,7 @@ typedef NS_ENUM(NSInteger, PUBTargetPosition) {
 
 @property (nonatomic, strong) UIView *transitionSourceView;
 @property (nonatomic, strong) UIImage *transitionImage;
+
 @property (nonatomic, assign) PUBTargetPosition targetPosition;
 
 @end

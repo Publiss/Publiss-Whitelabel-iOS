@@ -690,11 +690,14 @@
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didLoadPageView:(PSPDFPageView *)pageView  {
-    //self.transitioningDelegate.scaleTransition.pageView = (PUBPageView *)pageView; //TODO: Add image of page.
     [self trackPage];
+    
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didShowPageView:(PSPDFPageView *)pageView {
+    
+    self.transitioningDelegate.documentTransition.transitionImage = pageView.contentView.image;
+    
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
     }
@@ -812,10 +815,7 @@
         
         // FIXME: Animate with last opened page.
         if (pdfController.page != 0) {
-            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument
-                                                                            page:pdfController.page
-                                                                            size:UIScreen.mainScreen.bounds.size
-                                                                         options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+            UIImage *targetPageImage = [self targetImageForDocument:pdfDocument page:pdfController.page];
             if (targetPageImage) {
                 self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
             }
@@ -829,6 +829,13 @@
             [self dispatchStatisticsDocumentDidOpen:document];
         }];
     }
+}
+
+- (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
+    return [PSPDFCache.sharedCache imageFromDocument:pdfDocument
+                                         page:page
+                                         size:CGSizeMake(256, 256)
+                                      options:PSPDFCacheOptionDiskLoadSync|PSPDFCacheOptionRenderSync|PSPDFCacheOptionMemoryStoreAlways];
 }
 
 @end
