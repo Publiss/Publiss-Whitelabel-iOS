@@ -33,7 +33,7 @@
         [container addSubview:toView];
         
         startFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
-        endFrame = [self transitionTargetFrom:self.transitionSourceView to:toView];
+        endFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
         
         dimView.alpha = 0.0f;
         [container addSubview:dimView];
@@ -60,7 +60,7 @@
         fromView.hidden = YES;
         self.transitionSourceView.hidden = YES;
         
-        startFrame = [self transitionTargetFrom:self.transitionSourceView to:toView];
+        startFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
         endFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
         
         dimView.alpha = 1.0f;
@@ -87,11 +87,13 @@
 
 #pragma mark - Helper
 
-- (CGRect)transitionTargetFrom:(UIView *)from to:(UIView *)to {
-    CGFloat scale = [self scaleFrom:from to:to];
+- (CGRect)endFrameWithSourceView:(UIView *)sourceView andTargetView:(UIView *)targetView {
+    CGFloat scale = [self scaleForTargetPosition:self.targetPosition
+                                  withSourceView:sourceView
+                                   andTargetView:targetView];
     
-    CGRect frame = CGRectMake(0, 0, from.bounds.size.width * scale, from.bounds.size.height * scale);
-    frame.origin = [self originForTargetPosition:self.targetPosition size:frame.size inContainer:to.bounds.size];
+    CGRect frame = CGRectMake(0, 0, sourceView.bounds.size.width * scale, sourceView.bounds.size.height * scale);
+    frame.origin = [self originForTargetPosition:self.targetPosition size:frame.size inContainer:targetView.bounds.size];
     return frame;
 }
 
@@ -109,9 +111,22 @@
     }
 }
 
-- (CGFloat)scaleFrom:(UIView *)from to:(UIView *)to {
-    CGFloat widthScale = to.bounds.size.width / from.bounds.size.width;
-    CGFloat heightScale = to.bounds.size.height / from.bounds.size.height;
+- (CGFloat)scaleForTargetPosition:(PUBTargetPosition)targetPosition
+                   withSourceView:(UIView *)sourceView
+                    andTargetView:(UIView *)targetView {
+    if (self.targetPosition == PUBTargetPositionCenter) {
+        return [self scalewithAspectFit:sourceView.bounds to:targetView.bounds];
+    }
+    else {
+        CGRect targetFrame = targetView.frame;
+        targetFrame.size.width /= 2;
+        return [self scalewithAspectFit:sourceView.bounds to:targetFrame];
+    }
+}
+
+- (CGFloat)scalewithAspectFit:(CGRect )fromRect to:(CGRect )toRect {
+    CGFloat widthScale = toRect.size.width / fromRect.size.width;
+    CGFloat heightScale = toRect.size.height / fromRect.size.height;
     
     CGFloat scaleAspectFit = MIN(widthScale, heightScale);
     
