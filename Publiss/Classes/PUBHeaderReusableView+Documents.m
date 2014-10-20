@@ -17,7 +17,6 @@
 - (void)setupWithDocuments:(NSArray *)documents {
     PUBDocument *document = documents.firstObject;
     
-    
     if (document && [document isKindOfClass:[PUBDocument class]]) {
         NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:document.publishedID];
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:featuredImageUrl];
@@ -30,18 +29,17 @@
         }
         else {
             __weak typeof(self) welf = self;
-            [self.imageView setImageWithURLRequest:urlRequest
-                                  placeholderImage:nil
-                                           success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                               __strong PUBHeaderReusableView *stelf = welf;
-                                               //[stelf animateImageWhenLoaded:stelf.imageView];
-                                               
-                                               stelf.imageView.image = image;
-                                               [PUBThumbnailImageCache.sharedInstance setImage:image
-                                                                                  forURLString:featuredImageUrl.absoluteString];
-                                           } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                               
-                                           }];
+            [NSURLConnection sendAsynchronousRequest:urlRequest
+                                               queue:[NSOperationQueue mainQueue]
+                                   completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                                       if (!connectionError) {
+                                           UIImage *image = [[UIImage alloc] initWithData:data];
+                                           welf.imageView.image = image;
+                                           [PUBThumbnailImageCache.sharedInstance setImage:image
+                                                                              forURLString:featuredImageUrl.absoluteString];
+                                       }
+                                   }];
+            
         }
     }
 }

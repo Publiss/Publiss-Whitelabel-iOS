@@ -66,11 +66,9 @@
         builder.shouldHideStatusBarWithHUD = YES;
         builder.backgroundColor = [UIColor blackColor];
 
-        
         builder.allowBackgroundSaving = YES;
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
         builder.pageTransition = PSPDFPageTransitionCurl;
-        //self.pageTransition = PSPDFPageTransitionScrollPerPage;
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
@@ -94,7 +92,10 @@
         [self setViewState:self.pubDocument.lastViewState];
     }
 
-    self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(close:)]];
+    self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close")
+                                                                 style:UIBarButtonItemStyleDone
+                                                                target:self
+                                                                action:@selector(close:)]];
     
     [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.pubDocument competionHandler:^(BOOL unpublished) {
         if (unpublished == YES && self.pubDocument.state != PUBDocumentStateDownloaded) {
@@ -113,17 +114,13 @@
         }
     }];
     
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
-    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
-    
     return self;
 }
 
 - (void)close:(id)sender {
+    //[self.navigationController popViewControllerAnimated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIViewController
@@ -133,8 +130,17 @@
     [self setupUserInterface];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
+    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
     if (self.pubDocument) {
         self.pubDocument.lastViewState = self.viewState;
     }
@@ -143,10 +149,6 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
 }
 
 - (void)setupUserInterface {

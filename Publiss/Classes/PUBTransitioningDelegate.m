@@ -79,4 +79,21 @@
     return transition;
 }
 
+#pragma mark - UIViewControllerAnimatedTransitioning delegate
+
+- (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
+                                   animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                fromViewController:(UIViewController *)fromVC
+                                                  toViewController:(UIViewController *)toVC {
+    PUBBaseTransition *transition = [self currentTransition];
+    if (operation == UINavigationControllerOperationPush) {
+        transition.transitionMode = TransitionModePresent;
+    }
+    else {
+        transition.transitionMode = TransitionModeDismiss;
+    }
+    
+    return transition;
+}
+
 @end

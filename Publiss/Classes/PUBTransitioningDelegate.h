@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, PUBSelectedTransition) {
     PUBSelectedTransitionDocument,
 };
 
-@interface PUBTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate>
+@interface PUBTransitioningDelegate : NSObject <UIViewControllerTransitioningDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, strong, readonly) PUBScaleTransition *scaleTransition;
 @property (nonatomic, strong, readonly) PUBFadeTransition *fadeTransition;

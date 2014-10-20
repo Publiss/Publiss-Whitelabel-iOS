@@ -27,5 +27,6 @@
 @dynamic state;
 @dynamic title;
 @dynamic updatedAt;
+@dynamic featuredUpdatedAt;
 
 @end

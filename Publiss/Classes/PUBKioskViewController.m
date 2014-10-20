@@ -777,6 +777,11 @@
     [self presentViewController:controllerToPresent animated:YES completion:^{
         [self dispatchStatisticsDocumentDidOpen:document];
     }];
+    
+    // TODO: Use cutom navigationcontroller transition.
+    
+    //self.navigationController.delegate = self.transitioningDelegate;
+    //[self.navigationController pushViewController:controllerToPresent animated:YES];
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {

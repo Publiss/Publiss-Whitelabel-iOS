@@ -10,6 +10,7 @@
 #import "PUBThumbnailImageCache.h"
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
+#import "PUBDocumentFetcher.h"
 
 @implementation PUBDocument (Helper)
 
@@ -40,6 +41,7 @@
         dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
     });
     NSDate *onlineUpdatedAt = [dateFormatter dateFromString:PUBSafeCast(dictionary[@"updated_at"], NSString.class)];
+    NSDate *onlineFeaturedUpdatedAt = [dateFormatter dateFromString:PUBSafeCast(dictionary[@"featured_updated_at"], NSString.class)];
     
     BOOL shouldUpdateValues = NO;
     PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:dictionary[@"apple_product_id"]];
@@ -65,6 +67,12 @@
         BOOL localFeatured = document.featured;
         
         shouldUpdateValues = remoteFeatured != localFeatured;
+        
+        if(onlineFeaturedUpdatedAt &&
+           ![[onlineFeaturedUpdatedAt laterDate:document.featuredUpdatedAt] isEqualToDate:document.featuredUpdatedAt]) {
+            document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
+            [document removeFeaturedImage];
+        }
     }
     
     if (shouldUpdateValues) {
@@ -80,6 +88,7 @@
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
             document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
             document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
+            document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
             
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);
@@ -264,6 +273,11 @@
         return YES;
     }
     return NO;
+}
+
+- (void)removeFeaturedImage {
+    NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:self.publishedID];
+    [PUBThumbnailImageCache.sharedInstance removeImageWithURLString:featuredImageUrl.absoluteString];
 }
 
 #pragma mark - Data Wrappers

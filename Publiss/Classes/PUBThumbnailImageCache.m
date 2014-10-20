@@ -71,6 +71,15 @@
     });
 }
 
+- (void)removeImageWithURLString:(NSString *)URLString {
+    dispatch_async(self.ioQueue, ^{
+        BOOL removed = [NSFileManager.defaultManager removeItemAtPath:[self cacheFilePathForURLString:URLString] error:nil];
+        if (!removed) {
+            NSLog(@"Warning: There was no file to remove at path: %@", URLString);
+        }
+    });
+}
+
 #pragma mark - Helpers
 
 - (NSString *)cacheFilePathForURLString:(NSString *)URLString {
