@@ -307,7 +307,7 @@
     [header setupWithDocuments:self.featuredDocuments];
     
     header.singleTapBlock = ^() {
-        [self showPreviewForDocument:self.featuredDocuments.firstObject];
+        [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
     };
     
     header.longPressBlock = ^() {
@@ -330,8 +330,6 @@
     
     return header;
 }
-
-
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -402,22 +400,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PUBDocument *document = self.publishedDocuments[indexPath.item];
-    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    
-    switch (document.state) {
-        case PUBDocumentStateDownloaded:
-            [self presentDocument:document];
-            break;
-            
-        case PUBDocumentPurchased:
-            [self presentDocument:document];
-            break;
-            
-        default:
-            self.transitioningDelegate.scaleTransition.transitionSourceView = cell;
-            [self showPreviewForDocument:document];
-            break;
-    }
+    [self presentDocumentAccordingToState:document];
 }
 
 #pragma mark - Actions
@@ -536,23 +519,11 @@
                                      }
                                  }
                              }];
-            
         }
     }
 }
 
 #pragma mark - Helper
-
-- (UIImage *)imageForDocument:(PUBDocument *)document {
-    if (!document) return nil;
-    
-    NSUInteger lastPage = document.lastViewState.page;
-    UIImage *coverImage = [PSPDFCache.sharedCache imageFromDocument:[PUBPDFDocument documentWithPUBDocument:document]
-                                                               page:lastPage
-                                                               size:UIScreen.mainScreen.bounds.size
-                                                            options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderQueue|PSPDFCacheOptionMemoryStoreAlways];
-    return coverImage;
-}
 
 - (void)removePdfForDocument:(PUBDocument *)document {
     [document deleteDocument:^{
@@ -691,7 +662,6 @@
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didLoadPageView:(PSPDFPageView *)pageView  {
     [self trackPage];
-    
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didShowPageView:(PSPDFPageView *)pageView {
@@ -759,7 +729,16 @@
 
 #pragma mark - Present Preview/Document
 
-- (void)showPreviewForDocument:(PUBDocument *)document {
+- (void)presentDocumentAccordingToState:(PUBDocument *)document {
+    if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
+        [self presentDocument:document];
+    }
+    else {
+        [self presentPreviewForDocument:document];
+    }
+}
+
+- (void)presentPreviewForDocument:(PUBDocument *)document {
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
     previewViewController.document = document;
     previewViewController.kioskController = self;
@@ -789,15 +768,15 @@
 }
 
 - (void)presentDocument:(PUBDocument *)document {
+    PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
+    [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
+    PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
+    pdfController.delegate = self;
+    pdfController.kioskViewController = self;
+    
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        
-        PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
-        [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
-        PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
-        pdfController.delegate = self;
-        pdfController.kioskViewController = self;
         
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
         self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
@@ -813,22 +792,24 @@
             self.transitioningDelegate.documentTransition.targetPosition = PUBTargetPositionCenter;
         }
         
-        // FIXME: Animate with last opened page.
         if (pdfController.page != 0) {
             UIImage *targetPageImage = [self targetImageForDocument:pdfDocument page:pdfController.page];
             if (targetPageImage) {
                 self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
             }
         }
-        
-        UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
-        controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-        controllerToPresent.transitioningDelegate = self.transitioningDelegate;
-
-        [self presentViewController:controllerToPresent animated:YES completion:^{
-            [self dispatchStatisticsDocumentDidOpen:document];
-        }];
     }
+    else {
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionCrossfade;
+    }
+    
+    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
+    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    
+    [self presentViewController:controllerToPresent animated:YES completion:^{
+        [self dispatchStatisticsDocumentDidOpen:document];
+    }];
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
