@@ -30,7 +30,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.3)
   - GoogleAnalytics-iOS-SDK (~> 3.0)
-  - JDStatusBarNotification (~> 1.4)
+  - JDStatusBarNotification
   - Lockbox (~> 1.4)
   - PSPDFKit
   - REMenu (~> 1.9)

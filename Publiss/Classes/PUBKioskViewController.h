@@ -7,14 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
-@class PUBMainViewController, PUBDocument, PUBCellView;
+@class PUBDocument;
 
 @interface PUBKioskViewController : UICollectionViewController
+
++ (PUBKioskViewController *)kioskViewController;
 
 @property (nonatomic, assign) BOOL shouldRetrieveDocuments;
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated;
 - (void)presentDocument:(PUBDocument *)document;
-
-+ (PUBKioskViewController *)kioskViewController;
 
 @end

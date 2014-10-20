@@ -35,31 +35,22 @@
 #import "PUBTransitioningDelegate.h"
 #import "PUBDocumentTransition.h"
 
-@interface PUBKioskViewController () <PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
-    NSUInteger _animationCellIndex;
-    BOOL _animationDoubleWithPageCurl;
-    BOOL _animateViewWillAppearWithFade;
-}
+@interface PUBKioskViewController () <PSPDFViewControllerDelegate>
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
+@property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
 
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 @property (nonatomic, strong) REMenu *menu;
-@property (nonatomic, strong) UIImageView *documentView;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
-@property (nonatomic, assign) BOOL isOpening;
 
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
 
 @property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
-
-@property (nonatomic, strong) PUBDocument *lastOpenedDocument;
 @property (nonatomic, strong) NSTimer *pageTracker;
-
-@property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
 
 @end
 
@@ -118,7 +109,6 @@
     [self.collectionView registerClass:[PUBHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBHeaderReusableView"];
     
     UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
-    longpressGesture.delegate = self;
     [self.collectionView addGestureRecognizer:longpressGesture];
     
     self.collectionView.delegate = self;
@@ -296,7 +286,7 @@
 - (void)showAbout {
     [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss")
                                 message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version]
-                               delegate:self
+                               delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
 }
