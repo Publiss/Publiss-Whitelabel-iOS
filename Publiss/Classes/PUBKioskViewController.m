@@ -712,6 +712,8 @@
 
 }
 
+#pragma mark - Publiss Statistics
+
 - (void)updateUpdateTrackingInformationWithProductID:(NSTimer *)timer {
     NSNumber *currentTime = @(NSDate.date.timeIntervalSince1970);
     trackedPageTime = @(currentTime.integerValue - trackedPageTime.integerValue);
@@ -743,6 +745,13 @@
                                                             userInfo:pageTrack];
         }
     }
+}
+
+- (void)dispatchStatisticsDocumentDidOpen:(PUBDocument *)document {
+    [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
+                                                      object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
+                                                                            PUBStatisticsDocumentIDKey: document.productID,
+                                                                            PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
 }
 
 #pragma mark - Present Preview/Document
@@ -812,13 +821,13 @@
             }
         }
         
-        // TODO: Add statistics for openend page.
-        
         UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
         controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
         controllerToPresent.transitioningDelegate = self.transitioningDelegate;
 
-        [self presentViewController:controllerToPresent animated:YES completion:nil];
+        [self presentViewController:controllerToPresent animated:YES completion:^{
+            [self dispatchStatisticsDocumentDidOpen:document];
+        }];
     }
 }
 
