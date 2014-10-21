@@ -800,8 +800,8 @@
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
     return [PSPDFCache.sharedCache imageFromDocument:pdfDocument
                                          page:page
-                                         size:CGSizeMake(256, 256)
-                                      options:PSPDFCacheOptionDiskLoadSync|PSPDFCacheOptionRenderSync|PSPDFCacheOptionMemoryStoreAlways];
+                                         size:UIScreen.mainScreen.bounds.size
+                                      options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
 }
 
 - (void)updateDocumentTransitionWithDocument:(PUBDocument *)document{
