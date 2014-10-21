@@ -7,7 +7,7 @@ pod 'REMenu', '~> 1.9'
 pod 'JDStatusBarNotification'
 pod 'GoogleAnalytics-iOS-SDK', '~> 3.0'
 pod 'UIActionSheet+Blocks'
-pod 'SWRevealViewController'
+pod 'REFrostedViewController'
 
 post_install do |installer|
 	puts "CREATING VERSION FILE"
