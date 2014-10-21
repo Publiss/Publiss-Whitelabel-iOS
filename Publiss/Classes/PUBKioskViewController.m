@@ -365,6 +365,7 @@
     
     if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
+        cell.coverImage.hidden = NO;
         [cell setNeedsLayout];
     } else {
         [cell.activityIndicator startAnimating];
@@ -797,6 +798,7 @@
             [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
                                         andDoublePageModeActive:pdfController.isDoublePageMode];
         }
+        [stelf.collectionView reloadData];
     };
     
     self.navigationController.delegate = self.transitioningDelegate;
