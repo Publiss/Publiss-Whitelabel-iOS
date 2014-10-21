@@ -1,4 +1,5 @@
-platform :ios, '7.1'            
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '7.1'
 pod 'AFNetworking', '~> 2.3'
 pod 'Lockbox', '~> 1.4'
 pod 'PSPDFKit'
@@ -6,6 +7,7 @@ pod 'REMenu', '~> 1.9'
 pod 'JDStatusBarNotification'
 pod 'GoogleAnalytics-iOS-SDK', '~> 3.0'
 pod 'UIActionSheet+Blocks'
+pod 'SWRevealViewController'
 
 post_install do |installer|
 	puts "CREATING VERSION FILE"

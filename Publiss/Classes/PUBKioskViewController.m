@@ -63,7 +63,11 @@
 }
 
 + (PUBKioskViewController *)kioskViewController {
-    return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
+    return [PUBKioskViewController kioskViewControllerWithStoryboardName:@"PUBKiosk"];
+}
+
++ (PUBKioskViewController *)kioskViewControllerWithStoryboardName:(NSString *)storyboard {
+    return [[UIStoryboard storyboardWithName:storyboard bundle:nil] instantiateInitialViewController];
 }
 
 #pragma mark - UIViewController

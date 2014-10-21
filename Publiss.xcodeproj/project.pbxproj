@@ -93,6 +93,9 @@
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
 		87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F1294419E2850300A082E2 /* PUBNavigationViewController.m */; };
+		87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */; };
+		87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87FE340019F656AB00BED33B /* PUBMenu.storyboard */; };
+		87FE340A19F6641C00BED33B /* PUBLinkAnnotationBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE340919F6641C00BED33B /* PUBLinkAnnotationBaseView.m */; };
 		EB07BD7ACAD44CFFA2E7A71C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7EC5682127449A88DBB3A62 /* libPods.a */; };
 		EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFB9DB5518508F8A008CEBDE /* CoreTelephony.framework */; };
 		EFBA434318E07FAA00BC738B /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFBA434218E07FAA00BC738B /* StoreKit.framework */; };
@@ -251,6 +254,11 @@
 		87B1962819DD75EC0060353B /* Publiss.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Publiss.podspec; sourceTree = SOURCE_ROOT; };
 		87F1294319E2850300A082E2 /* PUBNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBNavigationViewController.h; sourceTree = "<group>"; };
 		87F1294419E2850300A082E2 /* PUBNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBNavigationViewController.m; sourceTree = "<group>"; };
+		87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMenuViewController.h; sourceTree = "<group>"; };
+		87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBMenuViewController.m; sourceTree = "<group>"; };
+		87FE340019F656AB00BED33B /* PUBMenu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = PUBMenu.storyboard; sourceTree = "<group>"; };
+		87FE340819F6641C00BED33B /* PUBLinkAnnotationBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBLinkAnnotationBaseView.h; sourceTree = "<group>"; };
+		87FE340919F6641C00BED33B /* PUBLinkAnnotationBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBLinkAnnotationBaseView.m; sourceTree = "<group>"; };
 		A7EC5682127449A88DBB3A62 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACC07DEE8AD97811741438B8 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D403592118BF442100C5E72F /* Publiss_1.03.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.03.xcdatamodel; sourceTree = "<group>"; };
@@ -388,6 +396,8 @@
 				81C1EF14184A6C0B002B694F /* Transistions */,
 				87F1294319E2850300A082E2 /* PUBNavigationViewController.h */,
 				87F1294419E2850300A082E2 /* PUBNavigationViewController.m */,
+				87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */,
+				87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -407,6 +417,7 @@
 				8103B57A1846C14E00E8E77E /* xib */,
 				8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */,
 				8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */,
+				87FE340019F656AB00BED33B /* PUBMenu.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -612,6 +623,8 @@
 				877665C019ACEA0C000DFFF1 /* PUBSearchViewController.m */,
 				877665C119ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.h */,
 				877665C219ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.m */,
+				87FE340819F6641C00BED33B /* PUBLinkAnnotationBaseView.h */,
+				87FE340919F6641C00BED33B /* PUBLinkAnnotationBaseView.m */,
 			);
 			path = PSPDFSubclasses;
 			sourceTree = "<group>";
@@ -719,6 +732,7 @@
 				877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */,
 				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
 				8749898319B07668006ABCA3 /* Localizable.strings in Resources */,
+				87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */,
 				87B1962919DD75EC0060353B /* Publiss.podspec in Resources */,
 				8776662F19ADB05E000DFFF1 /* PUBPreviewViewController.xib in Resources */,
 				8776662919ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard in Resources */,
@@ -791,6 +805,7 @@
 				8776661A19ACED98000DFFF1 /* PUBCommunication.m in Sources */,
 				87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */,
 				877665EC19ACECEA000DFFF1 /* PUBNamedBadgeView.m in Sources */,
+				87FE340A19F6641C00BED33B /* PUBLinkAnnotationBaseView.m in Sources */,
 				37F2F9B419F11037003E344D /* PUBFadeTransition.m in Sources */,
 				877665F519ACED17000DFFF1 /* PUBScaleTransition.m in Sources */,
 				877665C719ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.m in Sources */,
@@ -799,6 +814,7 @@
 				8776661C19ACED98000DFFF1 /* PUBHTTPRequestManager.m in Sources */,
 				37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */,
 				37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */,
+				87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */,
 				870110EC180FCF140034B9AC /* PUBAppDelegate.m in Sources */,
 				877665C319ACEA0C000DFFF1 /* PUBPageView.m in Sources */,
 				7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */,
