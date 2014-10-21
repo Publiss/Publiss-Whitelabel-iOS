@@ -25,6 +25,13 @@
     UIImageView *documentImageView = [[UIImageView alloc] initWithImage:self.transitionImage];
     PUBDimmView *dimView = [[PUBDimmView alloc] initWithFrame:container.frame];
     
+    if (self.dataSource && [self.dataSource respondsToSelector:@selector(currentTransitionSourceView)]) {
+        UIView *transitionSourceView = [self.dataSource currentTransitionSourceView];
+        if (transitionSourceView) {
+            self.transitionSourceView = transitionSourceView;
+        }
+    }
+    
     if (self.transitionMode == TransitionModePresent) {
         toView.hidden = YES;
         self.transitionSourceView.hidden = YES;
@@ -45,7 +52,7 @@
         
         [UIView animateWithDuration:DURATION_PRESENT * 0.8
                               delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
+                            options:UIViewAnimationOptionCurveEaseIn
                          animations:^{
                              dimView.alpha = 1.0f;
                              documentImageView.frame = endFrame;
@@ -54,7 +61,10 @@
                              toView.hidden = NO;
                              [dimView removeFromSuperview];
                              
-                             [UIView animateWithDuration:DURATION_PRESENT * 0.2 animations:^{
+                             [UIView animateWithDuration:DURATION_PRESENT * 0.2
+                                                   delay:0
+                                                 options:UIViewAnimationOptionCurveEaseOut
+                                              animations:^{
                                  documentImageView.alpha = 0;
                              } completion:^(BOOL finished2) {
                                  [documentImageView removeFromSuperview];
@@ -81,7 +91,7 @@
         
         [UIView animateWithDuration:DURATION_DISMISS * 0.8
                               delay:0
-                            options:UIViewAnimationOptionCurveEaseInOut
+                            options:UIViewAnimationOptionCurveEaseIn
                          animations:^{
                              dimView.alpha = 0.0f;
                              documentImageView.frame = endFrame;
@@ -90,7 +100,10 @@
                              self.transitionSourceView.hidden = NO;
                              [dimView removeFromSuperview];
                              
-                             [UIView animateWithDuration:DURATION_DISMISS * 0.2 animations:^{
+                             [UIView animateWithDuration:DURATION_DISMISS * 0.2
+                                                   delay:0
+                                                 options:UIViewAnimationOptionCurveEaseOut
+                                              animations:^{
                                  documentImageView.alpha = 0;
                              } completion:^(BOOL finished2) {
                                  [documentImageView removeFromSuperview];

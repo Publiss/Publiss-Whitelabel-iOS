@@ -14,14 +14,25 @@ typedef NS_ENUM(NSInteger, PUBTargetPosition) {
     PUBTargetPositionRight,
 };
 
+@protocol PUBDocumentTransitionDataSource;
+
 @interface PUBDocumentTransition : PUBBaseTransition
+
+@property (nonatomic, assign) id<PUBDocumentTransitionDataSource> dataSource;
 
 @property (nonatomic, strong) UIView *transitionSourceView;
 @property (nonatomic, strong) UIImage *transitionImage;
-
 @property (nonatomic, assign) PUBTargetPosition targetPosition;
 
 + (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
                              isDoubleModeActive:(BOOL)doubleModeActive;
+
+@end
+
+@protocol PUBDocumentTransitionDataSource <NSObject>
+
+@optional
+
+- (UIView *)currentTransitionSourceView;
 
 @end
