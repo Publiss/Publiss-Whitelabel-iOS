@@ -35,7 +35,7 @@
 #import "PUBTransitioningDelegate.h"
 #import "PUBFadeTransition.h"
 #import "PUBDocumentTransition.h"
-#import "SWRevealViewController.h"
+#import "REFrostedViewController.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
@@ -96,9 +96,13 @@
     self.transitioningDelegate = [PUBTransitioningDelegate new];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
-    
-    SWRevealViewController *revealController = [self revealViewController];
-    //[self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
+}
+
+- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController panGestureRecognized:sender];
 }
 
 #pragma mark - Setup

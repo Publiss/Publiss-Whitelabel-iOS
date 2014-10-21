@@ -92,6 +92,7 @@
 		877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 877666AA19AF6DD0000DFFF1 /* Publiss.bundle */; };
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
+		87D9204119F69DAD0016872B /* PUBMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204019F69DAD0016872B /* PUBMainViewController.m */; };
 		87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F1294419E2850300A082E2 /* PUBNavigationViewController.m */; };
 		87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */; };
 		87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87FE340019F656AB00BED33B /* PUBMenu.storyboard */; };
@@ -252,6 +253,8 @@
 		8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.11.xcdatamodel; sourceTree = "<group>"; };
 		8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBURLFactoryTest.m; sourceTree = "<group>"; };
 		87B1962819DD75EC0060353B /* Publiss.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Publiss.podspec; sourceTree = SOURCE_ROOT; };
+		87D9203F19F69DAD0016872B /* PUBMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMainViewController.h; sourceTree = "<group>"; };
+		87D9204019F69DAD0016872B /* PUBMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBMainViewController.m; sourceTree = "<group>"; };
 		87F1294319E2850300A082E2 /* PUBNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBNavigationViewController.h; sourceTree = "<group>"; };
 		87F1294419E2850300A082E2 /* PUBNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBNavigationViewController.m; sourceTree = "<group>"; };
 		87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMenuViewController.h; sourceTree = "<group>"; };
@@ -398,6 +401,8 @@
 				87F1294419E2850300A082E2 /* PUBNavigationViewController.m */,
 				87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */,
 				87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */,
+				87D9203F19F69DAD0016872B /* PUBMainViewController.h */,
+				87D9204019F69DAD0016872B /* PUBMainViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -805,6 +810,7 @@
 				8776661A19ACED98000DFFF1 /* PUBCommunication.m in Sources */,
 				87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */,
 				877665EC19ACECEA000DFFF1 /* PUBNamedBadgeView.m in Sources */,
+				87D9204119F69DAD0016872B /* PUBMainViewController.m in Sources */,
 				87FE340A19F6641C00BED33B /* PUBLinkAnnotationBaseView.m in Sources */,
 				37F2F9B419F11037003E344D /* PUBFadeTransition.m in Sources */,
 				877665F519ACED17000DFFF1 /* PUBScaleTransition.m in Sources */,
