@@ -31,8 +31,10 @@
         
         [container addSubview:toView];
         
-        startFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
+        startFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:fromView];
         endFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
+        
+        [self hideNavigationBarOfController:toVC withDuration:DURATION_PRESENT];
         
         dimView.alpha = 0.0f;
         [container addSubview:dimView];
@@ -136,6 +138,8 @@
     
     return scaleAspectFit;
 }
+
+
 
 + (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
                              isDoubleModeActive:(BOOL)doubleModeActive {

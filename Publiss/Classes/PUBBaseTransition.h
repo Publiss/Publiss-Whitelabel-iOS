@@ -16,4 +16,6 @@ typedef NS_ENUM(NSInteger, TransitionMode) { TransitionModePresent = 0, Transiti
 
 @property (nonatomic, assign) TransitionMode transitionMode;
 
+- (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration;
+
 @end

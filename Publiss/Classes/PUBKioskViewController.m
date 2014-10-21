@@ -33,6 +33,7 @@
 #import "UIActionSheet+Blocks.h"
 
 #import "PUBTransitioningDelegate.h"
+#import "PUBFadeTransition.h"
 #import "PUBDocumentTransition.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate>
@@ -631,6 +632,12 @@
     [self trackPage];
 }
 
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    if (self.presentedDocument) {
+        [self updateDocumentTransitionWithDocument:self.presentedDocument];
+    }
+}
+
 - (void)pdfViewControllerWillDismiss:(PSPDFViewController *)pdfController {
     if (self.pageTracker.isValid) {
         [self trackPage];
@@ -709,10 +716,14 @@
 
 - (void)presentDocumentAccordingToState:(PUBDocument *)document {
     if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
-        [self presentDocument:document];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentDocument:document];
+        });
     }
     else {
-        [self presentPreviewForDocument:document];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentPreviewForDocument:document];
+        });
     }
 }
 
@@ -729,6 +740,7 @@
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = NO;
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -771,20 +783,23 @@
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = YES;
     }
     
     __weak typeof(self) welf = self;
     self.transitioningDelegate.willDismissBlock = ^{
         __strong typeof(welf) stelf = welf;
         if (stelf.presentedDocument) {
-            NSIndexPath *path = [stelf indexPathForProductID:stelf.presentedDocument.productID];
-            PUBCellView *cell = (PUBCellView *)[stelf.collectionView cellForItemAtIndexPath:path];
-            stelf.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+            //[stelf updateDocumentTransitionWithDocument:stelf.presentedDocument];
         }
     };
     
     self.navigationController.delegate = self.transitioningDelegate;
-    [self.navigationController pushViewController:controllerToPresent animated:YES];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController pushViewController:controllerToPresent animated:YES];
+    });
+    
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
@@ -792,6 +807,12 @@
                                          page:page
                                          size:CGSizeMake(256, 256)
                                       options:PSPDFCacheOptionDiskLoadSync|PSPDFCacheOptionRenderSync|PSPDFCacheOptionMemoryStoreAlways];
+}
+
+- (void)updateDocumentTransitionWithDocument:(PUBDocument *)document {
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
 }
 
 @end

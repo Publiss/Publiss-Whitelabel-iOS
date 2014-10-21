@@ -17,4 +17,13 @@
     NSAssert(NO, @"Needs to be overwritten.");
 }
 
+- (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration {
+    CATransition *transition = [CATransition animation];
+    transition.duration = duration;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    
+    [controller.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
+}
+
 @end
