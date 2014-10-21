@@ -632,12 +632,6 @@
     [self trackPage];
 }
 
-- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    if (self.presentedDocument) {
-        [self updateDocumentTransitionWithDocument:self.presentedDocument];
-    }
-}
-
 - (void)pdfViewControllerWillDismiss:(PSPDFViewController *)pdfController {
     if (self.pageTracker.isValid) {
         [self trackPage];
@@ -790,7 +784,9 @@
     self.transitioningDelegate.willDismissBlock = ^{
         __strong typeof(welf) stelf = welf;
         if (stelf.presentedDocument) {
-            //[stelf updateDocumentTransitionWithDocument:stelf.presentedDocument];
+            [stelf updateDocumentTransitionWithDocument:stelf.presentedDocument];
+            [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
+                                        andDoublePageModeActive:pdfController.isDoublePageMode];
         }
     };
     
@@ -799,7 +795,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController pushViewController:controllerToPresent animated:YES];
     });
-    
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
@@ -809,10 +804,21 @@
                                       options:PSPDFCacheOptionDiskLoadSync|PSPDFCacheOptionRenderSync|PSPDFCacheOptionMemoryStoreAlways];
 }
 
-- (void)updateDocumentTransitionWithDocument:(PUBDocument *)document {
+- (void)updateDocumentTransitionWithDocument:(PUBDocument *)document{
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    
     NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
-    self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+    
+    if (cell) {
+        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+    }
+}
+
+- (void)updateDocumentTransitionWithCurrentPageIndex:(NSInteger)currentPageIndex
+                             andDoublePageModeActive:(BOOL)doublePageModeActive {
+    self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:currentPageIndex
+                                                                                                  isDoubleModeActive:doublePageModeActive];
 }
 
 @end
