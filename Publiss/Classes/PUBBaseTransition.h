@@ -15,6 +15,7 @@ typedef NS_ENUM(NSInteger, TransitionMode) { TransitionModePresent = 0, Transiti
 @interface PUBBaseTransition : NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, assign) TransitionMode transitionMode;
+@property (nonatomic, copy) void (^animationEndedBlock)(BOOL success, TransitionMode mode);
 
 - (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration;
 

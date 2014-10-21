@@ -26,4 +26,10 @@
     [controller.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
 }
 
+- (void)animationEnded:(BOOL)transitionCompleted {
+    if (self.animationEndedBlock) {
+        self.animationEndedBlock(transitionCompleted, _transitionMode);
+    }
+}
+
 @end

@@ -741,10 +741,28 @@
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
         self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
         self.transitioningDelegate.scaleTransition.sourceImage = cell.coverImage.image;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.scaleTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
         self.transitioningDelegate.fadeTransition.shouldHideStatusBar = NO;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.fadeTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -798,7 +816,15 @@
             [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
                                         andDoublePageModeActive:pdfController.isDoublePageMode];
         }
-        [stelf.collectionView reloadData];
+        
+    };
+    
+    self.transitioningDelegate.documentTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+        if (mode == TransitionModeDismiss) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [welf.collectionView reloadData];
+            });
+        }
     };
     
     self.navigationController.delegate = self.transitioningDelegate;
