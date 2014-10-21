@@ -28,7 +28,11 @@
     CGRect startRect;
     CGRect endRect;
     
-    UIView *transitionImageView;
+    UIImageView *blendOverView = [[UIImageView alloc] initWithImage:self.sourceImage];
+    blendOverView.contentMode = UIViewContentModeScaleAspectFill;
+    blendOverView.clipsToBounds = YES;
+    
+    UIView *transitionImageViewTarget;
     
     if (self.transitionMode == TransitionModePresent) {
         
@@ -44,9 +48,12 @@
         startRect = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
         endRect = [self endFrameForController:toVC inContainer:container];
         
-        transitionImageView = [toView snapshotViewAfterScreenUpdates:YES];
-        transitionImageView.frame = startRect;
-        [container addSubview:transitionImageView];
+        transitionImageViewTarget = [toView snapshotViewAfterScreenUpdates:YES];
+        transitionImageViewTarget.frame = startRect;
+        [container addSubview:transitionImageViewTarget];
+        
+        blendOverView.frame = startRect;
+        [container addSubview:blendOverView];
         
         toView.hidden = YES;
         
@@ -55,17 +62,22 @@
         
         [UIView animateWithDuration:DURATION_PRESENT
                               delay:0.f
-             usingSpringWithDamping:PUBIsiPad() ? .8f : 2.5f
-              initialSpringVelocity:17.f
+             //usingSpringWithDamping:PUBIsiPad() ? .8f : 2.5f
+              //initialSpringVelocity:17.f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
+                             
+                             blendOverView.alpha = 0;
+                             blendOverView.frame = endRect;
+                             
                              toView.frame = endRect;
-                             transitionImageView.frame = endRect;
+                             transitionImageViewTarget.frame = endRect;
                              dimView.alpha = DIMM_VIEW_ALPHA;
                          }
                          completion:^(BOOL finished) {
                              toView.hidden = NO;
-                             [transitionImageView removeFromSuperview];
+                             [blendOverView removeFromSuperview];
+                             [transitionImageViewTarget removeFromSuperview];
                              [transitionContext completeTransition:YES];
                          }];
     }
@@ -78,21 +90,29 @@
         startRect = [self endFrameForController:fromVC inContainer:container];
         endRect = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
         
-        transitionImageView = [fromView snapshotViewAfterScreenUpdates:YES];
-        transitionImageView.frame = startRect;
-        [container addSubview:transitionImageView];
+        transitionImageViewTarget = [fromView snapshotViewAfterScreenUpdates:YES];
+        transitionImageViewTarget.frame = startRect;
+        [container addSubview:transitionImageViewTarget];
+        
+        blendOverView.frame = startRect;
+        blendOverView.alpha = 0;
+        [container addSubview:blendOverView];
         
         [UIView animateKeyframesWithDuration:DURATION_DISMISS
                                        delay:0.f
                                      options:UIViewKeyframeAnimationOptionBeginFromCurrentState
                          animations:^{
+                             
+                             blendOverView.alpha = 1;
+                             blendOverView.frame = endRect;
+                             
                              fromView.frame = endRect;
-                             transitionImageView.frame = endRect;
+                             transitionImageViewTarget.frame = endRect;
                              dimView.alpha = 0.0;
                          }
                          completion:^(BOOL finished) {
-                             
-                             [transitionImageView removeFromSuperview];
+                             [transitionImageViewTarget removeFromSuperview];
+                             [blendOverView removeFromSuperview];
                              [dimView removeFromSuperview];
                              [transitionContext completeTransition:YES];
                              self.transitionSourceView.hidden = NO;

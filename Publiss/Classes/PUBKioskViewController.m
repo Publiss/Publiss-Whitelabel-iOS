@@ -37,7 +37,7 @@
 #import "PUBDocumentTransition.h"
 #import "SWRevealViewController.h"
 
-@interface PUBKioskViewController () <PSPDFViewControllerDelegate>
+@interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
@@ -739,6 +739,7 @@
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
         self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
+        self.transitioningDelegate.scaleTransition.sourceImage = cell.coverImage.image;
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
@@ -775,6 +776,7 @@
         self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
         self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:pdfController.page
                                                                                                       isDoubleModeActive:pdfController.isDoublePageMode];
+        self.transitioningDelegate.documentTransition.dataSource = self;
         
         if (pdfController.page != 0) {
             UIImage *targetPageImage = [self targetImageForDocument:pdfDocument page:pdfController.page];
@@ -792,7 +794,6 @@
     self.transitioningDelegate.willDismissBlock = ^{
         __strong typeof(welf) stelf = welf;
         if (stelf.presentedDocument) {
-            [stelf updateDocumentTransitionWithDocument:stelf.presentedDocument];
             [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
                                         andDoublePageModeActive:pdfController.isDoublePageMode];
         }
@@ -812,21 +813,19 @@
                                       options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
 }
 
-- (void)updateDocumentTransitionWithDocument:(PUBDocument *)document{
-    [self.collectionView.collectionViewLayout invalidateLayout];
-    
-    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
-    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
-    
-    if (cell) {
-        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
-    }
-}
-
 - (void)updateDocumentTransitionWithCurrentPageIndex:(NSInteger)currentPageIndex
                              andDoublePageModeActive:(BOOL)doublePageModeActive {
     self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:currentPageIndex
                                                                                                   isDoubleModeActive:doublePageModeActive];
+}
+
+#pragma mark - PUBDocumentTransition DataSource
+
+- (UIView *)currentTransitionSourceView {
+    [self.collectionView layoutSubviews];
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    return cell.coverImage;
 }
 
 @end

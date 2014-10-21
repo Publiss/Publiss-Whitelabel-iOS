@@ -12,5 +12,6 @@
 @interface PUBScaleTransition : PUBBaseTransition
 
 @property (nonatomic, strong) UIView *transitionSourceView;
+@property (nonatomic, strong) UIImage *sourceImage;
 
 @end
