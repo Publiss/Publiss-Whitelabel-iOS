@@ -96,18 +96,12 @@
     self.transitioningDelegate = [PUBTransitioningDelegate new];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
-    
     [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
 }
 
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
-    // Dismiss keyboard (optional)
-    //
     [self.view endEditing:YES];
     [self.frostedViewController.view endEditing:YES];
-    
-    // Present the view controller
-    //
     [self.frostedViewController panGestureRecognized:sender];
 }
 
@@ -121,7 +115,7 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
     self.kioskLayout = [[PUBKioskLayout alloc] init];
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
@@ -835,7 +829,16 @@
     [self.collectionView layoutSubviews];
     NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
     return cell.coverImage;
+}
+
+- (UIImage *)currentTransitionImage {
+    [self.collectionView layoutSubviews];
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
+    return cell.coverImage.image;
 }
 
 @end

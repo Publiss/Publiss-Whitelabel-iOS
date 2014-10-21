@@ -65,7 +65,6 @@
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
-        builder.shouldShowHUDOnViewWillAppear = YES;
     }]];
     
     // setup Speechsynthesizer so its slower

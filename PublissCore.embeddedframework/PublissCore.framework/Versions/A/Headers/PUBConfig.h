@@ -19,5 +19,5 @@
 @property (nonatomic, strong) NSURL *webserviceBaseURL;
 @property (nonatomic, assign) BOOL inAppPurchaseActive;
 @property (nonatomic, strong) UIColor *primaryColor;
-
+@property (nonatomic, strong) UIColor *kioskBackgroundColor;
 @end
