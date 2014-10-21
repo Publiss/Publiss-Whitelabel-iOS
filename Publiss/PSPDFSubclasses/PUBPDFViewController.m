@@ -19,6 +19,7 @@
 #import "PUBLinkAnnotationView.h"
 #import "PSPDFSpeechSynthesizer.h"
 #import "PUBConstants.h"
+#import "PUBLinkAnnotationBaseView.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
@@ -33,25 +34,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - PSPDFViewController
 
-- (instancetype)initWithDocument:(PSPDFDocument *)document {
-    self = [super initWithDocument:document];
-    
-    // setup Speechsynthesizer so its slower
-    PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
-    speechSynthesizer.speakRate = 0.1f;
-    
-    self.documentProgress = [NSDictionary dictionary];
-    self.downloadFinished = NO;
-    self.initiatedDownload = NO;
-    
-    self.navigationItem.title = PUBIsiPad() ? document.title : nil;
-    [self.pdfController updateConfigurationWithBuilder:^(PSPDFConfigurationBuilder *builder) {
-        builder.backgroundColor = UIColor.blackColor;
+- (instancetype)initWithDocument:(PSPDFDocument *)document configuration:(PSPDFConfiguration *)configuration {
+    self = [super initWithDocument:document configuration:[configuration configurationUpdatedWithBuilder:^(PSPDFConfigurationBuilder *builder) {
+         builder.backgroundColor = UIColor.blackColor;
         
         // Customize PSPDFKit defaults.
         [builder overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
         [builder overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
         [builder overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
+        [builder overrideClass:PSPDFLinkAnnotationBaseView.class withClass:PUBLinkAnnotationBaseView.class];
         
         // Appearance only needs to be set up once.
         static dispatch_once_t onceToken;
@@ -67,15 +58,24 @@
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
         builder.backgroundColor = [UIColor blackColor];
-
+        
         builder.allowBackgroundSaving = YES;
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
         builder.pageTransition = PSPDFPageTransitionCurl;
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
-        
-    }];
+        builder.shouldShowHUDOnViewWillAppear = YES;
+    }]];
+    
+    // setup Speechsynthesizer so its slower
+    PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
+    speechSynthesizer.speakRate = 0.1f;
+    
+    self.documentProgress = [NSDictionary dictionary];
+    self.downloadFinished = NO;
+    self.initiatedDownload = NO;
+    self.navigationItem.title = PUBIsiPad() ? document.title : nil;
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
     

@@ -35,6 +35,7 @@
 #import "PUBTransitioningDelegate.h"
 #import "PUBFadeTransition.h"
 #import "PUBDocumentTransition.h"
+#import "SWRevealViewController.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
@@ -91,6 +92,9 @@
     self.transitioningDelegate = [PUBTransitioningDelegate new];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
+    
+    SWRevealViewController *revealController = [self revealViewController];
+    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
 #pragma mark - Setup
@@ -753,7 +757,7 @@
     
     PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
     [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
-    PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
+    PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument configuration:PSPDFConfiguration.defaultConfiguration];
     pdfController.delegate = self;
     pdfController.kioskViewController = self;
     
