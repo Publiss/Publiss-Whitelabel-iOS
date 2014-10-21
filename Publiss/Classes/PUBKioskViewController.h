@@ -15,6 +15,7 @@
 + (PUBKioskViewController *)kioskViewControllerWithStoryboardName:(NSString *)storyboard;
 
 @property (nonatomic, assign) BOOL shouldRetrieveDocuments;
+
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated;
 - (void)presentDocument:(PUBDocument *)document;
 

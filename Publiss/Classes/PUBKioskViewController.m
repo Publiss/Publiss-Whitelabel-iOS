@@ -825,7 +825,16 @@
     [self.collectionView layoutSubviews];
     NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
     return cell.coverImage;
+}
+
+- (UIImage *)currentTransitionImage {
+    [self.collectionView layoutSubviews];
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
+    return cell.coverImage.image;
 }
 
 @end

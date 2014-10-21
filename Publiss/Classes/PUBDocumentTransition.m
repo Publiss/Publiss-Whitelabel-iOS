@@ -22,7 +22,6 @@
     CGRect startFrame;
     CGRect endFrame;
     
-    UIImageView *documentImageView = [[UIImageView alloc] initWithImage:self.transitionImage];
     PUBDimmView *dimView = [[PUBDimmView alloc] initWithFrame:container.frame];
     
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(currentTransitionSourceView)]) {
@@ -31,6 +30,15 @@
             self.transitionSourceView = transitionSourceView;
         }
     }
+    
+    if (!self.transitionImage && self.dataSource && [self.dataSource respondsToSelector:@selector(currentTransitionImage)]) {
+        UIImage *transitionImage = [self.dataSource currentTransitionImage];
+        if (transitionImage) {
+            self.transitionImage = transitionImage;
+        }
+    }
+    
+    UIImageView *documentImageView = [[UIImageView alloc] initWithImage:self.transitionImage];
     
     if (self.transitionMode == TransitionModePresent) {
         toView.hidden = YES;
@@ -52,7 +60,7 @@
         
         [UIView animateWithDuration:DURATION_PRESENT * 0.8
                               delay:0
-                            options:UIViewAnimationOptionCurveEaseIn
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              dimView.alpha = 1.0f;
                              documentImageView.frame = endFrame;
@@ -63,7 +71,7 @@
                              
                              [UIView animateWithDuration:DURATION_PRESENT * 0.2
                                                    delay:0
-                                                 options:UIViewAnimationOptionCurveEaseOut
+                                                 options:UIViewAnimationOptionCurveEaseInOut
                                               animations:^{
                                  documentImageView.alpha = 0;
                              } completion:^(BOOL finished2) {
@@ -91,7 +99,7 @@
         
         [UIView animateWithDuration:DURATION_DISMISS * 0.8
                               delay:0
-                            options:UIViewAnimationOptionCurveEaseIn
+                            options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              dimView.alpha = 0.0f;
                              documentImageView.frame = endFrame;
@@ -102,7 +110,7 @@
                              
                              [UIView animateWithDuration:DURATION_DISMISS * 0.2
                                                    delay:0
-                                                 options:UIViewAnimationOptionCurveEaseOut
+                                                 options:UIViewAnimationOptionCurveEaseInOut
                                               animations:^{
                                  documentImageView.alpha = 0;
                              } completion:^(BOOL finished2) {
