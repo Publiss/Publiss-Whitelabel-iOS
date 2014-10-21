@@ -67,6 +67,10 @@
     PUBBaseTransition *transition = [self currentTransition];
     transition.transitionMode = TransitionModePresent;
     
+    if (self.willPresentBlock) {
+        self.willPresentBlock();
+    }
+    
     return transition;
 }
 
@@ -75,6 +79,10 @@
     
     PUBBaseTransition *transition = [self currentTransition];
     transition.transitionMode = TransitionModeDismiss;
+    
+    if (self.willDismissBlock) {
+        self.willDismissBlock();
+    }
     
     return transition;
 }
@@ -88,9 +96,17 @@
     PUBBaseTransition *transition = [self currentTransition];
     if (operation == UINavigationControllerOperationPush) {
         transition.transitionMode = TransitionModePresent;
+        
+        if (self.willPresentBlock) {
+            self.willPresentBlock();
+        }
     }
     else {
         transition.transitionMode = TransitionModeDismiss;
+        
+        if (self.willDismissBlock) {
+            self.willDismissBlock();
+        }
     }
     
     return transition;

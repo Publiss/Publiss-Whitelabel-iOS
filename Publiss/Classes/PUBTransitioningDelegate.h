@@ -24,4 +24,7 @@ typedef NS_ENUM(NSInteger, PUBSelectedTransition) {
 
 @property (nonatomic, assign) PUBSelectedTransition selectedTransition;
 
+@property (nonatomic, copy) void (^willPresentBlock)();
+@property (nonatomic, copy) void (^willDismissBlock)();
+
 @end

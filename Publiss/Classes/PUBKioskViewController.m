@@ -40,10 +40,10 @@
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
 @property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
+@property (nonatomic, strong) PUBDocument *presentedDocument;
 
 @property (nonatomic, strong) REMenu *menu;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
-
 
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
@@ -742,13 +742,15 @@
 }
 
 - (void)presentDocument:(PUBDocument *)document {
+    self.presentedDocument = document;
+    
     PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
     [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
     PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
     pdfController.delegate = self;
     pdfController.kioskViewController = self;
     
-    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:pdfController];
+    UIViewController *controllerToPresent = pdfController;
     
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
@@ -766,22 +768,23 @@
                 self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
             }
         }
-        
-        controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-        controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    }
+    else {
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
     }
     
-    // NOTE: Fade transition did not work on iPad for some obscure reason.
-    //       NO custom transition for header.
+    __weak typeof(self) welf = self;
+    self.transitioningDelegate.willDismissBlock = ^{
+        __strong typeof(welf) stelf = welf;
+        if (stelf.presentedDocument) {
+            NSIndexPath *path = [stelf indexPathForProductID:stelf.presentedDocument.productID];
+            PUBCellView *cell = (PUBCellView *)[stelf.collectionView cellForItemAtIndexPath:path];
+            stelf.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+        }
+    };
     
-    [self presentViewController:controllerToPresent animated:YES completion:^{
-        [self dispatchStatisticsDocumentDidOpen:document];
-    }];
-    
-    // TODO: Use cutom navigationcontroller transition.
-    
-    //self.navigationController.delegate = self.transitioningDelegate;
-    //[self.navigationController pushViewController:controllerToPresent animated:YES];
+    self.navigationController.delegate = self.transitioningDelegate;
+    [self.navigationController pushViewController:controllerToPresent animated:YES];
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {

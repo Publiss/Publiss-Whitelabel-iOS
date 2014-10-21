@@ -60,7 +60,11 @@
         self.transitionSourceView.hidden = YES;
         
         startFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
-        endFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
+        endFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:toView];
+        
+        if (toView.superview == nil) {
+            [container addSubview:toView];
+        }
         
         dimView.alpha = 1.0f;
         [container addSubview:dimView];
@@ -72,7 +76,7 @@
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
-                              dimView.alpha = 0.0f;
+                             dimView.alpha = 0.0f;
                              documentImageView.frame = endFrame;
                          }
                          completion:^(BOOL finished) {
@@ -134,7 +138,7 @@
 }
 
 + (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
-                               isDoubleModeActive:(BOOL)doubleModeActive {
+                             isDoubleModeActive:(BOOL)doubleModeActive {
     if (doubleModeActive && pageIndex % 2 == 0) {
         return PUBTargetPositionRight;
     }

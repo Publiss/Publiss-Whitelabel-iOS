@@ -53,6 +53,10 @@
         fromView.alpha = 1.0;
         self.dimmView.alpha = DIMM_VIEW_ALPHA;
         
+        if (toView.superview == nil) {
+            [container insertSubview:toView belowSubview:fromView];
+        }
+        
         [UIView animateWithDuration:DURATION_DISMISS
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
