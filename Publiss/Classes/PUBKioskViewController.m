@@ -33,6 +33,7 @@
 #import "UIActionSheet+Blocks.h"
 
 #import "PUBTransitioningDelegate.h"
+#import "PUBFadeTransition.h"
 #import "PUBDocumentTransition.h"
 #import "SWRevealViewController.h"
 
@@ -713,10 +714,14 @@
 
 - (void)presentDocumentAccordingToState:(PUBDocument *)document {
     if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
-        [self presentDocument:document];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentDocument:document];
+        });
     }
     else {
-        [self presentPreviewForDocument:document];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentPreviewForDocument:document];
+        });
     }
 }
 
@@ -733,6 +738,7 @@
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = NO;
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -775,27 +781,48 @@
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = YES;
     }
     
     __weak typeof(self) welf = self;
     self.transitioningDelegate.willDismissBlock = ^{
         __strong typeof(welf) stelf = welf;
         if (stelf.presentedDocument) {
-            NSIndexPath *path = [stelf indexPathForProductID:stelf.presentedDocument.productID];
-            PUBCellView *cell = (PUBCellView *)[stelf.collectionView cellForItemAtIndexPath:path];
-            stelf.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+            [stelf updateDocumentTransitionWithDocument:stelf.presentedDocument];
+            [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
+                                        andDoublePageModeActive:pdfController.isDoublePageMode];
         }
     };
     
     self.navigationController.delegate = self.transitioningDelegate;
-    [self.navigationController pushViewController:controllerToPresent animated:YES];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController pushViewController:controllerToPresent animated:YES];
+    });
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
     return [PSPDFCache.sharedCache imageFromDocument:pdfDocument
                                          page:page
-                                         size:CGSizeMake(256, 256)
-                                      options:PSPDFCacheOptionDiskLoadSync|PSPDFCacheOptionRenderSync|PSPDFCacheOptionMemoryStoreAlways];
+                                         size:UIScreen.mainScreen.bounds.size
+                                      options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+}
+
+- (void)updateDocumentTransitionWithDocument:(PUBDocument *)document{
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
+    if (cell) {
+        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+    }
+}
+
+- (void)updateDocumentTransitionWithCurrentPageIndex:(NSInteger)currentPageIndex
+                             andDoublePageModeActive:(BOOL)doublePageModeActive {
+    self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:currentPageIndex
+                                                                                                  isDoubleModeActive:doublePageModeActive];
 }
 
 @end

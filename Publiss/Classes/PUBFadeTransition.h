@@ -11,4 +11,6 @@
 
 @interface PUBFadeTransition : PUBBaseTransition
 
+@property (nonatomic, assign) BOOL shouldHideStatusBar;
+
 @end

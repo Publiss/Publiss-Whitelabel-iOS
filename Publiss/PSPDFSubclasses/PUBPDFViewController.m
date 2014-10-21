@@ -26,6 +26,7 @@
 @property (nonatomic, strong) JDStatusBarView *barView;
 @property (nonatomic, assign) BOOL downloadFinished;
 @property (nonatomic, assign) BOOL initiatedDownload;
+@property (nonatomic, assign) BOOL initallyHiddenStatusBar;
 @end
 
 @implementation PUBPDFViewController
@@ -53,6 +54,7 @@
         
         builder.allowToolbarTitleChange = NO;
         
+        builder.shouldShowHUDOnViewWillAppear = NO;
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
         builder.backgroundColor = [UIColor blackColor];
@@ -73,9 +75,6 @@
     self.documentProgress = [NSDictionary dictionary];
     self.downloadFinished = NO;
     self.initiatedDownload = NO;
-    
-   
-    
     self.navigationItem.title = PUBIsiPad() ? document.title : nil;
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
@@ -132,8 +131,29 @@
     [self setupUserInterface];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    self.navigationController.navigationBarHidden = YES;
+    self.initallyHiddenStatusBar = YES;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.initallyHiddenStatusBar ? YES : [super prefersStatusBarHidden];
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+    return self.initallyHiddenStatusBar ? UIStatusBarAnimationFade : [super preferredStatusBarUpdateAnimation];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.initallyHiddenStatusBar = NO;
+    });
     
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];

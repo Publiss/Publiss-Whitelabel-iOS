@@ -31,8 +31,11 @@
         
         [container addSubview:toView];
         
-        startFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
+        startFrame = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:fromView];
         endFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
+        
+        [self hideNavigationBarOfController:toVC withDuration:DURATION_PRESENT];
+        [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
         
         dimView.alpha = 0.0f;
         [container addSubview:dimView];
@@ -40,7 +43,7 @@
         documentImageView.frame = startFrame;
         [container addSubview:documentImageView];
         
-        [UIView animateWithDuration:DURATION_PRESENT
+        [UIView animateWithDuration:DURATION_PRESENT * 0.8
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -49,10 +52,14 @@
                          }
                          completion:^(BOOL finished) {
                              toView.hidden = NO;
-                             
                              [dimView removeFromSuperview];
-                             [documentImageView removeFromSuperview];
-                             [transitionContext completeTransition:YES];
+                             
+                             [UIView animateWithDuration:DURATION_PRESENT * 0.2 animations:^{
+                                 documentImageView.alpha = 0;
+                             } completion:^(BOOL finished2) {
+                                 [documentImageView removeFromSuperview];
+                                 [transitionContext completeTransition:YES];
+                             }];
                          }];
     }
     else {
@@ -72,7 +79,7 @@
         documentImageView.frame = startFrame;
         [container addSubview:documentImageView];
         
-        [UIView animateWithDuration:DURATION_DISMISS
+        [UIView animateWithDuration:DURATION_DISMISS * 0.8
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
@@ -81,10 +88,14 @@
                          }
                          completion:^(BOOL finished) {
                              self.transitionSourceView.hidden = NO;
-                             
                              [dimView removeFromSuperview];
-                             [documentImageView removeFromSuperview];
-                             [transitionContext completeTransition:YES];
+                             
+                             [UIView animateWithDuration:DURATION_DISMISS * 0.2 animations:^{
+                                 documentImageView.alpha = 0;
+                             } completion:^(BOOL finished2) {
+                                 [documentImageView removeFromSuperview];
+                                 [transitionContext completeTransition:YES];
+                             }];
                          }];
     }
 }
@@ -136,6 +147,8 @@
     
     return scaleAspectFit;
 }
+
+
 
 + (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
                              isDoubleModeActive:(BOOL)doubleModeActive {

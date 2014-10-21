@@ -59,7 +59,7 @@
     }
 }
 
-#pragma mark - UIViewControllerAnimatedTransitioning delegate
+#pragma mark - UIViewControllerAnimatedTransitioning Delegate
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
                                                                   presentingController:(UIViewController *)presenting
@@ -87,7 +87,7 @@
     return transition;
 }
 
-#pragma mark - UIViewControllerAnimatedTransitioning delegate
+#pragma mark - UINavigationController Delegate
 
 - (id <UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController
                                    animationControllerForOperation:(UINavigationControllerOperation)operation

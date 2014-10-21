@@ -37,6 +37,10 @@
         toView.frame = [self endFrameForController:toVC inContainer:container];
         [container addSubview:toView];
         
+        if (self.shouldHideStatusBar) {
+            [self hideNavigationBarOfController:toVC withDuration:DURATION_PRESENT];
+        }
+        
         [UIView animateWithDuration:DURATION_PRESENT
                               delay:0
                             options:UIViewAnimationOptionCurveEaseInOut
