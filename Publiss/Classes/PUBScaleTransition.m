@@ -62,8 +62,8 @@
         
         [UIView animateWithDuration:DURATION_PRESENT
                               delay:0.f
-             //usingSpringWithDamping:PUBIsiPad() ? .8f : 2.5f
-              //initialSpringVelocity:17.f
+             usingSpringWithDamping:PUBIsiPad() ? .8f : 2.5f
+              initialSpringVelocity:17.f
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
                              

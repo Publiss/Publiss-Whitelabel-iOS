@@ -98,7 +98,7 @@
     [self refreshDocumentsWithActivityViewAnimated:YES];
     
     SWRevealViewController *revealController = [self revealViewController];
-    [self.view addGestureRecognizer:revealController.panGestureRecognizer];
+    //[self.view addGestureRecognizer:revealController.panGestureRecognizer];
 }
 
 #pragma mark - Setup
@@ -111,7 +111,7 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
     self.kioskLayout = [[PUBKioskLayout alloc] init];
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
