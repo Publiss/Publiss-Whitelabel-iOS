@@ -56,6 +56,8 @@
 @property (nonatomic, strong) NSTimer *pageTracker;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, weak) PUBHeaderReusableView *headerView;
+
 @end
 
 #define LINE_HEIGHT 30.f
@@ -359,6 +361,8 @@
         }
     };
     
+    self.headerView = header;
+    
     return header;
 }
 
@@ -588,6 +592,8 @@
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
             [cell setupForDocument:document];
         }
+        
+        
     }
 }
 
@@ -597,12 +603,25 @@
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
         PUBDocument *document = self.publishedDocuments[indexPath.item];
         
-        if (document) {
-            document.state = PUBDocumentStateDownloaded;
-            [PUBCoreDataStack.sharedCoreDataStack saveContext];
-            
-            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            [cell setupForDocument:document];
+        if (!indexPath) {
+            PUBDocument *featured = self.featuredDocuments.firstObject;
+            if (featured && [featured.productID isEqual:productID]) {
+                document = featured;
+                document.state = PUBDocumentStateDownloaded;
+                [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                
+                [self.headerView setupWithDocuments:@[document]];
+                [self.collectionView.collectionViewLayout invalidateLayout];
+            }
+        }
+        else {
+            if (document) {
+                document.state = PUBDocumentStateDownloaded;
+                [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                
+                PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell setupForDocument:document];
+            }
         }
     }
 }

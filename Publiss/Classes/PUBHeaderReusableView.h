@@ -10,6 +10,8 @@
 
 @interface PUBHeaderReusableView : PUBImageReusableView
 
+@property (nonatomic, strong) IBOutlet UIImageView *cloudImageView;
+
 @property (nonatomic, copy) void (^singleTapBlock)();
 @property (nonatomic, copy) void (^longPressBlock)();
 

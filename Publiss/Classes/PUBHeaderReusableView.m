@@ -43,12 +43,32 @@
 
 - (void)setup {
     self.imageView.image = [UIImage imageNamed:@"HeaderBackground"];
+    [self addSubview:self.cloudImageView];
     
     [self removeGestureRecognizer:self.singleTapRecognizer];
     [self removeGestureRecognizer:self.longPressRecognizer];
     
     [self addGestureRecognizer:self.singleTapRecognizer];
     [self addGestureRecognizer:self.longPressRecognizer];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.cloudImageView.frame = [self cloudImageViewRect];
+}
+
+- (UIImageView *)cloudImageView {
+    if (!_cloudImageView) {
+        _cloudImageView = [[UIImageView alloc] initWithFrame:[self cloudImageViewRect]];
+        _cloudImageView.image = [UIImage imageNamed:@"download_header"];
+    }
+    return _cloudImageView;
+}
+
+- (CGRect)cloudImageViewRect {
+    CGFloat size = 22;
+    CGFloat spacing = 8;
+    return CGRectMake(self.bounds.size.width - size - spacing, spacing, size, size);
 }
 
 - (UITapGestureRecognizer *)singleTapRecognizer {

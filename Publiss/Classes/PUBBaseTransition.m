@@ -7,6 +7,9 @@
 
 #import "PUBBaseTransition.h"
 
+const CGFloat DURATION_PRESENT = .35f;
+const CGFloat DURATION_DISMISS = .30f;
+
 @implementation PUBBaseTransition
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext {
