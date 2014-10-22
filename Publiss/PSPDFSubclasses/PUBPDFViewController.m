@@ -132,10 +132,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     self.navigationController.navigationBarHidden = YES;
-    self.initallyHiddenStatusBar = YES;
-    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self hideStatusBarInJustTheReightWay];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
+    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -146,17 +153,18 @@
     return self.initallyHiddenStatusBar ? UIStatusBarAnimationFade : [super preferredStatusBarUpdateAnimation];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    
-    [self setNeedsStatusBarAppearanceUpdate];
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+- (void)hideStatusBarInJustTheReightWay {
     dispatch_async(dispatch_get_main_queue(), ^{
+        self.initallyHiddenStatusBar = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
         self.initallyHiddenStatusBar = NO;
+        [self setHUDVisible:YES animated:NO];
+        [self setHUDVisible:NO animated:NO];
     });
-    
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
-    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -226,7 +234,6 @@
         [PUBDocumentFetcher.sharedFetcher setPageAlreadyExsists:self.pubDocument page:page];
     }
 }
-
 
 - (void)updateProgress {
     NSInteger pagesDoneCount = 0;

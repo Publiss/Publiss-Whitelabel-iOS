@@ -16,6 +16,7 @@
     self.deleteButton.hidden = YES;
     self.badgeView.hidden = YES;
     self.namedBadgeView.hidden = YES;
+    self.coverImage.hidden = NO;
     
     switch (document.state) {
         case PUBDocumentStateOnline:

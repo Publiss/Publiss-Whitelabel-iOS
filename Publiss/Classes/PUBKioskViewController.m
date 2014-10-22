@@ -86,7 +86,7 @@
     [self setupCollectionView];
     [self setupMenu];
     [self setupSpinner];
-
+    
     [JDStatusBarNotification addStyleNamed:PurchasedMenuStyle
                                    prepare:^JDStatusBarStyle *(JDStatusBarStyle *style) {
                                        style.barColor = [UIColor whiteColor];
@@ -112,6 +112,44 @@
     [self.frostedViewController panGestureRecognized:sender];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc addObserver:self selector:@selector(trackPage) name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
+    [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
+    [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (self.shouldRetrieveDocuments) {
+        self.shouldRetrieveDocuments = NO;
+        [self refreshDocumentsWithActivityViewAnimated:YES];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
+    [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
+    [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
+    
+    if (self.pageTracker.isValid) {
+        [self.pageTracker invalidate];
+        self.pageTracker = nil;
+    }
+}
+
 #pragma mark - Setup
 
 - (void)setupNavigationItems {
@@ -122,7 +160,7 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
     self.kioskLayout = [[PUBKioskLayout alloc] init];
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
@@ -136,13 +174,19 @@
 }
 
 - (void)setupSpinner {
-    self.spinner = [UIActivityIndicatorView new];
-    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-    self.spinner.color = [UIColor publissPrimaryColor];
-    self.spinner.frame = CGRectMake(self.view.center.x - 10.f, self.view.center.y - 10.f, 20.f, 20.f);
-    self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [self.collectionView addSubview:self.spinner];
-    self.spinner.hidden = YES;
+    if (!self.spinner) {
+        self.spinner = [UIActivityIndicatorView new];
+        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
+        self.spinner.color = [UIColor publissPrimaryColor];
+        
+        CGFloat spinnerWidth = 20.f;
+        CGFloat topOffset = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
+        
+        self.spinner.frame = CGRectMake(self.view.center.x - spinnerWidth / 2, self.view.center.y - spinnerWidth / 2 - topOffset, spinnerWidth, spinnerWidth);
+        self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [self.collectionView addSubview:self.spinner];
+        self.spinner.hidden = YES;
+    }
 }
 
 - (void)setupMenu {
@@ -237,44 +281,6 @@
     self.menu.liveBlurTintColor = [UIColor  publissPrimaryColor];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(trackPage) name:UIApplicationWillResignActiveNotification object:nil];
-    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
-    [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
-    [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-
-    if (self.shouldRetrieveDocuments) {
-        self.shouldRetrieveDocuments = NO;
-        [self refreshDocumentsWithActivityViewAnimated:YES];
-    }
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
-    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
-    [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
-    [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
-    
-    if (self.pageTracker.isValid) {
-        [self.pageTracker invalidate];
-        self.pageTracker = nil;
-    }
-}
-
 #pragma mark - Actions
 
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated {    
@@ -291,6 +297,7 @@
         self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
+        self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
         
         [self.collectionView reloadData];
         [self.spinner stopAnimating];
@@ -383,6 +390,7 @@
     
     if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
+        cell.coverImage.hidden = NO;
         [cell setNeedsLayout];
     } else {
         [cell.activityIndicator startAnimating];
@@ -758,10 +766,28 @@
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
         self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
         self.transitioningDelegate.scaleTransition.sourceImage = cell.coverImage.image;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.scaleTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
     }
     else {
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
         self.transitioningDelegate.fadeTransition.shouldHideStatusBar = NO;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.fadeTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
     }
     
     UIViewController *controllerToPresent = previewViewController;
@@ -814,6 +840,15 @@
         if (stelf.presentedDocument) {
             [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
                                         andDoublePageModeActive:pdfController.isDoublePageMode];
+        }
+        
+    };
+    
+    self.transitioningDelegate.documentTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+        if (mode == TransitionModeDismiss) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [welf.collectionView reloadData];
+            });
         }
     };
     
