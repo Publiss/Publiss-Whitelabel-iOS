@@ -8,7 +8,6 @@
 
 #import "PUBFadeTransition.h"
 #import "PUBDimmView.h"
-#import "PUBConstants.h"
 
 @interface PUBFadeTransition ()
 

@@ -8,7 +8,6 @@
 
 #import "PUBDocumentTransition.h"
 #import "PUBDimmView.h"
-#import "PUBConstants.h"
 
 @implementation PUBDocumentTransition
 
