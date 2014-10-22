@@ -115,7 +115,7 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
     self.kioskLayout = [[PUBKioskLayout alloc] init];
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
@@ -278,6 +278,7 @@
         self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
+        self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
         
         [self.collectionView reloadData];
         [self.spinner stopAnimating];
