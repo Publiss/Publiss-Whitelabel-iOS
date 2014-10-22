@@ -6,6 +6,7 @@
 //
 
 #import "PUBBaseTransition.h"
+#import "PUBConstants.h"
 
 @implementation PUBBaseTransition
 

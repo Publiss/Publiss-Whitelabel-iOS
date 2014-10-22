@@ -68,6 +68,10 @@ static NSString *const PUBiAPSecrets = @"purchase_secrets";
 static NSString *const PurchasingMenuStyle = @"PurchasingMenuStyle";
 static NSString *const PurchasedMenuStyle = @"PurchasedMenuStyle";
 
+//
+static CGFloat const DURATION_PRESENT = .35f;
+static CGFloat const DURATION_DISMISS = .30f;
+
 // Availability Macros
 #define PUBIsiPad() UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad
 #define PUBIsiPhone5() (([[UIScreen mainScreen] bounds].size.height - 568) ? NO : YES)
