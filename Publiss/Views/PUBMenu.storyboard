@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="z7E-o6-1v2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="z7E-o6-1v2">
     <dependencies>
-        <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -15,27 +15,34 @@
                         <viewControllerLayoutGuide type="bottom" id="qBx-6F-DQy"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="IFc-2c-hKM">
-                        <rect key="frame" x="0.0" y="0.0" width="200" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="240" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-logo" translatesAutoresizingMaskIntoConstraints="NO" id="Sci-eg-5KB">
-                                <rect key="frame" x="0.0" y="0.0" width="200" height="200"/>
+                            <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-logo" translatesAutoresizingMaskIntoConstraints="NO" id="Sci-eg-5KB">
+                                <rect key="frame" x="0.0" y="20" width="240" height="160"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="fpf-Pf-Rv6"/>
+                                    <constraint firstAttribute="width" constant="240" id="ATf-JV-RlW"/>
+                                    <constraint firstAttribute="width" constant="240" id="RQ4-ND-hYI"/>
+                                    <constraint firstAttribute="height" constant="160" id="fpf-Pf-Rv6"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="RQ4-ND-hYI"/>
+                                    </mask>
+                                </variation>
                             </imageView>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="28I-Wg-DFE">
-                                <rect key="frame" x="0.0" y="208" width="200" height="392"/>
+                                <rect key="frame" x="0.0" y="210" width="240" height="390"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="menu" id="gsU-wa-wnt" customClass="PUBMenuTableViewCell">
+                                    <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="menu" id="gsU-wa-wnt" customClass="PUBMenuTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gsU-wa-wnt" id="TV2-E8-lYV">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYK-Nu-G6a">
-                                                    <rect key="frame" x="62" y="11" width="130" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYK-Nu-G6a">
+                                                    <rect key="frame" x="62" y="11" width="170" height="22"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -70,17 +77,17 @@
                             </tableView>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="Sci-eg-5KB" secondAttribute="trailing" constant="-16" id="3hj-dc-4Pe"/>
+                            <constraint firstAttribute="centerX" secondItem="Sci-eg-5KB" secondAttribute="centerX" id="6bA-r1-gnj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="28I-Wg-DFE" secondAttribute="trailing" constant="-16" id="VK6-ZI-pYH"/>
-                            <constraint firstItem="28I-Wg-DFE" firstAttribute="top" secondItem="Sci-eg-5KB" secondAttribute="bottom" constant="8" id="b04-yc-B11"/>
-                            <constraint firstItem="Sci-eg-5KB" firstAttribute="leading" secondItem="IFc-2c-hKM" secondAttribute="leadingMargin" constant="-16" id="eFT-3h-syL"/>
+                            <constraint firstItem="28I-Wg-DFE" firstAttribute="top" secondItem="Sci-eg-5KB" secondAttribute="bottom" constant="30" id="b04-yc-B11"/>
                             <constraint firstItem="qBx-6F-DQy" firstAttribute="top" secondItem="28I-Wg-DFE" secondAttribute="bottom" id="jGB-lo-KNK"/>
-                            <constraint firstItem="Sci-eg-5KB" firstAttribute="top" secondItem="uCb-Fq-AAT" secondAttribute="bottom" constant="-20" id="m1G-oG-Wre"/>
+                            <constraint firstItem="Sci-eg-5KB" firstAttribute="top" secondItem="uCb-Fq-AAT" secondAttribute="bottom" id="m1G-oG-Wre"/>
                             <constraint firstItem="28I-Wg-DFE" firstAttribute="leading" secondItem="IFc-2c-hKM" secondAttribute="leadingMargin" constant="-16" id="uJ8-jb-dHx"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="200" height="600"/>
+                    <size key="freeformSize" width="240" height="600"/>
                     <connections>
                         <outlet property="tableView" destination="28I-Wg-DFE" id="I2u-7j-sTY"/>
                     </connections>

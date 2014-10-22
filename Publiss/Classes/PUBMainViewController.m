@@ -24,6 +24,7 @@
     frostedViewController.liveBlur = YES;
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleDark;
     frostedViewController.limitMenuViewSize = YES;
+    frostedViewController.menuViewSize = CGSizeMake(240, 0);
     return frostedViewController;
 }
 

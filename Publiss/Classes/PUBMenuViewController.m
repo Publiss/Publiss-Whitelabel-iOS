@@ -9,6 +9,8 @@
 #import "PUBMenuViewController.h"
 #import "PUBMenuTableViewCell.h"
 #import "PUBMenuItem.h"
+#import "PUBMenuItemManager.h"
+#import "REFrostedViewController.h"
 
 @interface PUBMenuViewController ()
 
@@ -37,37 +39,28 @@
     self.tableView.opaque = NO;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.contentInset = UIEdgeInsetsMake(48, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(16, 0, 0, 0);
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     if (!self.maskLayer) {
         self.maskLayer = [CAGradientLayer layer];
-        
         CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
         CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
-        
-        self.maskLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor, (__bridge id)innerColor, (__bridge id)outerColor];
-        self.maskLayer.locations = @[@(0.0),@(0.2),@(0.8),@(1.0)];
-        
-        self.maskLayer.bounds = CGRectMake(0, 0,
-                                      self.view.frame.size.width,
-                                      self.tableView.frame.size.height);
+        self.maskLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor];
+        self.maskLayer.locations = @[@(0.0),@(0.05)];
         self.maskLayer.anchorPoint = CGPointZero;
-        
         self.tableView.layer.mask = self.maskLayer;
     }
     [self scrollViewDidScroll:self.tableView];
 }
 
-- (NSArray *)menuItems {
-    if (!_menuItems) {
-        _menuItems = NSArray.array;
-    }
-    return _menuItems;
+- (void)viewWillLayoutSubviews {
+    self.maskLayer.bounds = CGRectMake(0, 0,
+                                       self.view.frame.size.width,
+                                       self.view.frame.size.height);
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -85,7 +78,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)sectionIndex {
-    return self.menuItems.count;
+    return PUBMenuItemManager.sharedInstance.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -101,12 +94,21 @@
     PUBMenuItem *menuItem = [self menuItemForIndexPath:indexPath];
     cell.titleLabel.text = menuItem.title;
     cell.icon.image = menuItem.icon;
-    
+
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.frostedViewController hideMenuViewController];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    PUBMenuItem *menuItem = [self menuItemForIndexPath:indexPath];
+    if (menuItem.actionBlock) {
+        menuItem.actionBlock();
+    }
+}
+
 - (PUBMenuItem *)menuItemForIndexPath:(NSIndexPath *)indexPath {
-    return [self.menuItems objectAtIndex:indexPath.row];
+    return [PUBMenuItemManager.sharedInstance.items objectAtIndex:indexPath.row];
 }
 
 @end

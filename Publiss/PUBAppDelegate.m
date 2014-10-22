@@ -22,7 +22,7 @@
     
     [Publiss.staticInstance setupWithLicenseKey:nil];
 
-    self.window.rootViewController = PUBMainViewController.mainViewController;
+    self.window.rootViewController = (UIViewController *)PUBMainViewController.mainViewController;
     [self.window makeKeyAndVisible];
     return YES;
 }

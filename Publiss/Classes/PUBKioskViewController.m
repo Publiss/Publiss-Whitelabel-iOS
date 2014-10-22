@@ -20,7 +20,6 @@
 #import "PUBPDFDocument.h"
 #import "IAPController.h"
 #import "PUBHTTPRequestManager.h"
-#import <REMenu/REMenu.h>
 #import "JDStatusBarNotification.h"
 #import "UIImage+PUBTinting.h"
 #import "PSPDFWebViewController.h"
@@ -37,7 +36,7 @@
 #import "PUBDocumentTransition.h"
 #import "REFrostedViewController.h"
 #import "PUBMenuItem.h"
-#import "PUBMenuViewController.h"
+#import "PUBMenuItemManager.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
@@ -45,8 +44,7 @@
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
 @property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
 @property (nonatomic, strong) PUBDocument *presentedDocument;
-
-@property (nonatomic, strong) REMenu *menu;
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
@@ -99,17 +97,11 @@
     self.transitioningDelegate = [PUBTransitioningDelegate new];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
-    [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
+    [self.view addGestureRecognizer:[UIPanGestureRecognizer.alloc initWithTarget:self action:@selector(panGestureRecognized:)]];
     
     self.refreshControl = UIRefreshControl.alloc.init;
     [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
     [self.collectionView addSubview:self.refreshControl];
-}
-
-- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
-    [self.view endEditing:YES];
-    [self.frostedViewController.view endEditing:YES];
-    [self.frostedViewController panGestureRecognized:sender];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -195,6 +187,7 @@
     visit.actionBlock = ^() {
         [self visitPublissSite];
     };
+    [PUBMenuItemManager.sharedInstance addMenuItem:visit];
     
     PUBMenuItem *about = PUBMenuItem.alloc.init;
     about.title = PUBLocalize(@"About Publiss");
@@ -202,76 +195,34 @@
     about.actionBlock = ^() {
         [self showAbout];
     };
-    
-    ((PUBMenuViewController *)self.frostedViewController.menuViewController).menuItems = @[visit, about];
-    
-    REMenuItem *visitSiteItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Visit Publiss Website")
-                                                         subtitle:nil
-                                                            image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                                 highlightedImage:nil
-                                                           action:^(REMenuItem *item) {
-                                                               [self visitPublissSite];
-                                                           }];
-    
-    
-    REMenuItem *aboutItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"About Publiss")
-                                                     subtitle:nil
-                                                        image:[[UIImage imageNamed:@"about"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                             highlightedImage:nil
-                                                       action:^(REMenuItem *item) {
-                                                           [self showAbout];
-                                                       }];
-    
-    NSMutableArray *menuItems = @[
-                                  visitSiteItem,
-                                  aboutItem,
-                                  ].mutableCopy;
+    [PUBMenuItemManager.sharedInstance addMenuItem:about];
     
     if (PUBConfig.sharedConfig.inAppPurchaseActive) {
-        REMenuItem *restoreItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Restore Purchases")
-                                                           subtitle:nil
-                                                              image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                                   highlightedImage:nil
-                                                             action:^(REMenuItem *item) {
-                                                                 [self restorePurchases];
-                                                             }];
-        [menuItems insertObject:restoreItem atIndex:1];
+        PUBMenuItem *restore = PUBMenuItem.alloc.init;
+        restore.title = PUBLocalize(@"Restore Purchases");
+        restore.icon = [[UIImage imageNamed:@"restore"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+        restore.actionBlock = ^() {
+            [self restorePurchases];
+        };
+        [PUBMenuItemManager.sharedInstance addMenuItem:restore];
         
 #ifdef DEBUG
-        REMenuItem *clearItem = [[REMenuItem alloc] initWithTitle:@"(DEBUG) Clear"
-                                                         subtitle:nil
-                                                            image:nil
-                                                 highlightedImage:nil
-                                                           action:^(REMenuItem *item) {
-                                                               [self clearPurchases];
-                                                           }];
-        
-        [menuItems addObject:clearItem];
+        PUBMenuItem *clear = PUBMenuItem.alloc.init;
+        clear.title = @"(DEBUG) Clear";
+        clear.actionBlock = ^() {
+            [self clearPurchases];
+        };
+        [PUBMenuItemManager.sharedInstance addMenuItem:clear];
 #endif
     }
-    
-    self.menu = [[REMenu alloc] initWithItems:menuItems];
-    
-    self.menu.textAlignment = NSTextAlignmentLeft;
-    self.menu.bounce = YES;
-    self.menu.bounceAnimationDuration = .1f;
-    self.menu.animationDuration = .29f;
-    self.menu.separatorHeight = 1.f;
-    self.menu.separatorColor = self.menu.highlightedSeparatorColor = [[UIColor blackColor] colorWithAlphaComponent:.1f];
-    self.menu.borderWidth = 0.0f;
-    self.menu.textColor = UIApplication.sharedApplication.delegate.window.tintColor;
-    self.menu.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f];
-    self.menu.textShadowOffset = CGSizeZero;
-    self.menu.shadowColor = [UIColor clearColor];
-    self.menu.highlightedBackgroundColor = [UIColor colorWithWhite:1.f alpha:.3f];
-    self.menu.highlightedTextShadowColor = [UIColor clearColor];
-    self.menu.highlightedTextColor = UIApplication.sharedApplication.delegate.window.tintColor;
-    self.menu.liveBlur = YES;
-    self.menu.liveBlurBackgroundStyle = REMenuLiveBackgroundStyleLight;
-    self.menu.textOffset = CGSizeMake(66.f, 0.f);
-    self.menu.imageOffset = CGSizeMake(18.f, 0.f);
-    self.menu.backgroundColor = UIColor.clearColor;
-    self.menu.liveBlurTintColor = [UIColor  publissPrimaryColor];
+}
+
+#pragma mark - Gesture
+
+- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController panGestureRecognized:sender];
 }
 
 #pragma mark - Actions
@@ -301,12 +252,7 @@
 }
 
 - (void)showMenu:(id)sender {
-    if (!self.menu.isOpen) {
-        [self.menu showFromNavigationController:self.navigationController];
-    }
-    else {
-        [self.menu close];
-    }
+    [self.frostedViewController presentMenuViewController];
 }
 
 - (void)showAbout {
@@ -318,8 +264,10 @@
 }
 
 - (void)visitPublissSite {
-    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
-    [self.navigationController pushViewController:webViewController animated:YES];
+    if (self.navigationController.topViewController == self) {
+        PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
+        [self.navigationController pushViewController:webViewController animated:YES];
+    }
 }
 
 #pragma mark - UICollectionView DataSoure
