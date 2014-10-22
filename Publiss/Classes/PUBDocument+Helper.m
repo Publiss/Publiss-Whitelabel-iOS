@@ -68,6 +68,7 @@
         
         shouldUpdateValues = remoteFeatured != localFeatured;
         
+        // TODO: Use == on date object
         if(onlineFeaturedUpdatedAt &&
            ![[onlineFeaturedUpdatedAt laterDate:document.featuredUpdatedAt] isEqualToDate:document.featuredUpdatedAt]) {
             document.featuredUpdatedAt = onlineFeaturedUpdatedAt;

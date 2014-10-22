@@ -115,6 +115,7 @@
                              [blendOverView removeFromSuperview];
                              [dimView removeFromSuperview];
                              [transitionContext completeTransition:YES];
+                             
                              self.transitionSourceView.hidden = NO;
                              self.transitionSourceView.superview.hidden = NO;
                          }];
