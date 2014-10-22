@@ -17,6 +17,7 @@
     NSAssert(NO, @"Needs to be overwritten.");
 }
 
+//TODO: Move in UINavigationControllerCategory
 - (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration {
     CATransition *transition = [CATransition animation];
     transition.duration = duration;

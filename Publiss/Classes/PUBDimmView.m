@@ -14,7 +14,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        self.userInteractionEnabled = NO;
+        self.userInteractionEnabled = YES;
         self.backgroundColor = [UIColor blackColor];
         self.tag = DIMM_VIEW_TAG;
     }

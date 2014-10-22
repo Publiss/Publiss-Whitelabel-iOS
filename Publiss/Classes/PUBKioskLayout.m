@@ -116,7 +116,6 @@
     return attributes;
 }
 
-
 - (void)updateSizesAndSpacings {
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
     
@@ -138,24 +137,5 @@
 - (UIInterfaceOrientation)orientation {
     return [[UIApplication sharedApplication] statusBarOrientation];
 }
-
-// Layout fix.
-
-/*
- // Code from: https://openradar.appspot.com/12433891
- - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect {
- NSArray *unfilteredPoses = [super layoutAttributesForElementsInRect:rect];
- id filteredPoses[unfilteredPoses.count];
- NSUInteger filteredPosesCount = 0;
- for (UICollectionViewLayoutAttributes *pose in unfilteredPoses) {
- CGRect frame = pose.frame;
- if (frame.origin.x + frame.size.width <= rect.size.width) {
- filteredPoses[filteredPosesCount++] = pose;
- }
- }
- return [NSArray arrayWithObjects:filteredPoses count:filteredPosesCount];
- }
- */
-
 
 @end

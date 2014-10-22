@@ -66,8 +66,9 @@
         BOOL remoteFeatured = [[dictionary valueForKeyPath:@"featured"] boolValue];
         BOOL localFeatured = document.featured;
         
-        shouldUpdateValues = remoteFeatured != localFeatured;
+        shouldUpdateValues = shouldUpdateValues || (remoteFeatured != localFeatured);
         
+        // TODO: Use == on date object
         if(onlineFeaturedUpdatedAt &&
            ![[onlineFeaturedUpdatedAt laterDate:document.featuredUpdatedAt] isEqualToDate:document.featuredUpdatedAt]) {
             document.featuredUpdatedAt = onlineFeaturedUpdatedAt;

@@ -168,8 +168,6 @@
     return scaleAspectFit;
 }
 
-
-
 + (PUBTargetPosition)targetPositionForPageIndex:(NSInteger)pageIndex
                              isDoubleModeActive:(BOOL)doubleModeActive {
     if (doubleModeActive && pageIndex % 2 == 0) {

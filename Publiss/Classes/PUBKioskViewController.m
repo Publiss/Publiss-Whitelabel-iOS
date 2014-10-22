@@ -298,12 +298,13 @@
         [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
     };
     
+    __weak typeof(header) weakHeader = header;
     header.longPressBlock = ^() {
         
         PUBDocument *document = self.featuredDocuments.firstObject;
         
         if (document.state == PUBDocumentStateDownloaded) {
-            [UIActionSheet showInView:self.view
+            [UIActionSheet showInView:weakHeader
                             withTitle:PUBLocalize(@"Do you want to remove the PDF for this document?")
                     cancelButtonTitle:PUBLocalize(@"Cancel")
                destructiveButtonTitle:PUBLocalize(@"Yes, remove PDF")
