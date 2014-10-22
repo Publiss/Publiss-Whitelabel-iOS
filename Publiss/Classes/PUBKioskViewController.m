@@ -36,6 +36,8 @@
 #import "PUBFadeTransition.h"
 #import "PUBDocumentTransition.h"
 #import "REFrostedViewController.h"
+#import "PUBMenuItem.h"
+#import "PUBMenuViewController.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
@@ -54,6 +56,7 @@
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
 @property (nonatomic, strong) NSTimer *pageTracker;
 
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
 #define LINE_HEIGHT 30.f
@@ -97,6 +100,10 @@
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
     [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureRecognized:)]];
+    
+    self.refreshControl = UIRefreshControl.alloc.init;
+    [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
 }
 
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
@@ -145,14 +152,21 @@
                                                                 action:@selector(showMenu:)];
     self.navigationItem.leftBarButtonItems = @[menuItem];
     
-    REMenuItem *reloadItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Reload")
-                                                      subtitle:nil
-                                                         image:[[UIImage imageNamed:@"refresh"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                              highlightedImage:nil
-                                                        action:^(REMenuItem *item) {
-                                                            [self refreshDocumentsWithActivityViewAnimated:YES];
-                                                        }];
+    PUBMenuItem *visit = PUBMenuItem.alloc.init;
+    visit.title = PUBLocalize(@"Visit Publiss Website");
+    visit.icon = [[UIImage imageNamed:@"web"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+    visit.actionBlock = ^() {
+        [self visitPublissSite];
+    };
     
+    PUBMenuItem *about = PUBMenuItem.alloc.init;
+    about.title = PUBLocalize(@"About Publiss");
+    about.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+    about.actionBlock = ^() {
+        [self showAbout];
+    };
+    
+    ((PUBMenuViewController *)self.frostedViewController.menuViewController).menuItems = @[visit, about];
     
     REMenuItem *visitSiteItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Visit Publiss Website")
                                                          subtitle:nil
@@ -172,7 +186,6 @@
                                                        }];
     
     NSMutableArray *menuItems = @[
-                                  reloadItem,
                                   visitSiteItem,
                                   aboutItem,
                                   ].mutableCopy;
@@ -284,6 +297,7 @@
         
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
+        [self.refreshControl endRefreshing];
     }];
 }
 
