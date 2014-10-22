@@ -50,7 +50,6 @@
         endFrame = [self endFrameWithSourceView:self.transitionSourceView andTargetView:toView];
         
         [self hideNavigationBarOfController:toVC withDuration:DURATION_PRESENT];
-        [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
         
         dimView.alpha = 0.0f;
         [container addSubview:dimView];
