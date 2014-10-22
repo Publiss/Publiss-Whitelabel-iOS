@@ -10,8 +10,6 @@
 
 @interface PUBMenuViewController : UIViewController
 
-@property (strong, nonatomic) NSArray *menuItems;
-
 + (PUBMenuViewController *)menuViewController;
 + (PUBMenuViewController *)menuViewControllerWithStoryboardName:(NSString *)storyboard;
 
