@@ -47,7 +47,6 @@
 @property (nonatomic, strong) PUBDocument *presentedDocument;
 
 @property (nonatomic, strong) REMenu *menu;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
@@ -85,7 +84,6 @@
     [self setupNavigationItems];
     [self setupCollectionView];
     [self setupMenu];
-    [self setupSpinner];
     
     [JDStatusBarNotification addStyleNamed:PurchasedMenuStyle
                                    prepare:^JDStatusBarStyle *(JDStatusBarStyle *style) {
@@ -173,19 +171,12 @@
     self.collectionView.dataSource = self;
 }
 
-- (void)setupSpinner {
-    if (!self.spinner) {
-        self.spinner = [UIActivityIndicatorView new];
-        self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-        self.spinner.color = [UIColor publissPrimaryColor];
-        
-        CGFloat spinnerWidth = 20.f;
-        CGFloat topOffset = self.navigationController.navigationBar.frame.size.height + self.navigationController.navigationBar.frame.origin.y;
-        
-        self.spinner.frame = CGRectMake(self.view.center.x - spinnerWidth / 2, self.view.center.y - spinnerWidth / 2 - topOffset, spinnerWidth, spinnerWidth);
-        self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-        [self.collectionView addSubview:self.spinner];
-        self.spinner.hidden = YES;
+- (void)setupRefreshControl {
+    if (!self.refreshControl) {
+        self.refreshControl = UIRefreshControl.alloc.init;
+        self.refreshControl.tintColor = [UIColor publissPrimaryColor];
+        [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
+        [self.collectionView addSubview:self.refreshControl];
     }
 }
 
@@ -287,8 +278,8 @@
     self.collectionView.userInteractionEnabled = NO;
     self.editButtonItem.enabled = NO;
     
-    if (![self.spinner isAnimating] && animated) {
-        [self.spinner startAnimating];
+    if (!self.refreshControl.isRefreshing) {
+        [self.refreshControl beginRefreshing];
     }
     
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
@@ -300,7 +291,6 @@
         self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
         
         [self.collectionView reloadData];
-        [self.spinner stopAnimating];
         
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
