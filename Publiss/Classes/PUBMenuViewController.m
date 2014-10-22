@@ -94,7 +94,7 @@
     PUBMenuItem *menuItem = [self menuItemForIndexPath:indexPath];
     cell.titleLabel.text = menuItem.title;
     cell.icon.image = menuItem.icon;
-    
+
     return cell;
 }
 
