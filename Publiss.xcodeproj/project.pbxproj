@@ -93,6 +93,8 @@
 		8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
 		87D9204119F69DAD0016872B /* PUBMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204019F69DAD0016872B /* PUBMainViewController.m */; };
+		87D9204419F6A1E70016872B /* PUBMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204319F6A1E70016872B /* PUBMenuItem.m */; };
+		87D9204719F798210016872B /* PUBMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204619F798210016872B /* PUBMenuTableViewCell.m */; };
 		87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F1294419E2850300A082E2 /* PUBNavigationViewController.m */; };
 		87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */; };
 		87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87FE340019F656AB00BED33B /* PUBMenu.storyboard */; };
@@ -255,6 +257,10 @@
 		87B1962819DD75EC0060353B /* Publiss.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Publiss.podspec; sourceTree = SOURCE_ROOT; };
 		87D9203F19F69DAD0016872B /* PUBMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMainViewController.h; sourceTree = "<group>"; };
 		87D9204019F69DAD0016872B /* PUBMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBMainViewController.m; sourceTree = "<group>"; };
+		87D9204219F6A1E70016872B /* PUBMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMenuItem.h; sourceTree = "<group>"; };
+		87D9204319F6A1E70016872B /* PUBMenuItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBMenuItem.m; sourceTree = "<group>"; };
+		87D9204519F798210016872B /* PUBMenuTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMenuTableViewCell.h; sourceTree = "<group>"; };
+		87D9204619F798210016872B /* PUBMenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBMenuTableViewCell.m; sourceTree = "<group>"; };
 		87F1294319E2850300A082E2 /* PUBNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBNavigationViewController.h; sourceTree = "<group>"; };
 		87F1294419E2850300A082E2 /* PUBNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBNavigationViewController.m; sourceTree = "<group>"; };
 		87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBMenuViewController.h; sourceTree = "<group>"; };
@@ -460,6 +466,10 @@
 				37F2F9A119ED6196003E344D /* PUBKioskLayout.m */,
 				37F2F9B819F13004003E344D /* PUBDimmView.h */,
 				37F2F9B919F13004003E344D /* PUBDimmView.m */,
+				87D9204219F6A1E70016872B /* PUBMenuItem.h */,
+				87D9204319F6A1E70016872B /* PUBMenuItem.m */,
+				87D9204519F798210016872B /* PUBMenuTableViewCell.h */,
+				87D9204619F798210016872B /* PUBMenuTableViewCell.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -824,6 +834,7 @@
 				870110EC180FCF140034B9AC /* PUBAppDelegate.m in Sources */,
 				877665C319ACEA0C000DFFF1 /* PUBPageView.m in Sources */,
 				7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */,
+				87D9204419F6A1E70016872B /* PUBMenuItem.m in Sources */,
 				37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */,
 				877665D319ACEC7B000DFFF1 /* PUBProgressView.m in Sources */,
 				37F2F9B719F11CF6003E344D /* PUBTransitioningDelegate.m in Sources */,
@@ -852,6 +863,7 @@
 				877665B619ACEA06000DFFF1 /* IAPController.m in Sources */,
 				877665D919ACEC8E000DFFF1 /* PUBDownloadButton.m in Sources */,
 				877665EF19ACECF4000DFFF1 /* PUBBugFixFlowLayout.m in Sources */,
+				87D9204719F798210016872B /* PUBMenuTableViewCell.m in Sources */,
 				8776661219ACED83000DFFF1 /* PUBDocument.m in Sources */,
 				8776660419ACED5B000DFFF1 /* PUBPagePreviewViewController.m in Sources */,
 				877665F219ACED0A000DFFF1 /* PUBBaseTransition.m in Sources */,
