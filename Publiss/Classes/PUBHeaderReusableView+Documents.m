@@ -18,7 +18,7 @@
     PUBDocument *document = documents.firstObject;
     
     if (document && [document isKindOfClass:[PUBDocument class]]) {
-        NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:document.publishedID];
+        NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:(NSUInteger)document.publishedID];
         NSURLRequest *urlRequest = [NSURLRequest requestWithURL:featuredImageUrl];
         UIImage *featuredImage = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:featuredImageUrl.absoluteString];
         
@@ -47,7 +47,7 @@
 
 - (void)animateImageWhenLoaded:(UIImageView *)imageView {
     imageView.alpha = 0.0;
-    imageView.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    imageView.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
     
     [UIView animateWithDuration:0.33 animations:^{
         imageView.alpha = 1.0;

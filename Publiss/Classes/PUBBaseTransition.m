@@ -9,6 +9,7 @@
 
 const CGFloat DURATION_PRESENT = .35f;
 const CGFloat DURATION_DISMISS = .30f;
+const CGFloat DIMM_VIEW_ALPHA = .4f;
 
 @implementation PUBBaseTransition
 

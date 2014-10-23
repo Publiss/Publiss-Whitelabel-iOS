@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#define DIMM_VIEW_ALPHA 0.4
 #define DIMM_VIEW_TAG 999
 
 @interface PUBDimmView : UIView

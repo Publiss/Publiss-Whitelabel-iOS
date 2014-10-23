@@ -9,6 +9,7 @@
 
 extern const CGFloat DURATION_PRESENT;
 extern const CGFloat DURATION_DISMISS;
+extern const CGFloat DIMM_VIEW_ALPHA;
 
 typedef NS_ENUM(NSInteger, TransitionMode) { TransitionModePresent = 0, TransitionModeDismiss };
 

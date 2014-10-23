@@ -277,7 +277,7 @@
 }
 
 - (void)removeFeaturedImage {
-    NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:self.publishedID];
+    NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:(NSUInteger)self.publishedID];
     [PUBThumbnailImageCache.sharedInstance removeImageWithURLString:featuredImageUrl.absoluteString];
 }
 
