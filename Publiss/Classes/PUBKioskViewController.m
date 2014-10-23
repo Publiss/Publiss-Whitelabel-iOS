@@ -42,9 +42,11 @@
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
+@property (nonatomic, weak) PUBHeaderReusableView *headerView;
+
 @property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
 @property (nonatomic, strong) PUBDocument *presentedDocument;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (nonatomic, assign) BOOL isPresentingController;
 
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
@@ -54,7 +56,7 @@
 @property (nonatomic, strong) NSTimer *pageTracker;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
-@property (nonatomic, weak) PUBHeaderReusableView *headerView;
+
 
 @end
 
@@ -714,6 +716,12 @@
 }
 
 - (void)presentPreviewForDocument:(PUBDocument *)document {
+    
+    if (self.isPresentingController) {
+        return;
+    }
+    self.isPresentingController = YES;
+    
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
     previewViewController.document = document;
     previewViewController.kioskController = self;
@@ -755,10 +763,18 @@
     controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
     controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     
-    [self presentViewController:controllerToPresent animated:YES completion:nil];
+    [self presentViewController:controllerToPresent animated:YES completion:^{
+        self.isPresentingController = NO;
+    }];
 }
 
 - (void)presentDocument:(PUBDocument *)document {
+    
+    if (self.isPresentingController) {
+        return;
+    }
+    self.isPresentingController = YES;
+    
     self.presentedDocument = document;
     
     PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
@@ -804,16 +820,19 @@
     
     self.transitioningDelegate.documentTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
         if (mode == TransitionModeDismiss) {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [welf.collectionView reloadData];
             });
         }
+        
     };
     
     self.navigationController.delegate = self.transitioningDelegate;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController pushViewController:controllerToPresent animated:YES];
+        welf.isPresentingController = NO;
     });
 }
 
