@@ -39,7 +39,7 @@
     self.tableView.opaque = NO;
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.contentInset = UIEdgeInsetsMake(16, 0, 0, 0);
+    self.tableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -50,7 +50,6 @@
         CGColorRef outerColor = [UIColor colorWithWhite:1.0 alpha:0.0].CGColor;
         CGColorRef innerColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
         self.maskLayer.colors = @[(__bridge id)outerColor, (__bridge id)innerColor];
-        self.maskLayer.locations = @[@(0.0),@(0.05)];
         self.maskLayer.anchorPoint = CGPointZero;
         self.tableView.layer.mask = self.maskLayer;
     }
@@ -61,6 +60,7 @@
     self.maskLayer.bounds = CGRectMake(0, 0,
                                        self.view.frame.size.width,
                                        self.view.frame.size.height);
+    self.maskLayer.locations = @[@(0.0),@(100 * 18 / self.view.frame.size.height / 100)];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
