@@ -15,6 +15,16 @@
 
 @implementation PUBPreviewViewController
 
++ (PUBPreviewViewController *)instantiatePreviewController {
+    if (PUBIsiPad()) {
+        return [[PUBPreviewViewController alloc] initWithNibName:@"PUBPreviewViewController" bundle:nil];
+    }
+    else {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBPreviewViewControlleriPhone" bundle:nil];
+        return [storyboard instantiateViewControllerWithIdentifier:@"iPhonePreviewVC"];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"preview_background"]];

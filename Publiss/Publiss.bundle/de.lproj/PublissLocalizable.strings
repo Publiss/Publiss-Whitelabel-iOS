@@ -24,7 +24,7 @@
 "Your purchases have been restored." = "Deine Einkäufe wurden wiederhergestellt.";
 "Your purchases could not be restored. Please try again later." = "Deine Einkäufe konnten nicht wiederhergestellt werden, bitte versuche es später noch einmal.";
 "Page %tu of %tu done." = "Seite %tu von %tu geladen.";
-"Visit Publiss Website" = "Publiss Website besuchen";
+"Visit Publiss Website" = "Publiss Website";
 "Processing Purchase..." = "Einkauf wird bearbeitet...";
 "PDF is being downloaded ..." = "PDF wird geladen ...";
 "No active internet connection." = "Keine aktive Internetverbindung.";
@@ -34,3 +34,7 @@
 "About Publiss" = "About Publiss";
 "Publiss" = "Publiss";
 "Menu Website URL" = "http://www.publiss.com";
+
+"Do you want to remove the PDF for this document?" = "Wollen Sie das PDF für dieses Dokument entfernen?";
+"Cancel" = "Abbrechen";
+"Yes, remove PDF" = "Ja, PDF entfernen";

@@ -10,6 +10,7 @@
 #import "PUBThumbnailImageCache.h"
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
+#import "PUBDocumentFetcher.h"
 
 @implementation PUBDocument (Helper)
 
@@ -40,6 +41,7 @@
         dateFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss'Z'";
     });
     NSDate *onlineUpdatedAt = [dateFormatter dateFromString:PUBSafeCast(dictionary[@"updated_at"], NSString.class)];
+    NSDate *onlineFeaturedUpdatedAt = [dateFormatter dateFromString:PUBSafeCast(dictionary[@"featured_updated_at"], NSString.class)];
     
     BOOL shouldUpdateValues = NO;
     PUBDocument *document = [PUBDocument findExistingPUBDocumentWithProductID:dictionary[@"apple_product_id"]];
@@ -48,8 +50,10 @@
         document = [PUBDocument createEntity];
         shouldUpdateValues = YES;
     } else {
-        //check if exsisting document should be updated
+        // Check if exsisting document should be updated
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
+        
+        // Save local annotations and delete PDF on update.
         if (shouldUpdateValues && document.state == PUBDocumentStateDownloaded) {
             PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
             [PUBPDFDocument saveLocalAnnotations:pubPDFDocument];
@@ -57,13 +61,26 @@
                 document.state = PUBDocumentStateUpdated;
             }];
         }
+        
+        // Update values if remote featured is different to local.
+        BOOL remoteFeatured = [[dictionary valueForKeyPath:@"featured"] boolValue];
+        BOOL localFeatured = document.featured;
+        
+        shouldUpdateValues = shouldUpdateValues || (remoteFeatured != localFeatured);
+        
+        // TODO: Use == on date object
+        if(onlineFeaturedUpdatedAt &&
+           ![[onlineFeaturedUpdatedAt laterDate:document.featuredUpdatedAt] isEqualToDate:document.featuredUpdatedAt]) {
+            document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
+            [document removeFeaturedImage];
+        }
     }
     
     if (shouldUpdateValues) {
         // Never trust external content.
         @try {
-            document.productID = PUBSafeCast(dictionary[@"apple_product_id"], NSString.class);
             document.publishedID = (uint16_t)[dictionary[@"id"] integerValue];
+            document.productID = PUBSafeCast(dictionary[@"apple_product_id"], NSString.class);
             document.updatedAt = onlineUpdatedAt;
             document.priority = (uint16_t)[dictionary[@"priority"] integerValue];
             document.title = PUBSafeCast(dictionary[@"name"], NSString.class);
@@ -71,6 +88,8 @@
             document.fileDescription = PUBSafeCast(dictionary[@"description"], NSString.class);
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
             document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
+            document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
+            document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
             
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);
@@ -79,8 +98,6 @@
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
         }
-        
-        
     }
 
     return document;
@@ -100,13 +117,17 @@
     return [self findWithPredicate:nil];
 }
 
-+ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending {
++ (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.entity = [self getEntity];
 
     NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending];
     fetchRequest.sortDescriptors = @[sortDescriptor];
 
+    if (predicate != nil) {
+        fetchRequest.predicate = predicate;
+    }
+    
     NSError *error = nil;
     NSArray *results = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:&error];
     
@@ -253,6 +274,11 @@
         return YES;
     }
     return NO;
+}
+
+- (void)removeFeaturedImage {
+    NSURL *featuredImageUrl = [PUBDocumentFetcher.sharedFetcher featuredImageForPublishedDocument:(NSUInteger)self.publishedID];
+    [PUBThumbnailImageCache.sharedInstance removeImageWithURLString:featuredImageUrl.absoluteString];
 }
 
 #pragma mark - Data Wrappers

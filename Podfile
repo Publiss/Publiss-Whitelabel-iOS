@@ -1,10 +1,12 @@
-platform :ios, '7.1'            
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '7.1'
 pod 'AFNetworking', '~> 2.3'
 pod 'Lockbox', '~> 1.4'
 pod 'PSPDFKit'
-pod 'REMenu', '~> 1.9'
-pod 'JDStatusBarNotification', '~> 1.4'
+pod 'JDStatusBarNotification'
 pod 'GoogleAnalytics-iOS-SDK', '~> 3.0'
+pod 'UIActionSheet+Blocks'
+pod 'REFrostedViewController'
 
 post_install do |installer|
 	puts "CREATING VERSION FILE"

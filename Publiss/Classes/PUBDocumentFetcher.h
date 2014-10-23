@@ -35,7 +35,7 @@
 - (NSURL *)coverImageForDocument:(PUBDocument *)document withSize:(CGSize)size;
 // webserver optimized version for partial rendering (50% size, quality 5%, precached)
 - (NSURL *)imageForDocumentOptimized:(PUBDocument *)document page:(NSUInteger)page;
-
+- (NSURL *)featuredImageForPublishedDocument:(NSUInteger)publishedDocumentId;
 // Get download status
 - (PSPDFRemoteFileObject *)remoteContentObjectForDocument:(PUBDocument *)document page:(NSUInteger)page;
 

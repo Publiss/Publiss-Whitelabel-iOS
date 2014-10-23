@@ -10,5 +10,6 @@
 @interface UIColor (PUBDesign)
 
 + (UIColor *)publissPrimaryColor;
++ (UIColor *)kioskBackgroundColor;
 
 @end

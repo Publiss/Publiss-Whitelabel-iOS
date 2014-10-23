@@ -16,6 +16,8 @@
 @property (nonatomic, strong) dispatch_queue_t ioQueue;
 @end
 
+//TODO: Log all error objects for file operations.
+
 @implementation PUBThumbnailImageCache
 
 - (id)init {
@@ -68,6 +70,16 @@
                                 withIntermediateDirectories:YES
                                                  attributes:nil
                                                       error:NULL];
+    });
+}
+
+- (void)removeImageWithURLString:(NSString *)URLString {
+    dispatch_async(self.ioQueue, ^{
+        NSError *error;
+        BOOL removed = [NSFileManager.defaultManager removeItemAtPath:[self cacheFilePathForURLString:URLString] error:&error];
+        if (!removed) {
+            NSLog(@"Warning: There was no file to remove at path: %@\nError: %@", URLString, error);
+        }
     });
 }
 

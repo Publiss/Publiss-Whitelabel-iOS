@@ -80,8 +80,6 @@
     
     [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.document competionHandler:^(BOOL unpublished) {
         if (unpublished) {
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                              object:NULL];
             [self dismissViewControllerAnimated:YES completion:^{
                 if (self.kioskController) {
                     [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
@@ -96,19 +94,18 @@
 #pragma mark - Dismiss ViewController
 
 // http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
+// FOR iOS8 and iOS7.1: http://stackoverflow.com/a/25844208
 - (void)handleTap:(UITapGestureRecognizer *)sender {
-    if ([sender isKindOfClass:UITapGestureRecognizer.class]) {
-        if (sender.state == UIGestureRecognizerStateEnded) {
-            CGPoint location = [sender locationInView:nil];
-            if (![self.view pointInside:[self.view convertPoint:location fromView:self.view.window] withEvent:nil]) {
-                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                                  object:NULL];
-                [self dismissViewControllerAnimated:YES completion:NULL];
-            }
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        UIView *rootView = self.view.window.rootViewController.view;
+        CGPoint location = [sender locationInView:rootView];
+        if (![self.view pointInside:[self.view convertPoint:location fromView:rootView] withEvent:nil]) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                [self.view.window removeGestureRecognizer:sender];
+            }];
         }
     }
 }
-
 
 - (void)downloadButtonTouchUpInside:(id)sender {
     if ([sender isKindOfClass:PUBDownloadButton.class]) {
@@ -195,7 +192,7 @@
 - (void)openPDFWithWithDocument:(PUBDocument *)document {
     [self dismissViewControllerAnimated:YES completion:^{
         if (self.kioskController) {
-            [self.kioskController showDocument:document forCell:self.cell forIndex:self.selectedIndex];
+            [self.kioskController presentDocument:document];
         }
     }];
 }

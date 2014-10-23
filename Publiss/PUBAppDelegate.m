@@ -10,6 +10,7 @@
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
+#import "PUBMainViewController.h"
 
 @implementation PUBAppDelegate
 
@@ -21,6 +22,8 @@
     
     [Publiss.staticInstance setupWithLicenseKey:nil];
 
+    self.window.rootViewController = (UIViewController *)PUBMainViewController.mainViewController;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 

@@ -14,8 +14,7 @@
 @interface PUBParentPreviewViewController : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource>
 
 @property (strong, nonatomic) PUBKioskViewController *kioskController;
-@property (strong, nonatomic) PUBCellView *cell;
-@property (assign, nonatomic) NSUInteger selectedIndex;
+
 @property (strong, nonatomic) PUBDocument *document;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *descriptionText;

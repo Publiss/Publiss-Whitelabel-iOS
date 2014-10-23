@@ -7,8 +7,9 @@
 
 #import "PUBBaseTransition.h"
 
-const CGFloat DURATION_PRESENT = 3.0f;
-const CGFloat DURATION_DISMISS = 3.0f;
+const CGFloat DURATION_PRESENT = .35f;
+const CGFloat DURATION_DISMISS = .30f;
+const CGFloat DIMM_VIEW_ALPHA = .4f;
 
 @implementation PUBBaseTransition
 
@@ -17,19 +18,23 @@ const CGFloat DURATION_DISMISS = 3.0f;
 }
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    NSAssert(NO, @"needs to be overwritten");
+    NSAssert(NO, @"Needs to be overwritten.");
 }
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    _transitionMode = TransitionModePresent;
-    return self;
+//TODO: Move in UINavigationControllerCategory
+- (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration {
+    CATransition *transition = [CATransition animation];
+    transition.duration = duration;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionFade;
+    
+    [controller.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
 }
 
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    _transitionMode = TransitionModeDismiss;
-    return self;
+- (void)animationEnded:(BOOL)transitionCompleted {
+    if (self.animationEndedBlock) {
+        self.animationEndedBlock(transitionCompleted, _transitionMode);
+    }
 }
 
 @end

@@ -20,7 +20,6 @@
 #import "PUBPDFDocument.h"
 #import "IAPController.h"
 #import "PUBHTTPRequestManager.h"
-#import <REMenu/REMenu.h>
 #import "JDStatusBarNotification.h"
 #import "UIImage+PUBTinting.h"
 #import "PSPDFWebViewController.h"
@@ -28,26 +27,35 @@
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
+#import "PUBKioskLayout.h"
+#import "PUBHeaderReusableView+Documents.h"
+#import "UIActionSheet+Blocks.h"
 
-@interface PUBKioskViewController () <UIViewControllerTransitioningDelegate, PSPDFViewControllerDelegate, UIAlertViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
-    NSUInteger _animationCellIndex;
-    BOOL _animationDoubleWithPageCurl;
-    BOOL _animateViewWillAppearWithFade;
-}
+#import "PUBTransitioningDelegate.h"
+#import "PUBFadeTransition.h"
+#import "PUBDocumentTransition.h"
+#import "REFrostedViewController.h"
+#import "PUBMenuItem.h"
+#import "PUBMenuItemManager.h"
 
-@property (nonatomic, assign) BOOL isOpening;
-@property (nonatomic, strong) PUBScaleTransition *scaleTransition;
-@property (nonatomic, copy) NSArray *documentArray;
+@interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
+
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
-@property (nonatomic, strong) UIView *dimView;
-@property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
-@property (nonatomic, strong) UIActivityIndicatorView *spinner;
-@property (nonatomic, strong) NSTimer *pageTracker;
-@property (nonatomic, strong) REMenu *menu;
-@property (nonatomic, strong) UIImageView *documentView;
-@property (nonatomic, strong) PUBDocument *lastOpenedDocument;
+@property (nonatomic, strong) PUBKioskLayout *kioskLayout;
+@property (nonatomic, weak) PUBHeaderReusableView *headerView;
 
+@property (nonatomic, strong) PUBTransitioningDelegate *transitioningDelegate;
+@property (nonatomic, strong) PUBDocument *presentedDocument;
+@property (nonatomic, assign) BOOL isPresentingController;
+
+@property (nonatomic, copy) NSArray *featuredDocuments;
+@property (nonatomic, copy) NSArray *publishedDocuments;
+
+@property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
+@property (nonatomic, strong) NSTimer *pageTracker;
+
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -57,52 +65,26 @@
     NSNumber *trackedPageTime;
 }
 
-#pragma mark - UIViewController
-
 + (PUBKioskViewController *)kioskViewController {
-    return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateInitialViewController];
+    return [PUBKioskViewController kioskViewControllerWithStoryboardName:@"PUBKiosk"];
 }
+
++ (PUBKioskViewController *)kioskViewControllerWithStoryboardName:(NSString *)storyboard {
+    return [[UIStoryboard storyboardWithName:storyboard bundle:nil] instantiateInitialViewController];
+}
+
+#pragma mark - UIViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.coverImageDictionary = [NSMutableDictionary dictionary];
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"ipad_background_portrait"]] colorWithAlphaComponent:1.0f];
     self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:1.0f];
+    
+    self.coverImageDictionary = [NSMutableDictionary dictionary];
+    
     [self setupNavigationItems];
-    self.scaleTransition = [PUBScaleTransition new];
-    self.transitioningDelegate = self;
-    
-    self.collectionView.collectionViewLayout = [[PUBBugFixFlowLayout alloc] init];
-    [self.collectionView.collectionViewLayout invalidateLayout];
-    
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-
-    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"]
-                                                                 style:UIBarButtonItemStylePlain
-                                                                target:self
-                                                                action:@selector(showMenu:)];
-    
-    self.navigationItem.leftBarButtonItems = @[menuItem];
+    [self setupCollectionView];
     [self setupMenu];
-
-    self.dimView = [[UIView alloc] initWithFrame:self.view.bounds];
-    self.dimView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.dimView.userInteractionEnabled = NO;
-    self.dimView.backgroundColor = [UIColor blackColor];
-    self.dimView.alpha = 0.0f;
-    self.dimView.hidden = YES;
-    [self.view addSubview:self.dimView];
-    
-    self.spinner = [UIActivityIndicatorView new];
-    self.spinner.activityIndicatorViewStyle = UIActivityIndicatorViewStyleWhite;
-    self.spinner.color = [UIColor publissPrimaryColor];
-    self.spinner.frame = CGRectMake(self.view.center.x - 10.f, self.view.center.y - 10.f, 20.f, 20.f);
-    self.spinner.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-    [self.collectionView addSubview:self.spinner];
-    self.spinner.hidden = YES;
     
     [JDStatusBarNotification addStyleNamed:PurchasedMenuStyle
                                    prepare:^JDStatusBarStyle *(JDStatusBarStyle *style) {
@@ -113,174 +95,47 @@
                                        return style;
                                    }];
     
-    UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
-    longpressGesture.delegate = self;
-
-    [self.collectionView addGestureRecognizer:longpressGesture];
+    self.transitioningDelegate = [PUBTransitioningDelegate new];
     
     [self refreshDocumentsWithActivityViewAnimated:YES];
-}
-
-- (void)showMenu:(id)sender {
-    if (!self.menu.isOpen) {
-        [self.menu showFromNavigationController:self.navigationController];
-    }
-    else {
-        [self.menu close];
-    }
-}
-
-- (void)setupMenu {
-    REMenuItem *reloadItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Reload")
-                                                      subtitle:nil
-                                                         image:[[UIImage imageNamed:@"refresh"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                              highlightedImage:nil
-                                                        action:^(REMenuItem *item) {
-                                                            [self refreshDocumentsWithActivityViewAnimated:YES];
-                                                        }];
+    [self.view addGestureRecognizer:[UIPanGestureRecognizer.alloc initWithTarget:self action:@selector(panGestureRecognized:)]];
     
-    
-    REMenuItem *visitSiteItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Visit Publiss Website")
-                                                         subtitle:nil
-                                                            image:[[UIImage imageNamed:@"web"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                                 highlightedImage:nil
-                                                           action:^(REMenuItem *item) {
-                                                               [self visitPublissSite];
-                                                           }];
-    
-    
-    REMenuItem *aboutItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"About Publiss")
-                                                     subtitle:nil
-                                                        image:[[UIImage imageNamed:@"about"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                             highlightedImage:nil
-                                                       action:^(REMenuItem *item) {
-                                                           [self showAbout];
-                                                       }];
-    
-    NSMutableArray *menuItems = @[
-                                  reloadItem,
-                                  visitSiteItem,
-                                  aboutItem,
-                                  ].mutableCopy;
-    
-    if (PUBConfig.sharedConfig.inAppPurchaseActive) {
-        REMenuItem *restoreItem = [[REMenuItem alloc] initWithTitle:PUBLocalize(@"Restore Purchases")
-                                                           subtitle:nil
-                                                              image:[[UIImage imageNamed:@"restore"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f]
-                                                   highlightedImage:nil
-                                                             action:^(REMenuItem *item) {
-                                                                 [self restorePurchases];
-                                                             }];
-        [menuItems insertObject:restoreItem atIndex:1];
-        
-#ifdef DEBUG
-        REMenuItem *clearItem = [[REMenuItem alloc] initWithTitle:@"(DEBUG) Clear"
-                                                         subtitle:nil
-                                                            image:nil
-                                                 highlightedImage:nil
-                                                           action:^(REMenuItem *item) {
-                                                               [self clearPurchases];
-                                                           }];
-        
-        [menuItems addObject:clearItem];
-#endif
-    }
-    
-    self.menu = [[REMenu alloc] initWithItems:menuItems];
-    
-    self.menu.textAlignment = NSTextAlignmentLeft;
-    self.menu.bounce = YES;
-    self.menu.bounceAnimationDuration = .1f;
-    self.menu.animationDuration = .29f;
-    self.menu.separatorHeight = 1.f;
-    self.menu.separatorColor = self.menu.highlightedSeparatorColor = [[UIColor blackColor] colorWithAlphaComponent:.1f];
-    self.menu.borderWidth = 0.0f;
-    self.menu.textColor = UIApplication.sharedApplication.delegate.window.tintColor;
-    self.menu.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.f];
-    self.menu.textShadowOffset = CGSizeZero;
-    self.menu.shadowColor = [UIColor clearColor];
-    self.menu.highlightedBackgroundColor = [UIColor colorWithWhite:1.f alpha:.3f];
-    self.menu.highlightedTextShadowColor = [UIColor clearColor];
-    self.menu.highlightedTextColor = UIApplication.sharedApplication.delegate.window.tintColor;
-    self.menu.liveBlur = YES;
-    self.menu.liveBlurBackgroundStyle = REMenuLiveBackgroundStyleLight;
-    self.menu.textOffset = CGSizeMake(66.f, 0.f);
-    self.menu.imageOffset = CGSizeMake(18.f, 0.f);
-    self.menu.backgroundColor = UIColor.clearColor;
-    self.menu.liveBlurTintColor = [UIColor  publissPrimaryColor];
+    self.refreshControl = UIRefreshControl.alloc.init;
+    [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:self.refreshControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(enableUIInteraction:) name:PUBEnableUIInteractionNotification object:nil];
     [dnc addObserver:self selector:@selector(trackPage) name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc addObserver:self selector:@selector(refreshDocumentsWithActivityViewAnimated:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [UIView animateWithDuration:0.25f animations:^{
-        self.navigationController.navigationBar.alpha = 1.f;
-    }];
-    [UIApplication.sharedApplication setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
-    [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    // Animate back to grid cell?
-    if (self.documentView) {
-        [self.collectionView layoutSubviews]; // ensure cells are laid out
-        
-        // Convert the coordinates into view coordinate system.
-        // We can't remember those, because the device might has been rotated.
-        PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:_animationCellIndex inSection:0]];
-        [cell setupForDocument:self.lastOpenedDocument];
-        CGRect relativeCellRect = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
-        
-        self.documentView.frame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl && UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
-        
-        // Update image for a nicer animation (get the correct page)
-        UIImage *coverImage = [self imageForDocument:self.lastOpenedDocument];
-        if (coverImage) self.documentView.image = coverImage;
-        
-        // Start animation!
-        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
-            self.documentView.frame = relativeCellRect;
-            [self.documentView.subviews.lastObject setAlpha:0.f];
-            self.dimView.alpha = 0.0f;
-        } completion:^(BOOL finished) {
-            cell.hidden = NO;
-            [UIView transitionWithView:self.documentView duration:0.25f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-                self.documentView.alpha = 0.0f;
-            } completion:^(BOOL finish) {
-                [self.documentView removeFromSuperview];
-                self.documentView = nil;
-                self.dimView.hidden = YES;
-                
-                if (self.shouldRetrieveDocuments) {
-                    self.shouldRetrieveDocuments = NO;
-                    [self refreshDocumentsWithActivityViewAnimated:YES];
-                }
-            }];
-        }];
+    if (self.shouldRetrieveDocuments) {
+        self.shouldRetrieveDocuments = NO;
+        [self refreshDocumentsWithActivityViewAnimated:YES];
     }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
-
+    
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc removeObserver:self name:PUBEnableUIInteractionNotification object:nil];
     [dnc removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+    
     [dnc removeObserver:self name:PUBDocumentFetcherUpdateNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentDownloadNotification object:nil];
     [dnc removeObserver:self name:PUBDocumentPurchaseFinishedNotification object:nil];
-    [dnc removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
     
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
@@ -288,47 +143,188 @@
     }
 }
 
-#pragma mark - Private
+#pragma mark - Setup
+
+- (void)setupNavigationItems {
+    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
+    self.navigationItem.title = PUBLocalize(@"Publiss");
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
+}
+
+- (void)setupCollectionView {
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    self.kioskLayout = [[PUBKioskLayout alloc] init];
+    self.collectionView.collectionViewLayout = self.kioskLayout;
+    [self.collectionView.collectionViewLayout invalidateLayout];
+    [self.collectionView registerClass:[PUBHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBHeaderReusableView"];
+    
+    UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
+    [self.collectionView addGestureRecognizer:longpressGesture];
+    
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+}
+
+- (void)setupRefreshControl {
+    if (!self.refreshControl) {
+        self.refreshControl = UIRefreshControl.alloc.init;
+        self.refreshControl.tintColor = [UIColor publissPrimaryColor];
+        [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
+        [self.collectionView addSubview:self.refreshControl];
+    }
+}
+
+- (void)setupMenu {
+    UIBarButtonItem *menuItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"menu_icon"]
+                                                                 style:UIBarButtonItemStylePlain
+                                                                target:self
+                                                                action:@selector(showMenu:)];
+    self.navigationItem.leftBarButtonItems = @[menuItem];
+    
+    PUBMenuItem *visit = PUBMenuItem.alloc.init;
+    visit.title = PUBLocalize(@"Visit Publiss Website");
+    visit.icon = [[UIImage imageNamed:@"web"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+    visit.actionBlock = ^() {
+        [self visitPublissSite];
+    };
+    [PUBMenuItemManager.sharedInstance addMenuItem:visit];
+    
+    PUBMenuItem *about = PUBMenuItem.alloc.init;
+    about.title = PUBLocalize(@"About Publiss");
+    about.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+    about.actionBlock = ^() {
+        [self showAbout];
+    };
+    [PUBMenuItemManager.sharedInstance addMenuItem:about];
+    
+    if (PUBConfig.sharedConfig.inAppPurchaseActive) {
+        PUBMenuItem *restore = PUBMenuItem.alloc.init;
+        restore.title = PUBLocalize(@"Restore Purchases");
+        restore.icon = [[UIImage imageNamed:@"restore"] imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+        restore.actionBlock = ^() {
+            [self restorePurchases];
+        };
+        [PUBMenuItemManager.sharedInstance addMenuItem:restore];
+        
+#ifdef DEBUG
+        PUBMenuItem *clear = PUBMenuItem.alloc.init;
+        clear.title = @"(DEBUG) Clear";
+        clear.actionBlock = ^() {
+            [self clearPurchases];
+        };
+        [PUBMenuItemManager.sharedInstance addMenuItem:clear];
+#endif
+    }
+}
+
+#pragma mark - Gesture
+
+- (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
+    [self.view endEditing:YES];
+    [self.frostedViewController.view endEditing:YES];
+    [self.frostedViewController panGestureRecognized:sender];
+}
+
+#pragma mark - Actions
 
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated {    
     self.collectionView.userInteractionEnabled = NO;
     self.editButtonItem.enabled = NO;
     
-    if (![self.spinner isAnimating] && animated) {
-        [self.spinner startAnimating];
+    if (!self.refreshControl.isRefreshing) {
+        [self.refreshControl beginRefreshing];
     }
     
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
-        self.documentArray = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES];
+        self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured != YES"]];
+        self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        
+        self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
+        self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
+        
         [self.collectionView reloadData];
+        
         self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
-        
-        [self.spinner stopAnimating];
+        [self.refreshControl endRefreshing];
     }];
 }
 
-#pragma mark - CollectionView DataSoure
+- (void)showMenu:(id)sender {
+    [self.frostedViewController presentMenuViewController];
+}
+
+- (void)showAbout {
+    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss")
+                                message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version]
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
+}
+
+- (void)visitPublissSite {
+    if (self.navigationController.topViewController == self) {
+        PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
+        self.navigationController.delegate = nil;
+        [self.navigationController pushViewController:webViewController animated:YES];
+    }
+}
+
+#pragma mark - UICollectionView DataSoure
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.documentArray.count;
+    return self.publishedDocuments.count;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    PUBHeaderReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                           withReuseIdentifier:@"PUBHeaderReusableView"
+                                                                                                  forIndexPath:indexPath];
+    [header setupWithDocuments:self.featuredDocuments];
+    
+    header.singleTapBlock = ^() {
+        [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
+    };
+    
+    __weak typeof(header) weakHeader = header;
+    header.longPressBlock = ^() {
+        
+        PUBDocument *document = self.featuredDocuments.firstObject;
+        
+        if (document.state == PUBDocumentStateDownloaded) {
+            [UIActionSheet showInView:weakHeader
+                            withTitle:PUBLocalize(@"Do you want to remove the PDF for this document?")
+                    cancelButtonTitle:PUBLocalize(@"Cancel")
+               destructiveButtonTitle:PUBLocalize(@"Yes, remove PDF")
+                    otherButtonTitles:nil
+                             tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
+                                 if (buttonIndex == actionSheet.destructiveButtonIndex) {
+                                     [self removePdfForDocument:document];
+                                 }
+                             }];
+        }
+    };
+    
+    self.headerView = header;
+    
+    return header;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
     PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    PUBDocument *document = (self.documentArray)[indexPath.item];
+    PUBDocument *document = (self.publishedDocuments)[indexPath.item];
     [cell setupForDocument:(PUBDocument *)document];
     [cell.deleteButton addTarget:self
                           action:@selector(deleteButtonClicked:)
                 forControlEvents:UIControlEventTouchUpInside];
-    
     
     // first look in cover image cache if there is already a preprocessed cover image
     NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
@@ -339,13 +335,14 @@
     
     if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
         cell.coverImage.image = thumbnail;
+        cell.coverImage.hidden = NO;
         [cell setNeedsLayout];
     } else {
         [cell.activityIndicator startAnimating];
         cell.coverImage.hidden = YES;
         cell.badgeView.hidden = YES;
         cell.namedBadgeView.hidden = YES;
-        NSMutableURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
+        NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         
         __weak PUBCellView *weakCell = cell;
         __weak PUBDocument *weakDocument = document;
@@ -385,121 +382,11 @@
     return cell;
 }
 
-#pragma mark - UICollectionView Delegate
-
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CGSize size = CGSizeZero;
-    if (PUBIsiPad()) {
-        size = CGSizeMake(160.0f, 160.0f);
-    } else {
-        size = CGSizeMake(140.f, 140.f);
-    }
-    return size;
-}
-
-#pragma mark CollectionViewFlowLayout
-
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout *)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-    UIEdgeInsets insets = UIEdgeInsetsZero;
-    if (PUBIsiPad()) {
-        insets = UIEdgeInsetsMake(LINE_HEIGHT, 30.0f, 30.0f, 30.0f);
-    } else {
-        insets = UIEdgeInsetsMake(50.f, 15.f, 50.8f, 15.f);
-    }
-    return insets;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout *)collectionViewLayout
-minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    CGFloat space = 0.0f;
-    if (PUBIsiPad()) {
-        space = 20.0f;
-    } else {
-        space = 10.f;
-    }
-    return space;
-}
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout *)collectionViewLayout
-minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    CGFloat space = 0.0f;
-    if (PUBIsiPad()) {
-        space = LINE_HEIGHT + 1.f;
-    } else {
-        space = 51.f;
-    }
-    return space;
-}
-
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = self.documentArray[indexPath.item];
-    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-    
-    switch (document.state) {
-        case PUBDocumentStateDownloaded:
-            [self showDocument:document forCell:cell forIndex:indexPath.row];
-            break;
-            
-        case PUBDocumentPurchased:
-            [self showDocument:document forCell:cell forIndex:indexPath.row];
-            break;
-            
-        default:
-            self.scaleTransition.cell = cell;
-            
-            if (PUBIsiPad()) {
-                PUBPreviewViewController *previewViewController = [[PUBPreviewViewController alloc] initWithNibName:@"PUBPreviewViewController" bundle:nil];
-                previewViewController.document = document;
-                previewViewController.kioskController = self;
-                previewViewController.cell = cell;
-                previewViewController.selectedIndex = indexPath.row;
-                self.scaleTransition.modal = YES;
-                self.scaleTransition.dimView = self.dimView;
-                previewViewController.modalPresentationStyle = UIModalPresentationCustom;
-                previewViewController.transitioningDelegate = self;
-                self.view.userInteractionEnabled = NO;
-                self.collectionView.userInteractionEnabled = NO;
-                [self presentViewController:previewViewController animated:YES completion:nil];
-            } else {
-                UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBPreviewViewControlleriPhone" bundle:nil];
-                PUBiPhonePreviewViewController *previewViewController = [storyboard instantiateViewControllerWithIdentifier:@"iPhonePreviewVC"];
-                previewViewController.document = document;
-                previewViewController.kioskController = self;
-                previewViewController.cell = cell;
-                previewViewController.selectedIndex = indexPath.row;
-                self.scaleTransition.modal = YES;
-                UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:previewViewController];
-                navController.modalPresentationStyle = UIModalPresentationCustom;
-                navController.transitioningDelegate = self;
-                self.view.userInteractionEnabled = NO;
-                self.collectionView.userInteractionEnabled = NO;
-                [self presentViewController:navController animated:YES completion:nil];
-            }
-            
-            break;
-    }
-}
-
-#pragma mark - UIViewControllerAnimatedTransitioning delegate
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented
-                                                                  presentingController:(UIViewController *)presenting
-                                                                      sourceController:(UIViewController *)source {
-    self.scaleTransition.transitionMode = TransitionModePresent;
-    return self.scaleTransition;
-}
-
-- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed {
-    self.scaleTransition.transitionMode = TransitionModeDismiss;
-    return self.scaleTransition;
+    PUBDocument *document = self.publishedDocuments[indexPath.item];
+    [self presentDocumentAccordingToState:document];
 }
 
 #pragma mark - Actions
@@ -508,16 +395,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([button isKindOfClass:UIButton.class]) {
         NSIndexPath *indexPath = [self.collectionView
                                   indexPathForItemAtPoint:[self.collectionView convertPoint:button.center fromView:button.superview]];
-        PUBDocument *document = (self.documentArray)[indexPath.row];
-        [document deleteDocument:^{
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBStatisticsDocumentDeletedNotification
-                                                              object:nil
-                                                            userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f",
-                                                                                                   NSDate.date.timeIntervalSince1970],
-                                                                       PUBStatisticsDocumentIDKey: document.productID,
-                                                                       PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
-            [self.collectionView reloadData];
-        }];
+        PUBDocument *document = (self.publishedDocuments)[indexPath.row];
+        [self removePdfForDocument:document];
     }
 }
 
@@ -591,7 +470,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         
         if (indexPath) {
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            PUBDocument *document = self.documentArray[indexPath.item];
+            PUBDocument *document = self.publishedDocuments[indexPath.item];
             
             CGFloat endAlpha;
             CGAffineTransform endTransform;
@@ -626,141 +505,25 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                      }
                                  }
                              }];
-            
         }
     }
 }
 
 #pragma mark - Helper
 
-- (UIImage *)imageForDocument:(PUBDocument *)document {
-    if (!document) return nil;
-    
-    NSUInteger lastPage = document.lastViewState.page;
-    UIImage *coverImage = [PSPDFCache.sharedCache imageFromDocument:[PUBPDFDocument documentWithPUBDocument:document]
-                                                               page:lastPage
-                                                               size:UIScreen.mainScreen.bounds.size
-                                                            options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderQueue|PSPDFCacheOptionMemoryStoreAlways];
-    return coverImage;
-}
-
-- (void)showDocument:(PUBDocument *)document forCell:(PUBCellView *)cell forIndex:(NSUInteger)index {
-    NSURL *URL = document.localDocumentURL;
-    if (!URL) {
-        PUBLogError(@"Failed loading local document: %@", URL.absoluteString);
-    } else {
-        if (self.isOpening) {
-            return;
-        }
-        self.view.userInteractionEnabled = NO;
-        self.collectionView.userInteractionEnabled = NO;
-        self.isOpening = YES;
-        self.lastOpenedDocument = document;
-        PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
-        [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
-        PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument];
-        pdfController.delegate = self;
-        pdfController.kioskViewController = self;
-        
-        UIImage *coverImage = [self imageForDocument:document];
-        if (nil == coverImage) {
-            coverImage = cell.coverImage.image;
-        }
-        CGRect cellCoords = [cell.coverImage convertRect:cell.coverImage.bounds toView:self.view];
-        UIImageView *coverImageView = [[UIImageView alloc] initWithImage:coverImage];
-        coverImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
-        coverImageView.frame = cellCoords;
-        coverImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self.view addSubview:coverImageView];
-        self.documentView = coverImageView;
-        _animationCellIndex = index;
-        
-        if (!PUBIsiPad()) {
-            [UIApplication.sharedApplication setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-        }
-
-        // If we have a different page, fade to that page.
-        UIImageView *targetPageImageView = nil;
-        if (pdfController.page != 0 && !pdfController.isDoublePageMode) {
-            UIImage *targetPageImage = [PSPDFCache.sharedCache imageFromDocument:pdfDocument page:pdfController.page size:UIScreen.mainScreen.bounds.size options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
-            if (targetPageImage) {
-                targetPageImageView = [[UIImageView alloc] initWithImage:targetPageImage];
-                targetPageImageView.frame = self.documentView.bounds;
-                targetPageImageView.contentMode = UIViewContentModeScaleAspectFit;
-                targetPageImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-                targetPageImageView.alpha = 0.f;
-                [self.documentView addSubview:targetPageImageView];
-            }
-        }
-        cell.hidden = YES;
-        self.dimView.hidden = NO;
-        [UIView animateWithDuration:0.3f delay:0.f options:0 animations:^{
-            self.navigationController.navigationBar.alpha = 0.f;
-            self.dimView.alpha = 1.0f;
-            _animationDoubleWithPageCurl = pdfController.configuration.pageTransition == PSPDFPageTransitionCurl && pdfController.isDoublePageMode;
-            CGRect newFrame = [self magazinePageCoordinatesWithDoublePageCurl:_animationDoubleWithPageCurl onFirstPage:(self.lastOpenedDocument.lastViewState.page == 0)];
-            coverImageView.frame = newFrame;
-            targetPageImageView.alpha = 1.f;
-        } completion:^(BOOL finished) {
-            CATransition *transition = [CATransition animation];
-            transition.duration = 0.25f;
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-            transition.type = kCATransitionFade;
-            [self.navigationController.navigationBar.layer addAnimation:transition forKey:kCATransition];
-            self.isOpening = NO;
-            self.view.userInteractionEnabled = YES;
-            self.collectionView.userInteractionEnabled = YES;
-            [self.navigationController pushViewController:pdfController animated:NO];
-            [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
-                                                              object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
-                                                                                    PUBStatisticsDocumentIDKey: document.productID,
-                                                                                    PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
-        }];
-    }
-}
-
-// Calculates where the document view will be on screen.
-- (CGRect)magazinePageCoordinatesWithDoublePageCurl:(BOOL)doublePageCurl onFirstPage:(BOOL)firstPage {
-    CGRect newFrame = self.view.frame;
-
-    // Animation needs to be different if we are in pageCurl mode.
-    if (doublePageCurl) {
-        newFrame.size.width /= 2;
-        if (firstPage) {
-            newFrame.origin.x += newFrame.size.width;
-        } else {
-            newFrame.origin.x = 0;
-        }
-    }
-    return newFrame;
-}
-
-- (void)setupNavigationItems {
-    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationItem.title = PUBLocalize(@"Publiss");
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
-}
-
-- (void)showAbout {
-    [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Publiss") message:[NSString stringWithFormat:PUBLocalize(@"About Publiss %@ \n %@"), PUBVersionString(), PSPDFKit.sharedInstance.version] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-}
-
-#pragma mark private
-
-- (void)visitPublissSite {
-    PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
-    [self.navigationController pushViewController:webViewController animated:YES];
+- (void)removePdfForDocument:(PUBDocument *)document {
+    [document deleteDocument:^{
+        [NSNotificationCenter.defaultCenter postNotificationName:PUBStatisticsDocumentDeletedNotification
+                                                          object:nil
+                                                        userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f",
+                                                                                               NSDate.date.timeIntervalSince1970],
+                                                                   PUBStatisticsDocumentIDKey: document.productID,
+                                                                   PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
+        [self.collectionView reloadData];
+    }];
 }
 
 #pragma mark - Notifications
-
-- (void)enableUIInteraction:(NSNotification *)notification {
-    if (!self.view.userInteractionEnabled) {
-        self.collectionView.userInteractionEnabled = YES;
-        self.view.userInteractionEnabled = YES;
-    }
-}
 
 - (void)trackPage {
     [self.pageTracker fire];
@@ -770,7 +533,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [[notification.userInfo allKeys] firstObject];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document && document.state == PUBDocumentStateLoading) {
             NSDictionary *documentProgress = notification.userInfo[document.productID];
@@ -779,6 +542,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
             [cell setupForDocument:document];
         }
+        
+        
     }
 }
 
@@ -786,14 +551,27 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [notification.userInfo objectForKey:PUBStatisticsDocumentIDKey];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
-        if (document) {
-            document.state = PUBDocumentStateDownloaded;
-            [PUBCoreDataStack.sharedCoreDataStack saveContext];
-            
-            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            [cell setupForDocument:document];
+        if (!indexPath) {
+            PUBDocument *featured = self.featuredDocuments.firstObject;
+            if (featured && [featured.productID isEqual:productID]) {
+                document = featured;
+                document.state = PUBDocumentStateDownloaded;
+                [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                
+                [self.headerView setupWithDocuments:@[document]];
+                [self.collectionView.collectionViewLayout invalidateLayout];
+            }
+        }
+        else {
+            if (document) {
+                document.state = PUBDocumentStateDownloaded;
+                [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                
+                PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell setupForDocument:document];
+            }
         }
     }
 }
@@ -801,7 +579,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 - (void)documentPurchased:(NSNotification *)notification {
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSIndexPath *indexPath = [self indexPathForProductID:notification.userInfo[@"productID"]];
-        PUBDocument *document = self.documentArray[indexPath.item];
+        PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document) {
             document.state = PUBDocumentPurchased;
@@ -820,8 +598,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     
     NSIndexPath *indexPath = self.indexPathsForDocuments[productID];
     if (!indexPath) {
-        for (NSInteger i = 0; i < self.documentArray.count; i++) {
-            PUBDocument *document = self.documentArray[i];
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
             if ([document.productID isEqualToString:productID]) {
                 indexPath = [NSIndexPath indexPathForItem:i inSection:0];
                 
@@ -836,8 +614,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     return indexPath;
 }
 
-- (void)setDocumentArray:(NSArray *)documentArray {
-    _documentArray = documentArray;
+- (void)setPublishedDocuments:(NSArray *)documentArray {
+    _publishedDocuments = documentArray;
     self.indexPathsForDocuments = nil;
 }
 
@@ -857,11 +635,12 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didLoadPageView:(PSPDFPageView *)pageView  {
-    self.scaleTransition.pageView = (PUBPageView *)pageView;
     [self trackPage];
 }
 
 - (void)pdfViewController:(PSPDFViewController *)pdfController didShowPageView:(PSPDFPageView *)pageView {
+    self.transitioningDelegate.documentTransition.transitionImage = pageView.contentView.image;
+    
     if (self.pageTracker.isValid) {
         [self.pageTracker invalidate];
     }
@@ -878,6 +657,8 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                                        repeats:NO];
 
 }
+
+#pragma mark - Publiss Statistics
 
 - (void)updateUpdateTrackingInformationWithProductID:(NSTimer *)timer {
     NSNumber *currentTime = @(NSDate.date.timeIntervalSince1970);
@@ -910,6 +691,180 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
                                                             userInfo:pageTrack];
         }
     }
+}
+
+- (void)dispatchStatisticsDocumentDidOpen:(PUBDocument *)document {
+    [NSNotificationCenter.defaultCenter postNotificationName:PUBDocumentDidOpenNotification
+                                                      object:nil userInfo:@{PUBStatisticsTimestampKey: [NSString stringWithFormat:@"%.0f", NSDate.date.timeIntervalSince1970],
+                                                                            PUBStatisticsDocumentIDKey: document.productID,
+                                                                            PUBStatisticsEventKey: PUBStatisticsEventOpenKey }];
+}
+
+#pragma mark - Present Preview/Document
+
+- (void)presentDocumentAccordingToState:(PUBDocument *)document {
+    if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentDocument:document];
+        });
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self presentPreviewForDocument:document];
+        });
+    }
+}
+
+- (void)presentPreviewForDocument:(PUBDocument *)document {
+    
+    if (self.isPresentingController) {
+        return;
+    }
+    self.isPresentingController = YES;
+    
+    PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
+    previewViewController.document = document;
+    previewViewController.kioskController = self;
+    
+    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    if (indexPath) {
+        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
+        self.transitioningDelegate.scaleTransition.transitionSourceView = cell.coverImage;
+        self.transitioningDelegate.scaleTransition.sourceImage = cell.coverImage.image;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.scaleTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
+    }
+    else {
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = NO;
+        
+        __weak typeof(self) welf = self;
+        self.transitioningDelegate.fadeTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+            if (mode == TransitionModeDismiss) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [welf.collectionView reloadData];
+                });
+            }
+        };
+    }
+    
+    UIViewController *controllerToPresent = previewViewController;
+    if (!PUBIsiPad()) {
+        controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
+    }
+    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
+    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    
+    [self presentViewController:controllerToPresent animated:YES completion:^{
+        self.isPresentingController = NO;
+    }];
+}
+
+- (void)presentDocument:(PUBDocument *)document {
+    
+    if (self.isPresentingController) {
+        return;
+    }
+    self.isPresentingController = YES;
+    
+    self.presentedDocument = document;
+    
+    PUBPDFDocument *pdfDocument = [PUBPDFDocument documentWithPUBDocument:document];
+    [PUBPDFDocument restoreLocalAnnotations:pdfDocument];
+    PUBPDFViewController *pdfController = [[PUBPDFViewController alloc] initWithDocument:pdfDocument configuration:PSPDFConfiguration.defaultConfiguration];
+    pdfController.delegate = self;
+    pdfController.kioskViewController = self;
+    
+    UIViewController *controllerToPresent = pdfController;
+    
+    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    if (indexPath) {
+        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
+        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
+        self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
+        self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:pdfController.page
+                                                                                                      isDoubleModeActive:pdfController.isDoublePageMode];
+        self.transitioningDelegate.documentTransition.dataSource = self;
+        
+        if (pdfController.page != 0) {
+            UIImage *targetPageImage = [self targetImageForDocument:pdfDocument page:pdfController.page];
+            if (targetPageImage) {
+                self.transitioningDelegate.documentTransition.transitionImage = targetPageImage;
+            }
+        }
+    }
+    else {
+        self.transitioningDelegate.selectedTransition = PUBSelectedTransitionFade;
+        self.transitioningDelegate.fadeTransition.shouldHideStatusBar = YES;
+    }
+    
+    __weak typeof(self) welf = self;
+    self.transitioningDelegate.willDismissBlock = ^{
+        __strong typeof(welf) stelf = welf;
+        if (stelf.presentedDocument) {
+            [stelf updateDocumentTransitionWithCurrentPageIndex:pdfController.page
+                                        andDoublePageModeActive:pdfController.isDoublePageMode];
+        }
+        
+    };
+    
+    self.transitioningDelegate.documentTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
+        if (mode == TransitionModeDismiss) {
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [welf.collectionView reloadData];
+            });
+        }
+        
+    };
+    
+    self.navigationController.delegate = self.transitioningDelegate;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.navigationController pushViewController:controllerToPresent animated:YES];
+        welf.isPresentingController = NO;
+    });
+}
+
+- (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
+    return [PSPDFCache.sharedCache imageFromDocument:pdfDocument
+                                         page:page
+                                         size:UIScreen.mainScreen.bounds.size
+                                      options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+}
+
+- (void)updateDocumentTransitionWithCurrentPageIndex:(NSInteger)currentPageIndex
+                             andDoublePageModeActive:(BOOL)doublePageModeActive {
+    self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:currentPageIndex
+                                                                                                  isDoubleModeActive:doublePageModeActive];
+}
+
+#pragma mark - PUBDocumentTransition DataSource
+
+- (UIView *)currentTransitionSourceView {
+    [self.collectionView layoutSubviews];
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
+    return cell.coverImage;
+}
+
+- (UIImage *)currentTransitionImage {
+    [self.collectionView layoutSubviews];
+    NSIndexPath *path = [self indexPathForProductID:self.presentedDocument.productID];
+    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
+    
+    return cell.coverImage.image;
 }
 
 @end
