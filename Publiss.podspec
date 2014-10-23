@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   s.dependency "PSPDFKit"
   s.dependency "AFNetworking"
   s.dependency "Lockbox"
-  s.dependency "REMenu"
+  s.dependency "REFrostedViewController"
   s.dependency "JDStatusBarNotification"
   s.dependency "GoogleAnalytics-iOS-SDK"
 
