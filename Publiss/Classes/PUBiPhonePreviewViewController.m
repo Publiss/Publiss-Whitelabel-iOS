@@ -86,10 +86,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 - (void)dismissNavController:(id)sender {
     if ([sender isKindOfClass:UIBarButtonItem.class]) {
         if (!self.presentingViewController.isBeingPresented) 
-            [self dismissViewControllerAnimated:YES completion:^{
-                [NSNotificationCenter.defaultCenter postNotificationName:PUBEnableUIInteractionNotification
-                                                                  object:NULL];
-            }];
+            [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 

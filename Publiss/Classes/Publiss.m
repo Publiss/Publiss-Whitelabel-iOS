@@ -50,6 +50,8 @@
     NSAssert(PUBConfig.sharedConfig.appToken != nil, @"You need to provide an app token setup with PUBConfig.sharedConfig.appToken = @\"token\"");
     NSAssert(PUBConfig.sharedConfig.appSecret != nil, @"You need to provide an app secret setup with PUBConfig.sharedConfig.appSecret = @\"secret\"");
     
+    //TODO: Move everything to own methods that has nothing to do with the licence key.
+    
     if (PUBConfig.sharedConfig.webserviceBaseURL == nil) {
         PUBConfig.sharedConfig.webserviceBaseURL = [NSURL URLWithString:@"https://backend.publiss.com"];
     }
@@ -60,6 +62,10 @@
     
     if (PUBConfig.sharedConfig.primaryColor == nil) {
         PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:3/255.0f green:172/255.0f blue:193/255.0f alpha:1];
+    }
+    
+    if (PUBConfig.sharedConfig.kioskBackgroundColor == nil) {
+        PUBConfig.sharedConfig.kioskBackgroundColor = [UIColor colorWithRed:238/255.0f green:238/255.0f blue:238/255.0f alpha:1];
     }
     
     if (licenseKey != nil) {

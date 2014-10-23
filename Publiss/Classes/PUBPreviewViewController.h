@@ -12,4 +12,6 @@
 
 @interface PUBPreviewViewController : PUBParentPreviewViewController
 
++ (PUBPreviewViewController *)instantiatePreviewController;
+
 @end

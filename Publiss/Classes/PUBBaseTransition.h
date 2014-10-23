@@ -7,10 +7,16 @@
 
 #import <Foundation/Foundation.h>
 
+extern const CGFloat DURATION_PRESENT;
+extern const CGFloat DURATION_DISMISS;
+
 typedef NS_ENUM(NSInteger, TransitionMode) { TransitionModePresent = 0, TransitionModeDismiss };
 
-@interface PUBBaseTransition : NSObject <UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate>
+@interface PUBBaseTransition : NSObject <UIViewControllerAnimatedTransitioning>
 
 @property (nonatomic, assign) TransitionMode transitionMode;
+@property (nonatomic, copy) void (^animationEndedBlock)(BOOL success, TransitionMode mode);
+
+- (void)hideNavigationBarOfController:(UIViewController *)controller withDuration:(CGFloat)duration;
 
 @end

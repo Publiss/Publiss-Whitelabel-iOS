@@ -28,5 +28,6 @@
 @property (nonatomic) uint16_t state;
 @property (nonatomic, retain) NSString * title;
 @property (nonatomic, retain) NSDate *updatedAt;
+@property (nonatomic, retain) NSDate *featuredUpdatedAt;
 
 @end

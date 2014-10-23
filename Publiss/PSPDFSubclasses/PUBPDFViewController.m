@@ -19,12 +19,14 @@
 #import "PUBLinkAnnotationView.h"
 #import "PSPDFSpeechSynthesizer.h"
 #import "PUBConstants.h"
+#import "PUBLinkAnnotationBaseView.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
 @property (nonatomic, strong) JDStatusBarView *barView;
 @property (nonatomic, assign) BOOL downloadFinished;
 @property (nonatomic, assign) BOOL initiatedDownload;
+@property (nonatomic, assign) BOOL initallyHiddenStatusBar;
 @end
 
 @implementation PUBPDFViewController
@@ -32,25 +34,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - PSPDFViewController
 
-- (instancetype)initWithDocument:(PSPDFDocument *)document {
-    self = [super initWithDocument:document];
-    
-    // setup Speechsynthesizer so its slower
-    PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
-    speechSynthesizer.speakRate = 0.1f;
-    
-    self.documentProgress = [NSDictionary dictionary];
-    self.downloadFinished = NO;
-    self.initiatedDownload = NO;
-    
-    self.navigationItem.title = PUBIsiPad() ? document.title : nil;
-    [self.pdfController updateConfigurationWithBuilder:^(PSPDFConfigurationBuilder *builder) {
-        builder.backgroundColor = UIColor.blackColor;
+- (instancetype)initWithDocument:(PSPDFDocument *)document configuration:(PSPDFConfiguration *)configuration {
+    self = [super initWithDocument:document configuration:[configuration configurationUpdatedWithBuilder:^(PSPDFConfigurationBuilder *builder) {
+         builder.backgroundColor = UIColor.blackColor;
         
         // Customize PSPDFKit defaults.
         [builder overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
         [builder overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
         [builder overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
+        [builder overrideClass:PSPDFLinkAnnotationBaseView.class withClass:PUBLinkAnnotationBaseView.class];
         
         // Appearance only needs to be set up once.
         static dispatch_once_t onceToken;
@@ -62,21 +54,27 @@
         
         builder.allowToolbarTitleChange = NO;
         
+        builder.shouldShowHUDOnViewWillAppear = NO;
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
-        builder.backgroundColor = UIColor.clearColor;
-
+        builder.backgroundColor = [UIColor blackColor];
         
         builder.allowBackgroundSaving = YES;
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
         builder.pageTransition = PSPDFPageTransitionCurl;
-        //self.pageTransition = PSPDFPageTransitionScrollPerPage;
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
         builder.pageMode = PSPDFPageModeAutomatic;
-//        builder.HUDView.thumbnailBar.thumbnailCellClass = PUBThumbnailGridViewCell.class; //TODO: Where should this be set instead?
-        builder.shouldShowHUDOnViewWillAppear = YES; // Hide HUD initially.
-    }];
+    }]];
+    
+    // setup Speechsynthesizer so its slower
+    PSPDFSpeechSynthesizer *speechSynthesizer = PSPDFSpeechSynthesizer.sharedSynthesizer;
+    speechSynthesizer.speakRate = 0.1f;
+    
+    self.documentProgress = [NSDictionary dictionary];
+    self.downloadFinished = NO;
+    self.initiatedDownload = NO;
+    self.navigationItem.title = PUBIsiPad() ? document.title : nil;
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
     
@@ -95,7 +93,10 @@
         [self setViewState:self.pubDocument.lastViewState];
     }
 
-    self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close") style:UIBarButtonItemStyleDone target:self action:@selector(close:)]];
+    self.leftBarButtonItems = @[[[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Close")
+                                                                 style:UIBarButtonItemStyleDone
+                                                                target:self
+                                                                action:@selector(close:)]];
     
     [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.pubDocument competionHandler:^(BOOL unpublished) {
         if (unpublished == YES && self.pubDocument.state != PUBDocumentStateDownloaded) {
@@ -114,23 +115,61 @@
         }
     }];
     
-    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
-    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
-    
     return self;
 }
 
 - (void)close:(id)sender {
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self setupUserInterface];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.navigationController.navigationBarHidden = YES;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self hideStatusBarInJustTheReightWay];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
+    [dnc addObserver:self selector:@selector(documentFetcherDidUpdateNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return self.initallyHiddenStatusBar ? YES : [super prefersStatusBarHidden];
+}
+
+- (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
+    return self.initallyHiddenStatusBar ? UIStatusBarAnimationFade : [super preferredStatusBarUpdateAnimation];
+}
+
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
+}
+
+- (void)hideStatusBarInJustTheReightWay {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.initallyHiddenStatusBar = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
+        self.initallyHiddenStatusBar = NO;
+        [self setHUDVisible:YES animated:NO];
+        [self setHUDVisible:NO animated:NO];
+    });
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    
     if (self.pubDocument) {
         self.pubDocument.lastViewState = self.viewState;
     }
@@ -141,11 +180,12 @@
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
-    
-    
+- (void)setupUserInterface {
+    UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
 }
 
 // Blurring of gallery
@@ -194,7 +234,6 @@
         [PUBDocumentFetcher.sharedFetcher setPageAlreadyExsists:self.pubDocument page:page];
     }
 }
-
 
 - (void)updateProgress {
     NSInteger pagesDoneCount = 0;

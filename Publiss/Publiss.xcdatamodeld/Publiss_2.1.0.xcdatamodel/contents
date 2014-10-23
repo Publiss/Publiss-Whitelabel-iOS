@@ -5,6 +5,7 @@
         <attribute name="downloadedSize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="downloadProgress" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="featured" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="featuredUpdatedAt" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="fileDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="fileSize" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
@@ -20,6 +21,6 @@
         <attribute name="updatedAt" optional="YES" attributeType="Date" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PUBDocument" positionX="0" positionY="0" width="128" height="300"/>
+        <element name="PUBDocument" positionX="0" positionY="0" width="128" height="315"/>
     </elements>
 </model>

@@ -30,4 +30,8 @@
     return self;
 }
 
+- (UIButton *)createActivationButton {
+    return [super createActivationButton];
+}
+
 @end
