@@ -40,12 +40,16 @@
 - (void)documentOnline {
     self.badgeView.hidden = NO;
     self.progressView.hidden = YES;
+    
+    [self.badgeView setNeedsDisplay];
 }
 
 - (void)documentUpdated {
     self.namedBadgeView.hidden = NO;
     [self.namedBadgeView setBadgeText:PUBLocalize(@"UPDATE")];
     self.progressView.hidden = YES;
+    
+    [self.namedBadgeView setNeedsDisplay];
 }
 
 - (void)documentDownloaded {
