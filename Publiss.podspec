@@ -9,16 +9,16 @@
 Pod::Spec.new do |s|
 
   s.name                      = "Publiss"
-  s.version                   = "2.0.0"
+  s.version                   = "2.0.1"
   s.summary                   = "Publiss enables you to enrich PDFs with multimedia content and publish them to a high-quality iPhone and iPad App - all by yourself."
   s.homepage                  = "http://www.publiss.com"
   s.screenshots               = "https://github.com/Publiss/Publiss-Whitelabel-iOS/raw/master/iPhone_iPad_Kiosk.png"
   s.license                   = "MIT"
   s.author                    = "Publiss GmbH"
   s.platform                  = :ios, "7.1"
-  s.source                    = { :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git", :tag => '2.0.0'}
+  s.source                    = { :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git", :tag => '2.0.1'}
   s.source_files              = "Publiss/3rd Party/*.{h,m}", "Publiss/PSPDFSubclasses/*.{h,m}", "Publiss/Classes/*.{h,m}", "Publiss/PUBVersion.h", "PublissCore.embeddedframework/**/*.h"
-  
+
   s.resources                 = ["Publiss/Images.xcassets", "Publiss/Views/*.*", "Publiss/*.{xcdatamodeld,xcdatamodel}", "Publiss/Publiss.bundle"]
 
   s.preserve_paths            = "PublissCore.embeddedframework", "Publiss/Publiss.xcdatamodeld"

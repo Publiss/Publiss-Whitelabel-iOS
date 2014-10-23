@@ -18,7 +18,11 @@
 @implementation PUBMainViewController
 
 + (REFrostedViewController *)mainViewController {
-    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:PUBKioskViewController.kioskViewController menuViewController:PUBMenuViewController.menuViewController];
+    return [PUBMainViewController mainViewControllerKioskController:PUBKioskViewController.kioskViewController andMenuController:PUBMenuViewController.menuViewController];
+}
+
++ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk andMenuController:(PUBMenuViewController *)menu {
+    REFrostedViewController *frostedViewController = [[REFrostedViewController alloc] initWithContentViewController:kiosk menuViewController:menu];
     frostedViewController.direction = REFrostedViewControllerDirectionLeft;
     frostedViewController.panGestureEnabled = YES;
     frostedViewController.liveBlur = YES;

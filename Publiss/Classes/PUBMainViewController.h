@@ -8,10 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class REFrostedViewController;
+@class REFrostedViewController, PUBKioskViewController, PUBMenuViewController;
 
 @interface PUBMainViewController : UIViewController
 
 + (REFrostedViewController *)mainViewController;
++ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk andMenuController:(PUBMenuViewController *)menu;
 
 @end
