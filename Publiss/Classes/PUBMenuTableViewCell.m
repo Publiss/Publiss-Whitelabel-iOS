@@ -25,7 +25,6 @@
         self.titleLabel.textColor = self.tintColor;
         self.icon.image = [self.icon.image imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
     }
-    // Configure the view for the selected state
 }
 
 @end
