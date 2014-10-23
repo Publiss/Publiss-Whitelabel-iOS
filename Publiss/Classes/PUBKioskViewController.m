@@ -57,7 +57,6 @@
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
-
 @end
 
 #define LINE_HEIGHT 30.f

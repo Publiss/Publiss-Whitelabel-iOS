@@ -29,10 +29,6 @@
     return [[UIStoryboard storyboardWithName:storyboard bundle:nil] instantiateInitialViewController];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleDefault;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
   
@@ -70,7 +66,6 @@
     [CATransaction commit];
 }
 
-
 #pragma mark UITableView Datasource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -98,6 +93,8 @@
     return cell;
 }
 
+#pragma mark UITableView Delegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.frostedViewController hideMenuViewController];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -106,6 +103,8 @@
         menuItem.actionBlock();
     }
 }
+
+#pragma mark Helper
 
 - (PUBMenuItem *)menuItemForIndexPath:(NSIndexPath *)indexPath {
     return [PUBMenuItemManager.sharedInstance.items objectAtIndex:indexPath.row];

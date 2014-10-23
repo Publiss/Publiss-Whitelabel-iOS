@@ -39,7 +39,7 @@
 }
 
 - (NSArray *)items {
-    return self.menuItemsStore;
+    return self.menuItemsStore.copy;
 }
 
 @end
