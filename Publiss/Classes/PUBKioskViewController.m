@@ -267,6 +267,7 @@
 - (void)visitPublissSite {
     if (self.navigationController.topViewController == self) {
         PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
+        self.navigationController.delegate = nil;
         [self.navigationController pushViewController:webViewController animated:YES];
     }
 }
