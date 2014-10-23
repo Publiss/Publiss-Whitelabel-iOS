@@ -33,6 +33,7 @@ Pod::Spec.new do |s|
   s.dependency "Lockbox"
   s.dependency "REFrostedViewController"
   s.dependency "JDStatusBarNotification"
+  s.dependency "UIActionSheet+Blocks"
   s.dependency "GoogleAnalytics-iOS-SDK"
 
 end
