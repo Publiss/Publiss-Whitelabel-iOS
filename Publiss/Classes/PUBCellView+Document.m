@@ -14,7 +14,7 @@
 
 - (void)setupForDocument:(PUBDocument *)document {
     self.deleteButton.hidden = YES;
-    self.badgeView.hidden = YES;
+    [self setBadgeViewHidden:YES animated:NO];
     self.namedBadgeView.hidden = YES;
     self.coverImage.hidden = NO;
     
@@ -38,10 +38,8 @@
 }
 
 - (void)documentOnline {
-    self.badgeView.hidden = NO;
+    [self setBadgeViewHidden:NO animated:NO];
     self.progressView.hidden = YES;
-    
-    [self.badgeView setNeedsDisplay];
 }
 
 - (void)documentUpdated {
@@ -53,21 +51,18 @@
 }
 
 - (void)documentDownloaded {
-    self.badgeView.hidden = YES;
     self.namedBadgeView.hidden = YES;
     self.progressView.progress = 0.f;
     self.progressView.hidden = YES;
 }
 
 - (void)documentLoadingForDocument:(PUBDocument *)document {
-    self.badgeView.hidden = YES;
     self.namedBadgeView.hidden = YES;
     self.progressView.hidden = NO;
     self.progressView.progress = document.downloadProgress;
 }
 
 - (void)documentPurchased {
-    self.badgeView.hidden = YES;
     self.namedBadgeView.hidden = NO;
     [self.namedBadgeView setBadgeText:PUBLocalize(@"PURCHASED")];
     self.progressView.hidden = YES;
