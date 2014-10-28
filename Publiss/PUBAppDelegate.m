@@ -6,10 +6,9 @@
 //
 
 #import "PUBAppDelegate.h"
-#import "Publiss.h"
-#import "UIColor+PUBDesign.h"
-#import "PUBConstants.h"
 #import <PublissCore.h>
+#import "Publiss.h"
+#import "PUBConstants.h"
 #import "PUBMainViewController.h"
 
 @implementation PUBAppDelegate
