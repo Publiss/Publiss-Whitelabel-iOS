@@ -181,11 +181,11 @@
 }
 
 - (void)setupUserInterface {
-    UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIApplication.sharedApplication.delegate.window.tintColor};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
 }
 
 // Blurring of gallery
