@@ -36,7 +36,7 @@ Publiss enables you to enrich PDFs with multimedia content and publish them to a
  - Get Publiss sourcecode from https://github.com/Publiss/Publiss-Whitelabel-iOS
  - Install CocoaPods http://guides.cocoapods.org/using/getting-started.html 
  - Install dependencies with CocoaPods in publiss-whitelabel-ios root folder with `$ pod install`
- - Open Publiss.xcworkspace in Xcode 5.1 or newer
+ - Open Publiss.xcworkspace in Xcode 6 or newer
  - Login at https://backend.publiss.com/
  - Select "Apps" button (left side menu)
  - Click on your app
@@ -67,22 +67,28 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
  
  ```
 #import "AppDelegate.h"
+#import <PublissCore.h>
 #import "PUBConfig.h"
 #import "Publiss.h"
-#import "PUBKioskViewController.h"
+#import "PUBMainViewController.h"
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.tintColor = [UIColor whiteColor];
-    
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+
     PUBConfig.sharedConfig.appToken = @"--- YOUR APP TOKEN ---";
     PUBConfig.sharedConfig.appSecret = @"--- YOUR APP SECRET ---";
     PUBConfig.sharedConfig.googleAnalyticsTrackingCode = nil;
     PUBConfig.sharedConfig.inAppPurchaseActive = NO;
     PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:0.0f green:134/255.0f blue:204/255.0f alpha:1];
+    PUBConfig.sharedConfig.secondaryColor = [UIColor whiteColor];
+    
+    [Publiss.staticInstance setupWithLicenseKey:nil];
+    
+    self.window.tintColor = PUBConfig.sharedConfig.primaryColor;
+    [UINavigationBar.appearance setTintColor:PUBConfig.sharedConfig.secondaryColor];
+    [UINavigationBar.appearance setBarTintColor:self.window.tintColor];
+    [UINavigationBar.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName:PUBConfig.sharedConfig.secondaryColor}];
     
     // Demo how to make custom translation
     PUBSetLocalizationDictionary(@{@"en" :
@@ -90,22 +96,21 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
                                          @"Publiss" : @"Example Publiss",
                                          @"Menu Website URL" : @"http://www.apple.com/"
                                          }});
-
-  
-    [Publiss.staticInstance setupWithLicenseKey:""];
     
-    self.window.rootViewController = PUBKioskViewController.kioskViewController;
+    self.window.rootViewController = (UIViewController *)PUBMainViewController.mainViewController;
     [self.window makeKeyAndVisible];
     
     return YES;
 }
+
+
  ```
  
  - Run Project in Xcode (iOS 7+ only, iPhone, iPad)
 
  
 ###Requirements:
- - Publiss requires Xcode 5.1 or higher, targeting iOS 7 (iPad and iPhone) and above.
+ - Publiss requires Xcode 6 or higher, targeting iOS 7 (iPad and iPhone) and above.
 
 ## License
 

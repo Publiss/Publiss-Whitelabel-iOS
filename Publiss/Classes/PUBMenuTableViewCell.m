@@ -8,12 +8,13 @@
 
 #import "PUBMenuTableViewCell.h"
 #import "PUBConfig.h"
+#import "UIColor+PUBDesign.h"
 #import "UIImage+PUBTinting.h"
 
 @implementation PUBMenuTableViewCell
 
 - (void)awakeFromNib {
-    // Initialization code
+    self.tintColor = PUBConfig.sharedConfig.secondaryColor;
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
@@ -23,7 +24,7 @@
         self.icon.image = [self.icon.image imageTintedWithColor:PUBConfig.sharedConfig.primaryColor fraction:0.f];
     } else {
         self.titleLabel.textColor = self.tintColor;
-        self.icon.image = [self.icon.image imageTintedWithColor:UIApplication.sharedApplication.delegate.window.tintColor fraction:0.f];
+        self.icon.image = [self.icon.image imageTintedWithColor:self.tintColor fraction:0.f];
     }
 }
 
