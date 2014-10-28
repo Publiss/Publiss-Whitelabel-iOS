@@ -42,7 +42,7 @@
         documentProvider.annotationManager.fileAnnotationProvider.annotationsPath = annotationPath;
     }];
     PDFDocument.title = document.title;
-    //PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeAll;
+    PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeAll;
     PDFDocument.annotationSaveMode = PSPDFAnnotationSaveModeExternalFile;
 //    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
     PDFDocument.diskCacheStrategy = PSPDFDiskCacheStrategyEverything;

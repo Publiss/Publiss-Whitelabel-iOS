@@ -147,10 +147,10 @@
 
 - (void)setupNavigationItems {
     self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.tintColor = UIColor.publissSecondaryColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor whiteColor]};
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIColor.publissSecondaryColor};
     
     self.navigationItem.title = PUBLocalize(@"Publiss");
 }
@@ -187,7 +187,7 @@
     
     PUBMenuItem *visit = PUBMenuItem.alloc.init;
     visit.title = PUBLocalize(@"Visit Publiss Website");
-    visit.icon = [[UIImage imageNamed:@"web"] imageTintedWithColor:[UIColor whiteColor] fraction:0.f];
+    visit.icon = [[UIImage imageNamed:@"web"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
     visit.actionBlock = ^() {
         [self visitPublissSite];
     };
@@ -195,7 +195,7 @@
     
     PUBMenuItem *about = PUBMenuItem.alloc.init;
     about.title = PUBLocalize(@"About Publiss");
-    about.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:[UIColor whiteColor] fraction:0.f];
+    about.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
     about.actionBlock = ^() {
         [self showAbout];
     };
@@ -204,7 +204,7 @@
     if (PUBConfig.sharedConfig.inAppPurchaseActive) {
         PUBMenuItem *restore = PUBMenuItem.alloc.init;
         restore.title = PUBLocalize(@"Restore Purchases");
-        restore.icon = [[UIImage imageNamed:@"restore"] imageTintedWithColor:[UIColor whiteColor] fraction:0.f];
+        restore.icon = [[UIImage imageNamed:@"restore"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
         restore.actionBlock = ^() {
             [self restorePurchases];
         };

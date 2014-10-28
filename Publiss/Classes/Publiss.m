@@ -64,6 +64,10 @@
         PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:3/255.0f green:172/255.0f blue:193/255.0f alpha:1];
     }
     
+    if (PUBConfig.sharedConfig.secondaryColor == nil) {
+        PUBConfig.sharedConfig.secondaryColor = [UIColor whiteColor];
+    }
+    
     if (PUBConfig.sharedConfig.kioskBackgroundColor == nil) {
         PUBConfig.sharedConfig.kioskBackgroundColor = [UIColor colorWithRed:238/255.0f green:238/255.0f blue:238/255.0f alpha:1];
     }

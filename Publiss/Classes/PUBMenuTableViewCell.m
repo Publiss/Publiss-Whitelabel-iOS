@@ -8,12 +8,13 @@
 
 #import "PUBMenuTableViewCell.h"
 #import "PUBConfig.h"
+#import "UIColor+PUBDesign.h"
 #import "UIImage+PUBTinting.h"
 
 @implementation PUBMenuTableViewCell
 
 - (void)awakeFromNib {
-    self.tintColor = [UIColor whiteColor];
+    self.tintColor = PUBConfig.sharedConfig.secondaryColor;
 }
 
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{

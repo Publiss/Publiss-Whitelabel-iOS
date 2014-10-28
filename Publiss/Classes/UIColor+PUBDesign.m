@@ -14,6 +14,10 @@
     return PUBConfig.sharedConfig.primaryColor;
 }
 
++ (UIColor *)publissSecondaryColor {
+    return PUBConfig.sharedConfig.secondaryColor;
+}
+
 + (UIColor *)kioskBackgroundColor {
     return PUBConfig.sharedConfig.kioskBackgroundColor;
 }
