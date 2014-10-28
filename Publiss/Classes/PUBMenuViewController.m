@@ -50,6 +50,7 @@
         self.tableView.layer.mask = self.maskLayer;
     }
     [self scrollViewDidScroll:self.tableView];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillLayoutSubviews {
