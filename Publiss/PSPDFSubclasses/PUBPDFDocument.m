@@ -9,6 +9,9 @@
 #import "PUBDocument+Helper.h"
 #import "PUBConstants.h"
 
+@interface PUBFileAnnotationProvider : PSPDFFileAnnotationProvider
+@end
+
 @interface PUBDocumentProvider : PSPDFDocumentProvider
 @end
 
@@ -29,6 +32,7 @@
     PDFDocument.productID = document.productID;
     
     [PDFDocument overrideClass:PSPDFDocumentProvider.class withClass:PUBDocumentProvider.class];
+    [PDFDocument overrideClass:PSPDFFileAnnotationProvider.class withClass:PUBFileAnnotationProvider.class];
     [PDFDocument setDidCreateDocumentProviderBlock:^(PSPDFDocumentProvider *documentProvider) {
         // Hide warnings for missing files.
         [documentProvider setValue:@YES forKey:@"checkIfFileExists"];
@@ -44,10 +48,10 @@
     PDFDocument.title = document.title;
     PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeAll;
     PDFDocument.annotationSaveMode = PSPDFAnnotationSaveModeExternalFile;
-//    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
+    //    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
     PDFDocument.diskCacheStrategy = PSPDFDiskCacheStrategyEverything;
     [PDFDocument loadAnnotationsFromXFDF];
-
+    
     return PDFDocument;
 }
 
@@ -94,6 +98,25 @@
             self.hasLoadedXFDFAnnotations = YES;
         }
     }
+}
+
+@end
+
+@implementation PUBFileAnnotationProvider
+
+- (NSArray *)annotationsForPage:(NSUInteger)page pageRef:(CGPDFPageRef)pageRef {
+    PSPDFDocumentProvider *documentProvider = self.documentProvider;
+    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
+    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
+    NSArray *annotations = [super annotationsForPage:absolutePage pageRef:pageRef];
+    return annotations;
+}
+
+- (BOOL)hasLoadedAnnotationsForPage:(NSUInteger)page {
+    PSPDFDocumentProvider *documentProvider = self.documentProvider;
+    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
+    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
+    return [super hasLoadedAnnotationsForPage:absolutePage];
 }
 
 @end
