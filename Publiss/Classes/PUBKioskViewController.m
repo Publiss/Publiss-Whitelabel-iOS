@@ -232,7 +232,6 @@
 #pragma mark - Actions
 
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated {    
-    self.collectionView.userInteractionEnabled = NO;
     self.editButtonItem.enabled = NO;
     
     if (!self.refreshControl.isRefreshing) {
@@ -249,7 +248,6 @@
         
         [self.collectionView reloadData];
         
-        self.collectionView.userInteractionEnabled = YES;
         self.editButtonItem.enabled = YES;
         [self.refreshControl endRefreshing];
     }];
@@ -767,7 +765,10 @@
     controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     
     [self presentViewController:controllerToPresent animated:YES completion:^{
-        self.isPresentingController = NO;
+        // dirty stuff ... but otherwise double opening will happen
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.isPresentingController = NO;
+        });
     }];
 }
 
@@ -835,7 +836,10 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.navigationController pushViewController:controllerToPresent animated:YES];
-        welf.isPresentingController = NO;
+        // dirty stuff ... but otherwise double opening will happen
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            welf.isPresentingController = NO;
+        });
     });
 }
 
