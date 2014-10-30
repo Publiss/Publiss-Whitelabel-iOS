@@ -19,7 +19,7 @@
 @property (nonatomic, assign) BOOL hasLoadedXFDFAnnotations;
 @property (nonatomic, copy) NSString *productID;
 @property (nonatomic, copy) NSArray *pageDimensions;
-@property (nonatomic, copy) NSArray *xfdfAnnotations;
+//@property (nonatomic, copy) NSArray *xfdfAnnotations;
 - (PUBDocument *)pubDocument;
 
 @end
@@ -46,7 +46,7 @@
         documentProvider.annotationManager.fileAnnotationProvider.annotationsPath = annotationPath;
     }];
     PDFDocument.title = document.title;
-    PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeAll;
+    PDFDocument.autodetectTextLinkTypes = PSPDFTextCheckingTypeNone;
     PDFDocument.annotationSaveMode = PSPDFAnnotationSaveModeExternalFile;
     //    PDFDocument.editableAnnotationTypes = [NSOrderedSet orderedSetWithObjects:PSPDFAnnotationStringHighlight, PSPDFAnnotationStringInk, PSPDFAnnotationStringNote, nil];
     PDFDocument.diskCacheStrategy = PSPDFDiskCacheStrategyEverything;
@@ -95,7 +95,7 @@
             PSPDFXFDFParser *parser = [[PSPDFXFDFParser alloc] initWithInputStream:fileInput documentProvider:self.documentProviders.firstObject];
             [parser parseWithError:NULL];
             [self addAnnotations:parser.annotations];
-            self.xfdfAnnotations = parser.annotations;
+//            self.xfdfAnnotations = parser.annotations;
             self.hasLoadedXFDFAnnotations = YES;
         }
     }
@@ -105,31 +105,32 @@
 
 @implementation PUBFileAnnotationProvider
 
-- (NSArray *)xfdfAnnotationsForPage:(NSUInteger)page xfdfAnnotation:(NSArray *)xfdfAnnotation {
-    NSMutableArray *annotationsOnPage = NSMutableArray.array;
-    for (PSPDFAnnotation *annotation in xfdfAnnotation) {
-        if (annotation.absolutePage == page) {
-            [annotationsOnPage addObject:annotation];
-        }
-    }
-    return annotationsOnPage;
-}
-
-- (NSArray *)annotationsForPage:(NSUInteger)page pageRef:(CGPDFPageRef)pageRef {
-    PSPDFDocumentProvider *documentProvider = self.documentProvider;
-    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
-    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
-    NSMutableArray *annotations = [super annotationsForPage:absolutePage pageRef:pageRef].mutableCopy;
-    [annotations addObjectsFromArray:[self xfdfAnnotationsForPage:absolutePage xfdfAnnotation:document.xfdfAnnotations]];
-    return annotations;
-}
-
-- (BOOL)hasLoadedAnnotationsForPage:(NSUInteger)page {
-    PSPDFDocumentProvider *documentProvider = self.documentProvider;
-    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
-    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
-    return [super hasLoadedAnnotationsForPage:absolutePage];
-}
+//
+//- (NSArray *)xfdfAnnotationsForPage:(NSUInteger)page xfdfAnnotation:(NSArray *)xfdfAnnotation {
+//    NSMutableArray *annotationsOnPage = NSMutableArray.array;
+//    for (PSPDFAnnotation *annotation in xfdfAnnotation) {
+//        if (annotation.absolutePage == page) {
+//            [annotationsOnPage addObject:annotation];
+//        }
+//    }
+//    return annotationsOnPage;
+//}
+//
+//- (NSArray *)annotationsForPage:(NSUInteger)page pageRef:(CGPDFPageRef)pageRef {
+//    PSPDFDocumentProvider *documentProvider = self.documentProvider;
+//    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
+//    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
+//    NSMutableArray *annotations = [super annotationsForPage:absolutePage pageRef:pageRef].mutableCopy;
+//    [annotations addObjectsFromArray:[self xfdfAnnotationsForPage:absolutePage xfdfAnnotation:document.xfdfAnnotations]];
+//    return annotations;
+//}
+//
+//- (BOOL)hasLoadedAnnotationsForPage:(NSUInteger)page {
+//    PSPDFDocumentProvider *documentProvider = self.documentProvider;
+//    PUBPDFDocument *document = (PUBPDFDocument *)documentProvider.document;
+//    NSUInteger absolutePage = [document pageOffsetForDocumentProvider:documentProvider];
+//    return [super hasLoadedAnnotationsForPage:absolutePage];
+//}
 
 @end
 
