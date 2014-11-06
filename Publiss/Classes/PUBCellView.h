@@ -20,7 +20,7 @@
 @property (strong, nonatomic) PUBBadgeView *badgeView;
 @property (strong, nonatomic) PUBNamedBadgeView *namedBadgeView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
-
+@property (assign, assign) CGFloat yOffset;
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated;
 
 @end

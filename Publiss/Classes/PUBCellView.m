@@ -17,7 +17,6 @@
 @implementation PUBCellView
 
 #define DELETE_BUTTON_WIDTH 22.f
-#define Y_OFFSET 0.0f
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -29,7 +28,7 @@
     [self.contentView addSubview:self.progressView];
     [self bringSubviewToFront:self.progressView];
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
-    
+    self.yOffset = 0;
     self.activityIndicator.hidden = YES;
     
     self.contentMode = UIViewContentModeScaleAspectFit;
@@ -145,9 +144,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-
+    
     self.contentView.frame =  CGRectIntegral(CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height));
-
+    
     // Resize the views to fit the cover image.
     
     if (self.coverImage.image) {
@@ -180,7 +179,7 @@
 
 - (CGPoint)coverImageCenter {
     return CGPointMake(__tg_ceil(self.bounds.size.width / 2.0f),
-                       __tg_ceil(self.bounds.size.height - self.coverImage.frame.size.height / 2.0f - Y_OFFSET));
+                       __tg_ceil(self.bounds.size.height - self.coverImage.frame.size.height / 2.0f - self.yOffset));
 }
 
 - (CGRect)activityIndicatorFrame {
@@ -224,7 +223,7 @@
     if (result != nil) {
         return result;
     }
-
+    
     if (!self.clipsToBounds && !self.hidden && self.alpha > 0.00000001f) {
         if (result != nil) {
             return result;
