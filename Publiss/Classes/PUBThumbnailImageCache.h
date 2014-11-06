@@ -15,8 +15,6 @@
 - (UIImage *)thumbnailImageWithURLString:(NSString *)URLString;
 - (void)setImage:(UIImage *)image forURLString:(NSString *)URLString;
 - (void)removeImageWithURLString:(NSString *)URLString;
-
 - (void)clearCache;
-- (NSString *)cacheFilePathForURLString:(NSString *)URLString;
 
 @end

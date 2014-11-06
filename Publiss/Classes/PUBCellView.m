@@ -130,13 +130,14 @@
 
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated {
     [self.badgeView setNeedsDisplay];
-    
-    self.badgeView.alpha = animated ? 0.f : 1.f;
-    self.badgeView.hidden = hidden;
-    if (!self.badgeView.hidden && animated) {
+    if (animated && !hidden) {
+        self.badgeView.hidden = hidden;
+        self.badgeView.alpha = 0.f;
         [UIView animateWithDuration:.25f animations:^{
             self.badgeView.alpha = 1.f;
         } completion:NULL];
+    } else {
+        self.badgeView.hidden = hidden;
     }
 }
 

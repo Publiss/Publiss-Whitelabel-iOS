@@ -51,13 +51,11 @@
 }
 
 - (void)documentDownloaded {
-    self.namedBadgeView.hidden = YES;
     self.progressView.progress = 0.f;
     self.progressView.hidden = YES;
 }
 
 - (void)documentLoadingForDocument:(PUBDocument *)document {
-    self.namedBadgeView.hidden = YES;
     self.progressView.hidden = NO;
     self.progressView.progress = document.downloadProgress;
 }
@@ -65,6 +63,7 @@
 - (void)documentPurchased {
     self.namedBadgeView.hidden = NO;
     [self.namedBadgeView setBadgeText:PUBLocalize(@"PURCHASED")];
+    [self setBadgeViewHidden:NO animated:NO];
     self.progressView.hidden = YES;
 }
 

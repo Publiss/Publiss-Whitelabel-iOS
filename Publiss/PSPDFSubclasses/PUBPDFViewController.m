@@ -19,7 +19,6 @@
 #import "PUBLinkAnnotationView.h"
 #import "PSPDFSpeechController.h"
 #import "PUBConstants.h"
-#import "PUBLinkAnnotationBaseView.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
@@ -42,7 +41,6 @@
         [builder overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
         [builder overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
         [builder overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
-        [builder overrideClass:PSPDFLinkAnnotationBaseView.class withClass:PUBLinkAnnotationBaseView.class];
         
         // Appearance only needs to be set up once.
         static dispatch_once_t onceToken;
@@ -69,7 +67,7 @@
     
     // setup Speechsynthesizer so its slower
     PSPDFSpeechController *speechController = [PSPDFKit sharedInstance].speechSynthesizer;
-    speechController.speakRate = 0.1f;
+    speechController.speakRate = 0.15f;
     
     self.documentProgress = [NSDictionary dictionary];
     self.downloadFinished = NO;

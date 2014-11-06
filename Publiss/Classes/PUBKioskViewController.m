@@ -238,7 +238,7 @@
     if (!self.refreshControl.isRefreshing) {
         [self.refreshControl beginRefreshing];
     }
-    
+    self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
         self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured != YES || featured == nil"]];
@@ -315,7 +315,6 @@
         };
         
         self.headerView = header;
-        
         return header;
     } else {
         return [collectionView dequeueReusableSupplementaryViewOfKind:kind
@@ -330,16 +329,11 @@
     cell.coverImage.hidden = NO;
     [cell.activityIndicator stopAnimating];
     if ([self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
-        cell.namedBadgeView.hidden = YES;
-        cell.coverImage.transform = CGAffineTransformMakeScale(.1f, .1f);
+        cell.transform = CGAffineTransformMakeScale(.1f, .1f);
         [UIView animateWithDuration:.4f animations:^{
-            cell.coverImage.alpha = 1.f;
-            cell.coverImage.transform = CGAffineTransformIdentity;
-        } completion:^(BOOL finished) {
-            BOOL shouldHideBadgeView = (document.state == PUBDocumentStateUpdated || document.state == PUBDocumentPurchased);
-            cell.namedBadgeView.hidden = !shouldHideBadgeView;
-            [cell setBadgeViewHidden:shouldHideBadgeView animated:YES];
-        }];
+            cell.alpha = 1.f;
+            cell.transform = CGAffineTransformIdentity;
+        } completion:NULL];
         [self.dynamicallyLoadedCoverImageIndexPath removeObject:indexPath];
     }
 }
@@ -348,14 +342,15 @@
 {
     [cell.activityIndicator startAnimating];
     cell.coverImage.hidden = YES;
-    cell.badgeView.hidden = YES;
     cell.namedBadgeView.hidden = YES;
+    [cell setBadgeViewHidden:YES animated:NO];
     if (![self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
         NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
-        [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
+        
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                            [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
                                             [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
                                             // has to called later becuase the cache needs some time to write
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

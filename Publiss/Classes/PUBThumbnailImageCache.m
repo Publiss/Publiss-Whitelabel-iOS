@@ -4,7 +4,6 @@
 //
 //  Copyright (c) 2014 Publiss GmbH. All rights reserved.
 //
-//  Partly based on the SDImageChache class (c) Olivier Poitrey <rs@dailymotion.com>
 
 #import "PUBThumbnailImageCache.h"
 #import "PSPDFKit.h"
@@ -43,8 +42,8 @@
     if (imageData) {
         return [[UIImage alloc] initWithData:imageData];
     } else {
-        return nil;
-    }
+    return nil;
+}
 }
 
 - (void)setImage:(UIImage *)image forURLString:(NSString *)URLString {
@@ -58,7 +57,7 @@
                                     attributes:nil
                                          error:NULL];
         }
-
+    
         [fileManager createFileAtPath:[self cacheFilePathForURLString:URLString] contents:imageData attributes:nil];
     });
 }
@@ -72,7 +71,7 @@
                                                       error:NULL];
     });
 }
-
+  
 - (void)removeImageWithURLString:(NSString *)URLString {
     dispatch_async(self.ioQueue, ^{
         NSError *error;
@@ -84,7 +83,7 @@
 }
 
 #pragma mark - Helpers
-
+   
 - (NSString *)cacheFilePathForURLString:(NSString *)URLString {
     return [self.cacheDirectory stringByAppendingPathComponent:[self cachedFileNameForURLString:URLString]];
 }
