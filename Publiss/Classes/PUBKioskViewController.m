@@ -100,9 +100,7 @@
     [self refreshDocumentsWithActivityViewAnimated:YES];
     [self.view addGestureRecognizer:[UIPanGestureRecognizer.alloc initWithTarget:self action:@selector(panGestureRecognized:)]];
     
-    self.refreshControl = UIRefreshControl.alloc.init;
-    [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
-    [self.collectionView addSubview:self.refreshControl];
+    [self setupRefreshControl];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -331,7 +329,6 @@
     if ([self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
         cell.transform = CGAffineTransformMakeScale(.1f, .1f);
         [UIView animateWithDuration:.4f animations:^{
-            cell.alpha = 1.f;
             cell.transform = CGAffineTransformIdentity;
         } completion:NULL];
         [self.dynamicallyLoadedCoverImageIndexPath removeObject:indexPath];
@@ -346,11 +343,11 @@
     [cell setBadgeViewHidden:YES animated:NO];
     if (![self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
         NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
-        
+        [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                            [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
+                                            
                                             [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
                                             // has to called later becuase the cache needs some time to write
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

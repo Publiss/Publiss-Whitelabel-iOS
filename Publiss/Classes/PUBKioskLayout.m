@@ -130,8 +130,10 @@
         self.headerReferenceSize = CGSizeZero;
     }
     
-    self.footerReferenceSize = CGSizeMake(self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
-    [self.collectionView setContentInset:UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.right, -self.footerReferenceSize.height + (PUBIsiPad() ? 30.0f : 50.8f), self.collectionView.contentInset.left)];
+    if (self.calculateShelveRects.count) {
+        self.footerReferenceSize = CGSizeMake(self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
+        [self.collectionView setContentInset:UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.right, -self.footerReferenceSize.height + (PUBIsiPad() ? 30.0f : 50.8f), self.collectionView.contentInset.left)];
+    }
 }
 
 - (UIInterfaceOrientation)orientation {
