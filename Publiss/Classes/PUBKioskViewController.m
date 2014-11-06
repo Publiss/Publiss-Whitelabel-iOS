@@ -51,7 +51,7 @@
 @property (nonatomic, copy) NSArray *featuredDocuments;
 @property (nonatomic, copy) NSArray *publishedDocuments;
 
-@property (nonatomic, strong) NSMutableDictionary *coverImageDictionary;
+@property (nonatomic, strong) NSMutableSet *dynamicallyLoadedCoverImageIndexPath;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
 @property (nonatomic, strong) NSTimer *pageTracker;
 
@@ -80,7 +80,7 @@
     
     self.view.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:1.0f];
     
-    self.coverImageDictionary = [NSMutableDictionary dictionary];
+    self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
     
     [self setupNavigationItems];
     [self setupCollectionView];
@@ -317,6 +317,51 @@
     return header;
 }
 
+- (void)prepareCellWithThumbnail:(UIImage *)thumbnail cell:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath document:(PUBDocument *)document
+{
+    cell.coverImage.image = thumbnail;
+    cell.coverImage.hidden = NO;
+    [cell.activityIndicator stopAnimating];
+    if ([self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
+        cell.namedBadgeView.hidden = YES;
+        cell.coverImage.transform = CGAffineTransformMakeScale(.1f, .1f);
+        [UIView animateWithDuration:.4f animations:^{
+            cell.coverImage.alpha = 1.f;
+            cell.coverImage.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL finished) {
+            BOOL shouldHideBadgeView = (document.state == PUBDocumentStateUpdated || document.state == PUBDocumentPurchased);
+            cell.namedBadgeView.hidden = !shouldHideBadgeView;
+            [cell setBadgeViewHidden:shouldHideBadgeView animated:YES];
+        }];
+        [self.dynamicallyLoadedCoverImageIndexPath removeObject:indexPath];
+    }
+}
+
+- (void)prepareCellWithoutThumbnail:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView thumbnailURL:(NSURL *)thumbnailURL
+{
+    [cell.activityIndicator startAnimating];
+    cell.coverImage.hidden = YES;
+    cell.badgeView.hidden = YES;
+    cell.namedBadgeView.hidden = YES;
+    if (![self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
+        NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
+        [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
+        [cell.coverImage setImageWithURLRequest:URLRequest
+                               placeholderImage:nil
+                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                            [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
+                                            // has to
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                                            });
+                                        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                                            });
+                                        }];
+    }
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
                   cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *const identifier = @"DocumentCell";
@@ -330,56 +375,13 @@
     // first look in cover image cache if there is already a preprocessed cover image
     NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
     UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
-    NSString *cachedImageURL = [PUBThumbnailImageCache.sharedInstance cacheFilePathForURLString:thumbnailURL.absoluteString];
-    
-    (self.coverImageDictionary)[cachedImageURL] = document.title;
-    
-    if (thumbnail != nil && [document.title isEqualToString:[self.coverImageDictionary valueForKey:cachedImageURL]]) {
-        cell.coverImage.image = thumbnail;
-        cell.coverImage.hidden = NO;
-        [cell setNeedsLayout];
+
+    if (nil != thumbnail) {
+        [self prepareCellWithThumbnail:thumbnail cell:cell indexPath:indexPath document:document];
     } else {
-        [cell.activityIndicator startAnimating];
-        cell.coverImage.hidden = YES;
-        cell.badgeView.hidden = YES;
-        cell.namedBadgeView.hidden = YES;
-        NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
-        
-        __weak PUBCellView *weakCell = cell;
-        __weak PUBDocument *weakDocument = document;
-        [cell.coverImage setImageWithURLRequest:URLRequest
-                               placeholderImage:nil
-                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                            PUBCellView *strongCell = weakCell;
-                                            PUBDocument *strongDocument = weakDocument;
-                                            strongCell.coverImage.image = image;
-                                            strongCell.coverImage.alpha = 0.f;
-                                            strongCell.coverImage.hidden = NO;
-                                            strongCell.namedBadgeView.hidden = YES;
-                                            [strongCell setBadgeViewHidden:YES animated:NO];
-                                            [strongCell.activityIndicator stopAnimating];
-                                            [strongCell setNeedsLayout];
-                                            
-                                            // animate first magazin coverload with scale animation
-                                            strongCell.coverImage.transform = CGAffineTransformMakeScale(.1f, .1f);
-                                            [UIView animateWithDuration:.4f animations:^{
-                                                strongCell.coverImage.alpha = 1.f;
-                                                strongCell.coverImage.transform = CGAffineTransformIdentity;
-                                            } completion:^(BOOL finished) {
-                                                BOOL shouldHideBadgeView = (strongDocument.state == PUBDocumentStateUpdated || strongDocument.state == PUBDocumentPurchased);
-                                                strongCell.namedBadgeView.hidden = !shouldHideBadgeView;
-                                                [strongCell setBadgeViewHidden:shouldHideBadgeView animated:YES];
-                                            }];
-                                            
-                                            
-                                            [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
-                                        } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                            PUBCellView *strongCell = weakCell;
-                                            strongCell.coverImage.hidden = NO;
-                                            [strongCell.activityIndicator stopAnimating];
-                                            PUBLogWarning(@"Failed to get image: %@", error);
-                                        }];
+        [self prepareCellWithoutThumbnail:cell indexPath:indexPath collectionView:collectionView thumbnailURL:thumbnailURL];
     }
+    [cell setNeedsLayout];
     return cell;
 }
 
@@ -844,10 +846,10 @@
 }
 
 - (UIImage *)targetImageForDocument:(PUBPDFDocument *)pdfDocument page:(NSInteger)page {
-    return [PSPDFCache.sharedCache imageFromDocument:pdfDocument
-                                         page:page
-                                         size:UIScreen.mainScreen.bounds.size
-                                      options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
+    return [PSPDFKit.sharedInstance.cache imageFromDocument:pdfDocument
+                                                       page:page
+                                                       size:UIScreen.mainScreen.bounds.size
+                                                    options:PSPDFCacheOptionDiskLoadSkip|PSPDFCacheOptionRenderSkip|PSPDFCacheOptionMemoryStoreAlways];
 }
 
 - (void)updateDocumentTransitionWithCurrentPageIndex:(NSInteger)currentPageIndex

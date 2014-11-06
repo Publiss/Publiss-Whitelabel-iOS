@@ -190,7 +190,7 @@
         if (document && document.state == PUBDocumentStateDownloaded) {
             // remove pdf cache for document
             PUBPDFDocument *pubPDFDocument = [PUBPDFDocument documentWithPUBDocument:document];
-            if ([PSPDFCache.sharedCache removeCacheForDocument:pubPDFDocument deleteDocument:YES error:&clearCacheError]) {
+            if ([PSPDFKit.sharedInstance.cache removeCacheForDocument:pubPDFDocument deleteDocument:YES error:&clearCacheError]) {
                 PUBLogVerbose(@"PDF Cache for document %@ cleared.", document.title);
             } else {
                 PUBLogError(@"Error clearing PDF Cache for document %@: %@", document.title, clearCacheError.localizedDescription);
@@ -226,7 +226,7 @@
     for (PUBDocument *document in [PUBDocument findAll]) {
         [document deleteDocument:NULL];
     }
-    [PSPDFCache.sharedCache clearCache];
+    [PSPDFKit.sharedInstance.cache clearCache];
     [PUBThumbnailImageCache.sharedInstance clearCache];
     [PUBCoreDataStack.sharedCoreDataStack saveContext];
 }
