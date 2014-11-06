@@ -23,12 +23,12 @@
 #import "JDStatusBarNotification.h"
 #import "UIImage+PUBTinting.h"
 #import "PSPDFWebViewController.h"
-#import "PUBBugFixFlowLayout.h"
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
 #import "PUBKioskLayout.h"
 #import "PUBHeaderReusableView+Documents.h"
+#import "PUBFooterReusableView.h"
 #import "UIActionSheet+Blocks.h"
 
 #import "PUBTransitioningDelegate.h"
@@ -161,6 +161,7 @@
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
     [self.collectionView registerClass:[PUBHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"PUBHeaderReusableView"];
+    [self.collectionView registerClass:[PUBFooterReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"PUBFooterReusableView"];
     
     UILongPressGestureRecognizer *longpressGesture = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(handleLongPressgesture:)];
     [self.collectionView addGestureRecognizer:longpressGesture];
@@ -284,37 +285,43 @@
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    PUBHeaderReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                           withReuseIdentifier:@"PUBHeaderReusableView"
-                                                                                                  forIndexPath:indexPath];
-    [header setupWithDocuments:self.featuredDocuments];
-    
-    header.singleTapBlock = ^() {
-        [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
-    };
-    
-    __weak typeof(header) weakHeader = header;
-    header.longPressBlock = ^() {
+    if (kind == UICollectionElementKindSectionHeader) {
+        PUBHeaderReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind
+                                                                           withReuseIdentifier:@"PUBHeaderReusableView"
+                                                                                  forIndexPath:indexPath];
+        [header setupWithDocuments:self.featuredDocuments];
         
-        PUBDocument *document = self.featuredDocuments.firstObject;
+        header.singleTapBlock = ^() {
+            [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
+        };
         
-        if (document.state == PUBDocumentStateDownloaded) {
-            [UIActionSheet showInView:weakHeader
-                            withTitle:PUBLocalize(@"Do you want to remove the PDF for this document?")
-                    cancelButtonTitle:PUBLocalize(@"Cancel")
-               destructiveButtonTitle:PUBLocalize(@"Yes, remove PDF")
-                    otherButtonTitles:nil
-                             tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
-                                 if (buttonIndex == actionSheet.destructiveButtonIndex) {
-                                     [self removePdfForDocument:document];
-                                 }
-                             }];
-        }
-    };
-    
-    self.headerView = header;
-    
-    return header;
+        __weak typeof(header) weakHeader = header;
+        header.longPressBlock = ^() {
+            
+            PUBDocument *document = self.featuredDocuments.firstObject;
+            
+            if (document.state == PUBDocumentStateDownloaded) {
+                [UIActionSheet showInView:weakHeader
+                                withTitle:PUBLocalize(@"Do you want to remove the PDF for this document?")
+                        cancelButtonTitle:PUBLocalize(@"Cancel")
+                   destructiveButtonTitle:PUBLocalize(@"Yes, remove PDF")
+                        otherButtonTitles:nil
+                                 tapBlock:^(UIActionSheet *actionSheet, NSInteger buttonIndex) {
+                                     if (buttonIndex == actionSheet.destructiveButtonIndex) {
+                                         [self removePdfForDocument:document];
+                                     }
+                                 }];
+            }
+        };
+        
+        self.headerView = header;
+        
+        return header;
+    } else {
+        return [collectionView dequeueReusableSupplementaryViewOfKind:kind
+                                                  withReuseIdentifier:@"PUBFooterReusableView"
+                                                         forIndexPath:indexPath];
+    }
 }
 
 - (void)prepareCellWithThumbnail:(UIImage *)thumbnail cell:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath document:(PUBDocument *)document
@@ -350,7 +357,7 @@
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
                                             [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
-                                            // has to
+                                            // has to called later becuase the cache needs some time to write
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                                 [collectionView reloadItemsAtIndexPaths:@[indexPath]];
                                             });

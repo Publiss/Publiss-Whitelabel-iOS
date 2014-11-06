@@ -120,7 +120,8 @@
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
     
     self.itemSize = PUBIsiPad() ? CGSizeMake(160.0f, 160.0f) : CGSizeMake(140.f, 140.f);
-    self.sectionInset = PUBIsiPad() ? UIEdgeInsetsMake(30.f, 30.0f, 30.0f, 30.0f) : UIEdgeInsetsMake(50.f, 15.f, 50.8f, 15.f);
+    // the bottom inset is 0 because it gets set in the content inset below
+    self.sectionInset = PUBIsiPad() ? UIEdgeInsetsMake(30.f, 30.0f, 0, 30.0f) : UIEdgeInsetsMake(50.f, 15.f, 0, 15.f);
     self.minimumInteritemSpacing = PUBIsiPad() ? 20.0f : 10.0f;
     self.minimumLineSpacing = PUBIsiPad() ? 31.0f : 51.0f;
     
@@ -132,6 +133,9 @@
     else {
         self.headerReferenceSize = CGSizeZero;
     }
+    
+    self.footerReferenceSize = CGSizeMake(self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
+    [self.collectionView setContentInset:UIEdgeInsetsMake(self.collectionView.contentInset.top, self.collectionView.contentInset.right, -self.footerReferenceSize.height + (PUBIsiPad() ? 30.0f : 50.8f), self.collectionView.contentInset.left)];
 }
 
 - (UIInterfaceOrientation)orientation {

@@ -88,10 +88,7 @@
             [PUBHTTPRequestManager.sharedRequestManager POST:trackingWebserviceURL
                                                   parameters:parameters
                                                      success:^(__unused AFHTTPRequestOperation *operation, id responseObject) {
-                                                         PUBLog(@"%@: [SUCCESS] dispatch statistic to %@ with statistic data: %@", [self class], trackingWebserviceURL, parameters);
-                                                         PUBLog(@"%@ Statistics: Server response object: %@", [self class], responseObject);
                                                          [PUBStatisticsManager.sharedInstance clearCache];
-                                                         
                                                      }
                                                      failure:^(__unused AFHTTPRequestOperation *operation, NSError *error) {
                                                          PUBLog(@"%@: [FAILURE] dispatch statistic to %@ with statistic data: %@", [self class], trackingWebserviceURL, parameters);
@@ -100,7 +97,7 @@
         }
     }
     else {
-        NSLog(@"%@: No statistics to dispatch. ", [self class]);
+        PUBLog(@"%@: No statistics to dispatch. ", [self class]);
     }
 }
 
