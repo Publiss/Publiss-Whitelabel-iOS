@@ -556,26 +556,28 @@
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [notification.userInfo objectForKey:PUBStatisticsDocumentIDKey];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.publishedDocuments[indexPath.item];
-        
-        if (!indexPath) {
-            PUBDocument *featured = self.featuredDocuments.firstObject;
-            if (featured && [featured.productID isEqual:productID]) {
-                document = featured;
-                document.state = PUBDocumentStateDownloaded;
-                [PUBCoreDataStack.sharedCoreDataStack saveContext];
-                
-                [self.headerView setupWithDocuments:@[document]];
-                [self.collectionView.collectionViewLayout invalidateLayout];
+        if (indexPath) {
+            PUBDocument *document = self.publishedDocuments[indexPath.item];
+            
+            if (!indexPath) {
+                PUBDocument *featured = self.featuredDocuments.firstObject;
+                if (featured && [featured.productID isEqual:productID]) {
+                    document = featured;
+                    document.state = PUBDocumentStateDownloaded;
+                    [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                    
+                    [self.headerView setupWithDocuments:@[document]];
+                    [self.collectionView.collectionViewLayout invalidateLayout];
+                }
             }
-        }
-        else {
-            if (document) {
-                document.state = PUBDocumentStateDownloaded;
-                [PUBCoreDataStack.sharedCoreDataStack saveContext];
-                
-                PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-                [cell setupForDocument:document];
+            else {
+                if (document) {
+                    document.state = PUBDocumentStateDownloaded;
+                    [PUBCoreDataStack.sharedCoreDataStack saveContext];
+                    
+                    PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                    [cell setupForDocument:document];
+                }
             }
         }
     }
