@@ -243,7 +243,11 @@
         self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
-        self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
+        if (self.publishedDocuments.count > 0) {
+            self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
+        } else {
+            self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+        }
         
         [self.collectionView reloadData];
         
@@ -535,17 +539,16 @@
     if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
         NSString *productID = [[notification.userInfo allKeys] firstObject];
         NSIndexPath *indexPath = [self indexPathForProductID:productID];
-        PUBDocument *document = self.publishedDocuments[indexPath.item];
-        
-        if (document && document.state == PUBDocumentStateLoading) {
-            NSDictionary *documentProgress = notification.userInfo[document.productID];
-            document.downloadProgress = [documentProgress[@"totalProgress"] floatValue];
-            
-            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            [cell setupForDocument:document];
+        if (indexPath) {
+            PUBDocument *document = self.publishedDocuments[indexPath.item];
+            if (document && document.state == PUBDocumentStateLoading) {
+                NSDictionary *documentProgress = notification.userInfo[document.productID];
+                document.downloadProgress = [documentProgress[@"totalProgress"] floatValue];
+                
+                PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+                [cell setupForDocument:document];
+            }
         }
-        
-        
     }
 }
 
