@@ -98,13 +98,7 @@
 }
 
 - (void)setupBackgroundBlur {
-    CGRect frame =
-    CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, CGRectGetWidth(self.view.frame), CGRectGetHeight(self.view.frame));
-    UINavigationBar *translucentView = [[UINavigationBar alloc] initWithFrame:frame];
-     translucentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [self.collectionView.superview addSubview:translucentView];
-    [self.collectionView.superview sendSubviewToBack:translucentView];
-    translucentView.backgroundColor = UIColor.clearColor;
+    self.view.backgroundColor = UIColor.whiteColor;
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
