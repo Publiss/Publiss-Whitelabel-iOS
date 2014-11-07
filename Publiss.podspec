@@ -28,12 +28,12 @@ Pod::Spec.new do |s|
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Publiss/PublissCore.embeddedframework"' }
 
-  s.dependency "PSPDFKit"
-  s.dependency "AFNetworking"
-  s.dependency "Lockbox"
-  s.dependency "REFrostedViewController"
-  s.dependency "JDStatusBarNotification"
-  s.dependency "UIActionSheet+Blocks"
-  s.dependency "GoogleAnalytics-iOS-SDK"
+  s.dependency "PSPDFKit", "4.1"
+  s.dependency "AFNetworking", "2.4.1"
+  s.dependency "Lockbox", "2.1.0"
+  s.dependency "REFrostedViewController", "2.4.7"
+  s.dependency "JDStatusBarNotification", "1.4.9"
+  s.dependency "UIActionSheet+Blocks", "0.8.1"
+  s.dependency "GoogleAnalytics-iOS-SDK", "3.0.9"
 
 end

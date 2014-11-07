@@ -399,8 +399,7 @@
 
 - (void)deleteButtonClicked:(UIButton *)button  {
     if ([button isKindOfClass:UIButton.class]) {
-        NSIndexPath *indexPath = [self.collectionView
-                                  indexPathForItemAtPoint:[self.collectionView convertPoint:button.center fromView:button.superview]];
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[self.collectionView convertPoint:button.superview.center fromView:button.superview]];
         PUBDocument *document = (self.publishedDocuments)[indexPath.row];
         [self removePdfForDocument:document];
     }
