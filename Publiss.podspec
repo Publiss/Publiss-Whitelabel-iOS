@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name                      = 'Publiss'
-  s.version                   = '2.0.4'
+  s.version                   = '2.0.5'
   s.summary                   = 'Publiss enables you to enrich PDFs with multimedia content and publish them to a high-quality iPhone and iPad App - all by yourself.'
   s.homepage                  = 'http://www.publiss.com'
   s.screenshots               = 'https://github.com/Publiss/Publiss-Whitelabel-iOS/raw/master/iPhone_iPad_Kiosk.png'
@@ -24,11 +24,11 @@ Pod::Spec.new do |s|
   s.preserve_paths            = 'PublissCore.embeddedframework', 'Publiss/Publiss.xcdatamodeld'
   s.framework                 = 'CoreData'
   s.vendored_frameworks       = 'PublissCore.embeddedframework/PublissCore.framework'
-  s.prefix_header_contents    = '#import <CoreData/CoreData.h>', '#import 'Publiss.h''
+  s.prefix_header_contents    = '#import <CoreData/CoreData.h>', '#import "Publiss.h"'
   s.requires_arc              = true
   s.xcconfig                  = { 'FRAMEWORK_SEARCH_PATHS' => '"$(PODS_ROOT)/Publiss/PublissCore.embeddedframework"' }
 
-  s.dependency 'PSPDFKit', '4.1.2'
+  s.dependency 'PSPDFKit', '4.1'
   s.dependency 'AFNetworking', '2.4.1'
   s.dependency 'Lockbox', '2.1.0'
   s.dependency 'REFrostedViewController', '2.4.7'
