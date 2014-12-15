@@ -239,7 +239,7 @@
     self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
-        self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured != YES || featured == nil"]];
+        self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
         self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;

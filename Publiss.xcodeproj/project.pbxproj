@@ -116,6 +116,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3744FE8C1A3F358A00F2BAB7 /* Publiss_2.1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.1.xcdatamodel; sourceTree = "<group>"; };
 		37B57E9919ECFC76000B893A /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
 		37B57E9C19ECFE3E000B893A /* Publiss_2.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.0.xcdatamodel; sourceTree = "<group>"; };
 		37F2F9A019ED6196003E344D /* PUBKioskLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskLayout.h; path = Classes/PUBKioskLayout.h; sourceTree = "<group>"; };
@@ -1141,6 +1142,7 @@
 		7864703518A532030005B3B1 /* Publiss.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				3744FE8C1A3F358A00F2BAB7 /* Publiss_2.1.1.xcdatamodel */,
 				37B57E9C19ECFE3E000B893A /* Publiss_2.1.0.xcdatamodel */,
 				8784A72818F575D9001DB322 /* Publiss_1.11.xcdatamodel */,
 				D403592118BF442100C5E72F /* Publiss_1.03.xcdatamodel */,
@@ -1148,7 +1150,7 @@
 				7864703718A532030005B3B1 /* Publiss_1.01.xcdatamodel */,
 				7864703818A532030005B3B1 /* Publiss_1.02.xcdatamodel */,
 			);
-			currentVersion = 37B57E9C19ECFE3E000B893A /* Publiss_2.1.0.xcdatamodel */;
+			currentVersion = 3744FE8C1A3F358A00F2BAB7 /* Publiss_2.1.1.xcdatamodel */;
 			path = Publiss.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

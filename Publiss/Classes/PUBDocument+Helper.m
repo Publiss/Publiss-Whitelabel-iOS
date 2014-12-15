@@ -66,7 +66,10 @@
         BOOL remoteFeatured = [[dictionary valueForKeyPath:@"featured"] boolValue];
         BOOL localFeatured = document.featured;
         
-        shouldUpdateValues = shouldUpdateValues || (remoteFeatured != localFeatured);
+        BOOL remoteShowInKiosk = [[dictionary valueForKeyPath:@"show_in_kiosk"] boolValue];
+        BOOL localShowInKiosk = document.showInKiosk;
+        
+        shouldUpdateValues = shouldUpdateValues || (remoteFeatured != localFeatured) || (remoteShowInKiosk != localShowInKiosk);
         
         // TODO: Use == on date object
         if(onlineFeaturedUpdatedAt &&
@@ -89,6 +92,7 @@
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
             document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
             document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
+            document.showInKiosk = [[dictionary valueForKeyPath:@"show_in_kiosk"] boolValue];
             document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
             
             // Progressive download support

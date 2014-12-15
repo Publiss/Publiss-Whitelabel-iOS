@@ -20,27 +20,29 @@ PODS:
   - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - GoogleAnalytics-iOS-SDK (3.10)
+  - GoogleAnalytics-iOS-SDK (3.10):
+    - GoogleAnalytics-iOS-SDK/Core
+  - GoogleAnalytics-iOS-SDK/Core (3.10)
   - JDStatusBarNotification (1.4.9)
-  - Lockbox (1.4.9)
+  - Lockbox (2.1.0)
   - PSPDFKit (4.1.2)
   - REFrostedViewController (2.4.7)
   - UIActionSheet+Blocks (0.8.1)
 
 DEPENDENCIES:
-  - AFNetworking (~> 2.4.1)
-  - GoogleAnalytics-iOS-SDK (~> 3.0)
-  - JDStatusBarNotification
-  - Lockbox (~> 1.4)
-  - PSPDFKit (~> 4.1)
-  - REFrostedViewController
-  - UIActionSheet+Blocks
+  - AFNetworking (= 2.4.1)
+  - GoogleAnalytics-iOS-SDK (= 3.10)
+  - JDStatusBarNotification (= 1.4.9)
+  - Lockbox (= 2.1.0)
+  - PSPDFKit (= 4.1.2)
+  - REFrostedViewController (= 2.4.7)
+  - UIActionSheet+Blocks (= 0.8.1)
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
-  GoogleAnalytics-iOS-SDK: e5872d2acc120613d954320e206c7e3bc8357d7c
+  GoogleAnalytics-iOS-SDK: f422062075d9ccb1ea8d783fc5ba3829461e9502
   JDStatusBarNotification: 9d833032d343e9a7abe0ec219c415dc115ba67a8
-  Lockbox: cfe87dbbce6b5c6d7cfeefc3fe6594ef55919b11
+  Lockbox: 3168f08cb26680b05a0702b8c0cc6da32788059d
   PSPDFKit: 00a21836c8d7efc52dad59e31b76d922036212cb
   REFrostedViewController: 08870a24788191339608b80b2bd4fce549858f0d
   UIActionSheet+Blocks: c8b9c02f3d08964e8f7a4202f004a639c15eab80

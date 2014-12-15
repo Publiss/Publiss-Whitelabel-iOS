@@ -19,6 +19,7 @@
 @dynamic pageCount;
 @dynamic paid;
 @dynamic featured;
+@dynamic showInKiosk;
 @dynamic priority;
 @dynamic productID;
 @dynamic publishedID;
