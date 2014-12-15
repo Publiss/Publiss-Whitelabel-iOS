@@ -37,6 +37,8 @@
 #import "REFrostedViewController.h"
 #import "PUBMenuItem.h"
 #import "PUBMenuItemManager.h"
+#import "PUBUserLoginViewController.h"
+#import "UIImage+ImageEffects.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
 
@@ -199,6 +201,14 @@
         [self showAbout];
     };
     [PUBMenuItemManager.sharedInstance addMenuItem:about];
+
+    PUBMenuItem *userLogin = PUBMenuItem.alloc.init;
+    userLogin.title = PUBLocalize(@"Login");
+    userLogin.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
+    userLogin.actionBlock = ^() {
+        [self showUserLogin];
+    };
+    [PUBMenuItemManager.sharedInstance addMenuItem:userLogin];
     
     if (PUBConfig.sharedConfig.inAppPurchaseActive) {
         PUBMenuItem *restore = PUBMenuItem.alloc.init;
@@ -266,6 +276,23 @@
                                delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil] show];
+}
+
+- (UIImage *)convertViewToImage {
+    UIGraphicsBeginImageContext(self.view.bounds.size);
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
+- (void)showUserLogin {
+    PUBUserLoginViewController *userViewController = PUBUserLoginViewController.userLoginViewController;
+    userViewController.view.backgroundColor = [UIColor colorWithPatternImage:[[self convertViewToImage] applyDarkEffect]];
+    userViewController.modalPresentationStyle = UIModalPresentationFormSheet;
+    [self.navigationController presentViewController:userViewController animated:YES completion:^{
+        
+    }];
 }
 
 - (void)visitPublissSite {
