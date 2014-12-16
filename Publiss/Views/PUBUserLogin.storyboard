@@ -18,19 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-logo" translatesAutoresizingMaskIntoConstraints="NO" id="FcZ-rg-g0v">
-                                <rect key="frame" x="180" y="20" width="240" height="112"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="112" id="KJ0-d6-R2F"/>
-                                    <constraint firstAttribute="width" constant="240" id="NCo-iU-rdD"/>
-                                    <constraint firstAttribute="width" constant="240" id="bE3-G6-3BN"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="NCo-iU-rdD"/>
-                                    </mask>
-                                </variation>
-                            </imageView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="37C-On-MUQ">
                                 <rect key="frame" x="16" y="150" width="568" height="430"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -128,13 +115,41 @@
                                     <outlet property="delegate" destination="wbO-xk-I8M" id="2Wd-ei-rY6"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qTE-Rg-7yc" userLabel="Close">
+                                <rect key="frame" x="562" y="40" width="22" height="22"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="22" id="NhD-7r-RlA"/>
+                                    <constraint firstAttribute="width" constant="22" id="pxx-A5-5kt"/>
+                                </constraints>
+                                <state key="normal" image="close">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="close:" destination="wbO-xk-I8M" eventType="touchUpInside" id="bvR-dY-3ei"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu-logo" translatesAutoresizingMaskIntoConstraints="NO" id="FcZ-rg-g0v">
+                                <rect key="frame" x="225" y="45" width="150" height="70"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="KJ0-d6-R2F"/>
+                                    <constraint firstAttribute="width" constant="240" id="NCo-iU-rdD"/>
+                                    <constraint firstAttribute="width" constant="150" id="bE3-G6-3BN"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="NCo-iU-rdD"/>
+                                    </mask>
+                                </variation>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="FcZ-rg-g0v" firstAttribute="top" secondItem="5FN-wB-nFb" secondAttribute="bottom" id="BAw-Pd-L83"/>
+                            <constraint firstItem="qTE-Rg-7yc" firstAttribute="top" secondItem="5FN-wB-nFb" secondAttribute="bottom" constant="20" id="77F-lw-o30"/>
+                            <constraint firstItem="FcZ-rg-g0v" firstAttribute="top" secondItem="5FN-wB-nFb" secondAttribute="bottom" constant="25" id="BAw-Pd-L83"/>
                             <constraint firstAttribute="centerX" secondItem="FcZ-rg-g0v" secondAttribute="centerX" id="CcR-Wm-3qq"/>
                             <constraint firstItem="37C-On-MUQ" firstAttribute="leading" secondItem="xYB-wC-24M" secondAttribute="leadingMargin" id="FV4-uJ-xmR"/>
-                            <constraint firstItem="37C-On-MUQ" firstAttribute="top" secondItem="FcZ-rg-g0v" secondAttribute="bottom" constant="18" id="Fks-ji-nOT"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="qTE-Rg-7yc" secondAttribute="trailing" id="FVC-ry-nGz"/>
+                            <constraint firstItem="37C-On-MUQ" firstAttribute="top" secondItem="FcZ-rg-g0v" secondAttribute="bottom" constant="35" id="Fks-ji-nOT"/>
                             <constraint firstItem="37C-On-MUQ" firstAttribute="trailing" secondItem="xYB-wC-24M" secondAttribute="trailingMargin" id="RpJ-jU-Mk0"/>
                             <constraint firstItem="ffJ-a3-FsN" firstAttribute="top" secondItem="37C-On-MUQ" secondAttribute="bottom" constant="20" id="m7L-oz-1eM"/>
                         </constraints>
@@ -146,6 +161,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="close" width="22" height="22"/>
         <image name="menu-logo" width="209" height="82"/>
     </resources>
 </document>

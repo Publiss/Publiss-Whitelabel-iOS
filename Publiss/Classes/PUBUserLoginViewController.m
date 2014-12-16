@@ -32,6 +32,12 @@
     return [[UIStoryboard storyboardWithName:@"PUBUserLogin" bundle:nil] instantiateInitialViewController];
 }
 
+#pragma mark - UI actions
+
+- (IBAction)close:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
