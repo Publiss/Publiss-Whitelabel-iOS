@@ -7,16 +7,55 @@
 //
 
 #import "PUBUserLoginViewController.h"
+#import "PUBUserLoginFieldTableViewCell.h"
 
 @interface PUBUserLoginViewController ()
+
+@property (nonatomic, strong) NSArray *loginFields;
 
 @end
 
 @implementation PUBUserLoginViewController
 
+#pragma mark - Initialization
+
+- (void)viewDidLoad
+{
+    self.loginFields = @[
+                         @{@"title": @"Email", @"type": @"PUBUserLoginTextFieldCell", @"parameter_name": @"email"},
+                         @{@"title": @"Name", @"type": @"PUBUserLoginTextFieldCell", @"parameter_name": @"name"},
+                         @{@"title": @"Password", @"type": @"PUBUserLoginPasswordFieldCell", @"parameter_name": @"password"}
+                         ];
+}
+
 + (PUBUserLoginViewController *)userLoginViewController {
     return [[UIStoryboard storyboardWithName:@"PUBUserLogin" bundle:nil] instantiateInitialViewController];
 }
+
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.loginFields.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *cellConfiguration = self.loginFields[indexPath.row];
+    NSString *CellIdentifier = (NSString *)cellConfiguration[@"type"];
+    
+    PUBUserLoginFieldTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    [cell setupFieldWithTitle:cellConfiguration[@"title"] andParameterName:cellConfiguration[@"parameter_name"]];
+
+    return cell;
+}
+
+
 /*
 #pragma mark - Navigation
 

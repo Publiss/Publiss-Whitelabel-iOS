@@ -31,7 +31,7 @@
                                     </mask>
                                 </variation>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="37C-On-MUQ">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="37C-On-MUQ">
                                 <rect key="frame" x="16" y="150" width="568" height="430"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="ax7-si-iAn">
@@ -76,12 +76,12 @@
                                     </constraints>
                                 </view>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="h41-Le-Ppb">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="PUBUserLoginTextFieldCell" id="h41-Le-Ppb" customClass="PUBUserLoginTextFieldTableViewCell">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="h41-Le-Ppb" id="ZMZ-Xx-Tw0">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7fa-Jy-FXX">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Text" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7fa-Jy-FXX">
                                                     <rect key="frame" x="8" y="8" width="552" height="30"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -94,9 +94,39 @@
                                                 <constraint firstItem="7fa-Jy-FXX" firstAttribute="top" secondItem="ZMZ-Xx-Tw0" secondAttribute="topMargin" id="pDy-WP-fLO"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="defaultTextField" destination="7fa-Jy-FXX" id="Fad-pE-6he"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PUBUserLoginPasswordFieldCell" id="aTS-bc-nnB" customClass="PUBUserLoginPasswordFieldTableViewCell">
+                                        <rect key="frame" x="124" y="11" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aTS-bc-nnB" id="uHH-kp-R4q">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8F7-1i-IFe">
+                                                    <rect key="frame" x="8" y="8" width="552" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="8F7-1i-IFe" firstAttribute="leading" secondItem="uHH-kp-R4q" secondAttribute="leadingMargin" id="7LJ-sm-G1f"/>
+                                                <constraint firstItem="8F7-1i-IFe" firstAttribute="trailing" secondItem="uHH-kp-R4q" secondAttribute="trailingMargin" id="Qkb-QN-3NT"/>
+                                                <constraint firstItem="8F7-1i-IFe" firstAttribute="top" secondItem="uHH-kp-R4q" secondAttribute="topMargin" id="RcD-Ic-YRA"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="8F7-1i-IFe" secondAttribute="bottom" constant="-3" id="aVC-0r-L5d"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="defaultTextField" destination="8F7-1i-IFe" id="tGj-To-i2W"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="wbO-xk-I8M" id="vWO-Am-IHX"/>
+                                    <outlet property="delegate" destination="wbO-xk-I8M" id="2Wd-ei-rY6"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>

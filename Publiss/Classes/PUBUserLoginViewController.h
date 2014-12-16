@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PUBUserLoginViewController : UIViewController
+@interface PUBUserLoginViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
 
 + (PUBUserLoginViewController *)userLoginViewController;
 
