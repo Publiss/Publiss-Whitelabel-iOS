@@ -33,9 +33,6 @@
     self.scrollView.scrollEnabled = YES;
     self.scrollView.showsVerticalScrollIndicator = YES;
     
-    self.previewCollectionView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"collectionview_preview_iphone"]];
-
-
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissNavController:)];
     self.navigationItem.leftBarButtonItems = @[doneButton];
 

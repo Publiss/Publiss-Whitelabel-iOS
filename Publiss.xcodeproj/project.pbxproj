@@ -357,6 +357,7 @@
 			children = (
 				8776662C19ADB05E000DFFF1 /* PreviewCell.xib */,
 				8776662D19ADB05E000DFFF1 /* PUBPreviewViewController.xib */,
+				8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */,
 			);
 			name = xib;
 			sourceTree = "<group>";
@@ -430,7 +431,6 @@
 			isa = PBXGroup;
 			children = (
 				8103B57A1846C14E00E8E77E /* xib */,
-				8776662719ADAFC8000DFFF1 /* PUBPreviewViewControlleriPhone.storyboard */,
 				8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */,
 				87FE340019F656AB00BED33B /* PUBMenu.storyboard */,
 			);

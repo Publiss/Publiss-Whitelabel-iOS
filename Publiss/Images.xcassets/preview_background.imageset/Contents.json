@@ -1,14 +1,42 @@
 {
   "images" : [
     {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "fill",
+          "width" : 1,
+          "height" : 1
+        },
+        "capInsets" : {
+          "bottom" : 22,
+          "top" : 21,
+          "right" : 22,
+          "left" : 21
+        }
+      },
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "preview_background.png"
+      "filename" : "preview_background_ipad.png",
+      "scale" : "1x"
     },
     {
+      "resizing" : {
+        "mode" : "9-part",
+        "center" : {
+          "mode" : "fill",
+          "width" : 1,
+          "height" : 1
+        },
+        "capInsets" : {
+          "bottom" : 2,
+          "top" : 41,
+          "right" : 42,
+          "left" : 45
+        }
+      },
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "preview_background@2x.png"
+      "filename" : "preview_background_ipad@2x.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",

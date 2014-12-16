@@ -11,6 +11,7 @@
 
 @interface PUBPreviewViewController () <PSPDFViewControllerDelegate, UINavigationControllerDelegate>
 @property (nonatomic, strong) IBOutlet UICollectionView *previewCollectionView;
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @end
 
 @implementation PUBPreviewViewController
@@ -27,15 +28,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"preview_background"]];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.previewCollectionView registerNib:[UINib nibWithNibName:@"PreviewCell" bundle:nil]
                  forCellWithReuseIdentifier:@"PreviewCell"];
     
     self.previewCollectionView.delegate = self;
     self.previewCollectionView.dataSource = self;
+    
+    self.scrollView.delegate = self;
+    self.scrollView.bounces = YES;
+    self.scrollView.scrollEnabled = YES;
+    self.scrollView.showsVerticalScrollIndicator = YES;
+    
     [self addMotionEffectForView:self.view withDepthX:20.f withDepthY:20.f];
-
-    self.descriptionText.numberOfLines = 3;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -53,6 +58,16 @@
     [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:NULL];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    // layout description text to top left corner
+    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), 99999);
+    [self.descriptionText sizeToFit];
+    CGFloat height = 502 + self.descriptionText.frame.size.height + 22;
+    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), height);
+}
+
 #define Cell_Spacing 15.f
 
 - (CGSize)collectionView:(UICollectionView *)collectionView
@@ -64,7 +79,7 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
                         layout:(UICollectionViewLayout *)collectionViewLayout
         insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(.0f, 20.0f, 0.0f, 20.0f);
+    return UIEdgeInsetsMake(18.0f, 20.0f, 0.0f, 20.0f);
 }
 
 
