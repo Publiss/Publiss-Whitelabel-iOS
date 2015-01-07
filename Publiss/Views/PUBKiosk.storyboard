@@ -8,7 +8,7 @@
         <!--Kiosk View Controller-->
         <scene sceneID="Ct3-MW-lcy">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="gsS-4U-Vt3" customClass="PUBKioskViewController" sceneMemberID="viewController">
+                <collectionViewController autoresizesArchivedViewToFullSize="NO" extendedLayoutIncludesOpaqueBars="YES" id="gsS-4U-Vt3" customClass="PUBKioskViewController" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="white" delaysContentTouches="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" keyboardDismissMode="interactive" dataMode="prototypes" id="N0A-DN-u0B">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -93,7 +93,7 @@
         <!--Navigation View Controller-->
         <scene sceneID="hdZ-dF-7g0">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1FT-Wh-JTQ" customClass="PUBNavigationViewController" sceneMemberID="viewController">
+                <navigationController extendedLayoutIncludesOpaqueBars="YES" automaticallyAdjustsScrollViewInsets="NO" id="1FT-Wh-JTQ" customClass="PUBNavigationViewController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zmX-R3-Uez">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>

@@ -73,6 +73,7 @@
     self.downloadFinished = NO;
     self.initiatedDownload = NO;
     self.navigationItem.title = PUBIsiPad() ? document.title : nil;
+    self.extendedLayoutIncludesOpaqueBars = YES;
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
     
