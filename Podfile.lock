@@ -24,8 +24,9 @@ PODS:
     - GoogleAnalytics-iOS-SDK/Core
   - GoogleAnalytics-iOS-SDK/Core (3.10)
   - JDStatusBarNotification (1.4.9)
+  - KVNProgress (2.1.6)
   - Lockbox (2.1.0)
-  - PSPDFKit (4.1.2)
+  - PSPDFKit (4.1.0)
   - REFrostedViewController (2.4.7)
   - UIActionSheet+Blocks (0.8.1)
 
@@ -33,8 +34,9 @@ DEPENDENCIES:
   - AFNetworking (= 2.4.1)
   - GoogleAnalytics-iOS-SDK (= 3.10)
   - JDStatusBarNotification (= 1.4.9)
+  - KVNProgress (= 2.1.6)
   - Lockbox (= 2.1.0)
-  - PSPDFKit (= 4.1.2)
+  - PSPDFKit (= 4.1)
   - REFrostedViewController (= 2.4.7)
   - UIActionSheet+Blocks (= 0.8.1)
 
@@ -42,8 +44,9 @@ SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
   GoogleAnalytics-iOS-SDK: f422062075d9ccb1ea8d783fc5ba3829461e9502
   JDStatusBarNotification: 9d833032d343e9a7abe0ec219c415dc115ba67a8
+  KVNProgress: ac45e7ded3510560d1900de8747f49dcbbc92c55
   Lockbox: 3168f08cb26680b05a0702b8c0cc6da32788059d
-  PSPDFKit: 00a21836c8d7efc52dad59e31b76d922036212cb
+  PSPDFKit: e21b184beb5e70de991178cfc056af5fb8def357
   REFrostedViewController: 08870a24788191339608b80b2bd4fce549858f0d
   UIActionSheet+Blocks: c8b9c02f3d08964e8f7a4202f004a639c15eab80
 

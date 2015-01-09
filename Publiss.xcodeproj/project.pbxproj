@@ -16,6 +16,10 @@
 		37F2F9B719F11CF6003E344D /* PUBTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B619F11CF6003E344D /* PUBTransitioningDelegate.m */; };
 		37F2F9BA19F13004003E344D /* PUBDimmView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B919F13004003E344D /* PUBDimmView.m */; };
 		37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */; };
+		728BDD731A600C49002C44D5 /* PUBMenuItemAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */; };
+		728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */; };
+		728BDD791A600C80002C44D5 /* PUBAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD781A600C80002C44D5 /* PUBAuthentication.m */; };
+		728BDD7B1A600CF8002C44D5 /* PUBUserLogin.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 728BDD7A1A600CF8002C44D5 /* PUBUserLogin.storyboard */; };
 		7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7864703518A532030005B3B1 /* Publiss.xcdatamodeld */; };
 		8110780C18112E2000281106 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780B18112E2000281106 /* AudioToolbox.framework */; };
 		8110780E18112E4100281106 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8110780D18112E4100281106 /* CoreAudio.framework */; };
@@ -136,6 +140,13 @@
 		37F2F9BB19F137C4003E344D /* PUBDocumentTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBDocumentTransition.h; path = Classes/PUBDocumentTransition.h; sourceTree = "<group>"; };
 		37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDocumentTransition.m; path = Classes/PUBDocumentTransition.m; sourceTree = "<group>"; };
 		462072B4D22FBED0967E830D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		728BDD711A600C49002C44D5 /* PUBMenuItemAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMenuItemAccount.h; path = Classes/PUBMenuItemAccount.h; sourceTree = "<group>"; };
+		728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBMenuItemAccount.m; path = Classes/PUBMenuItemAccount.m; sourceTree = "<group>"; };
+		728BDD741A600C6A002C44D5 /* PUBUserLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginViewController.h; path = Classes/PUBUserLoginViewController.h; sourceTree = "<group>"; };
+		728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBUserLoginViewController.m; path = Classes/PUBUserLoginViewController.m; sourceTree = "<group>"; };
+		728BDD771A600C80002C44D5 /* PUBAuthentication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBAuthentication.h; path = Classes/PUBAuthentication.h; sourceTree = "<group>"; };
+		728BDD781A600C80002C44D5 /* PUBAuthentication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBAuthentication.m; path = Classes/PUBAuthentication.m; sourceTree = "<group>"; };
+		728BDD7A1A600CF8002C44D5 /* PUBUserLogin.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBUserLogin.storyboard; path = Views/PUBUserLogin.storyboard; sourceTree = "<group>"; };
 		7864703618A532030005B3B1 /* Publiss.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss.xcdatamodel; sourceTree = "<group>"; };
 		7864703718A532030005B3B1 /* Publiss_1.01.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.01.xcdatamodel; sourceTree = "<group>"; };
 		7864703818A532030005B3B1 /* Publiss_1.02.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_1.02.xcdatamodel; sourceTree = "<group>"; };
@@ -367,6 +378,8 @@
 			children = (
 				8776661419ACED98000DFFF1 /* PUBCommunication.h */,
 				8776661519ACED98000DFFF1 /* PUBCommunication.m */,
+				728BDD771A600C80002C44D5 /* PUBAuthentication.h */,
+				728BDD781A600C80002C44D5 /* PUBAuthentication.m */,
 				8776661619ACED98000DFFF1 /* PUBDocumentFetcher.h */,
 				8776661719ACED98000DFFF1 /* PUBDocumentFetcher.m */,
 				8776661819ACED98000DFFF1 /* PUBHTTPRequestManager.h */,
@@ -380,6 +393,8 @@
 			children = (
 				87D9204219F6A1E70016872B /* PUBMenuItem.h */,
 				87D9204319F6A1E70016872B /* PUBMenuItem.m */,
+				728BDD711A600C49002C44D5 /* PUBMenuItemAccount.h */,
+				728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */,
 				8776660B19ACED83000DFFF1 /* PUBCoreDataStack.h */,
 				8776660C19ACED83000DFFF1 /* PUBCoreDataStack.m */,
 				8776660D19ACED83000DFFF1 /* PUBDocument.h */,
@@ -414,6 +429,8 @@
 				87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */,
 				87D9203F19F69DAD0016872B /* PUBMainViewController.h */,
 				87D9204019F69DAD0016872B /* PUBMainViewController.m */,
+				728BDD741A600C6A002C44D5 /* PUBUserLoginViewController.h */,
+				728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -433,6 +450,7 @@
 				8103B57A1846C14E00E8E77E /* xib */,
 				8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */,
 				87FE340019F656AB00BED33B /* PUBMenu.storyboard */,
+				728BDD7A1A600CF8002C44D5 /* PUBUserLogin.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -714,6 +732,7 @@
 						};
 					};
 					870110F5180FCF140034B9AC = {
+						DevelopmentTeam = 563BA5NND9;
 						TestTargetID = 870110D5180FCF140034B9AC;
 					};
 				};
@@ -744,6 +763,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8776662E19ADB05E000DFFF1 /* PreviewCell.xib in Resources */,
+				728BDD7B1A600CF8002C44D5 /* PUBUserLogin.storyboard in Resources */,
 				870110F1180FCF140034B9AC /* Images.xcassets in Resources */,
 				877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */,
 				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
@@ -825,9 +845,12 @@
 				37F2F9B419F11037003E344D /* PUBFadeTransition.m in Sources */,
 				877665F519ACED17000DFFF1 /* PUBScaleTransition.m in Sources */,
 				877665C719ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.m in Sources */,
+				728BDD731A600C49002C44D5 /* PUBMenuItemAccount.m in Sources */,
 				8776660119ACED51000DFFF1 /* PUBPreviewViewController.m in Sources */,
 				877665DF19ACEC9E000DFFF1 /* PUBCellView.m in Sources */,
 				8776661C19ACED98000DFFF1 /* PUBHTTPRequestManager.m in Sources */,
+				728BDD791A600C80002C44D5 /* PUBAuthentication.m in Sources */,
+				728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */,
 				37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */,
 				37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */,
 				87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */,
@@ -1066,6 +1089,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Publiss.app/Publiss";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1080,6 +1105,7 @@
 				);
 				INFOPLIST_FILE = "PublissTests/PublissTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../PSPDFKit/PSPDFKit/** $(SRCROOT)/PublissCore.embeddedframework/PublissCore.framework/Headers";
 				WRAPPER_EXTENSION = xctest;
@@ -1090,6 +1116,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Publiss.app/Publiss";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1100,6 +1128,7 @@
 				GCC_PREFIX_HEADER = "Publiss/Publiss-Prefix.pch";
 				INFOPLIST_FILE = "PublissTests/PublissTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/../PSPDFKit/PSPDFKit/** $(SRCROOT)/PublissCore.embeddedframework/PublissCore.framework/Headers";
 				WRAPPER_EXTENSION = xctest;
