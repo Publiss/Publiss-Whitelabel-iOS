@@ -9,14 +9,14 @@
 Pod::Spec.new do |s|
 
   s.name                      = 'Publiss'
-  s.version                   = '2.0.5'
+  s.version                   = '2.1.0'
   s.summary                   = 'Publiss enables you to enrich PDFs with multimedia content and publish them to a high-quality iPhone and iPad App - all by yourself.'
   s.homepage                  = 'http://www.publiss.com'
   s.screenshots               = 'https://github.com/Publiss/Publiss-Whitelabel-iOS/raw/master/iPhone_iPad_Kiosk.png'
   s.license                   = 'MIT'
   s.author                    = 'Publiss GmbH'
   s.platform                  = :ios, '7.1'
-  s.source                    = { :git => 'https://github.com/Publiss/Publiss-Whitelabel-iOS.git', :tag => '2.0.4'}
+  s.source                    = { :git => 'https://github.com/Publiss/Publiss-Whitelabel-iOS.git', :tag => '2.1.0'}
   s.source_files              = 'Publiss/3rd Party/*.{h,m}', 'Publiss/PSPDFSubclasses/*.{h,m}', 'Publiss/Classes/*.{h,m}', 'Publiss/PUBVersion.h', 'PublissCore.embeddedframework/**/*.h'
 
   s.resources                 = ['Publiss/Images.xcassets', 'Publiss/Views/*.*', 'Publiss/*.{xcdatamodeld,xcdatamodel}', 'Publiss/Publiss.bundle']
@@ -35,5 +35,6 @@ Pod::Spec.new do |s|
   s.dependency 'JDStatusBarNotification', '1.4.9'
   s.dependency 'UIActionSheet+Blocks', '0.8.1'
   s.dependency 'GoogleAnalytics-iOS-SDK', '3.10'
+  s.dependency 'KVNProgress', '2.1.6'
 
 end
