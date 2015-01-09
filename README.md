@@ -71,6 +71,7 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
 #import "PUBConfig.h"
 #import "Publiss.h"
 #import "PUBMainViewController.h"
+#import "PUBAuthentication.h"
 
 @implementation AppDelegate
 
@@ -82,6 +83,15 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
     PUBConfig.sharedConfig.inAppPurchaseActive = NO;
     PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:0.0f green:134/255.0f blue:204/255.0f alpha:1];
     PUBConfig.sharedConfig.secondaryColor = [UIColor whiteColor];
+    
+    // Uncomment the following lines to add user login to menu
+    // PUBAuthentication.sharedInstance.loginEnabled = YES;
+    // PUBAuthentication.sharedInstance.menuItemAccountField = @"email";
+    // PUBAuthentication.sharedInstance.loginFields = @[
+    //       @{@"title": @"Email",      @"class": @"PUBUserLoginTextFieldCell",         @"parameter_name": @"email"},
+    //       @{@"title": @"Password",   @"class": @"PUBUserLoginPasswordFieldCell",     @"parameter_name": @"password"}
+    // ];
+    // [PUBAuthentication.sharedInstance configureCommunications];
     
     [Publiss.staticInstance setupWithLicenseKey:nil];
     

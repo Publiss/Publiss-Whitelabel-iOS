@@ -10,4 +10,8 @@
 
 @implementation PUBMenuItem
 
+- (NSAttributedString *)attributedTitle {
+    return [NSAttributedString.alloc initWithString:self.title];
+}
+
 @end

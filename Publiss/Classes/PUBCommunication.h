@@ -11,7 +11,8 @@
 
 + (instancetype)sharedInstance;
 
-- (void)fetchAndSaveDocuments:(void (^)())completionHandler;
+- (void)fetchAndSaveDocuments:(void (^)())completionHandler
+                        error:(void (^)(NSError *error))errorHandler;
 
 - (void)dispatchCachedStatisticData;
 
@@ -24,5 +25,11 @@
 - (void)sendRestoreReceiptData:(NSData *)data
                     completion:(void(^)(id responseObject))completionBlock
                          error:(void(^)(NSError *error))errorBlock;
+
+#pragma mark - Publiss Authentication API
+
+- (void)sendLogin:(NSDictionary *)parameters
+       completion:(void(^)(id responseObject))completionBlock
+            error:(void(^)(NSError *error))errorBlock;
 
 @end

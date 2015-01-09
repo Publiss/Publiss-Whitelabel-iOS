@@ -38,3 +38,12 @@
 "Do you want to remove the PDF for this document?" = "Do you want to remove the PDF for this document?";
 "Cancel" = "Cancel";
 "Yes, remove PDF" = "YES, remove PDF";
+
+"Please wait until download is completed." = "Please wait until download is completed.";
+"Authenticating ..." = "Authenticating ...";
+"You are logged in!" = "You are now logged in!";
+"Request failed: forbidden (403)" = "Sorry!\nWe are experiencing technical difficulties";
+"Request failed: unauthorized (401)" = "Credentials are not valid";
+"User not found" = "Credentials are not valid";
+"You are now logged out!" = "You are now logged out!";
+"You have been logged out!\nPlease login again." = "You have been logged out!\nPlease login again.";

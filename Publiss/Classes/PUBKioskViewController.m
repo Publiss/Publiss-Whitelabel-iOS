@@ -39,8 +39,11 @@
 #import "PUBMenuItemManager.h"
 #import "PUBUserLoginViewController.h"
 #import "UIImage+ImageEffects.h"
+#import <KVNProgress/KVNProgress.h>
+#import "PUBAuthentication.h"
+#import "PUBMenuItemAccount.h"
 
-@interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource>
+@interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) PUBKioskLayout *kioskLayout;
@@ -201,14 +204,36 @@
         [self showAbout];
     };
     [PUBMenuItemManager.sharedInstance addMenuItem:about];
-
-    PUBMenuItem *userLogin = PUBMenuItem.alloc.init;
-    userLogin.title = PUBLocalize(@"Login");
-    userLogin.icon = [[UIImage imageNamed:@"about"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
-    userLogin.actionBlock = ^() {
-        [self showUserLogin];
-    };
-    [PUBMenuItemManager.sharedInstance addMenuItem:userLogin];
+    
+    if (PUBAuthentication.sharedInstance.loginEnabled) {
+        PUBMenuItemAccount *userLogin = PUBMenuItemAccount.alloc.init;
+        userLogin.actionBlockLogin = ^() {
+            if ([self isAnyDocumentCurrentlyLoading]) {
+                [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
+                [KVNProgress showErrorWithStatus:PUBLocalize(@"Please wait until download is completed.")];
+            }
+            else {
+                [self showUserLogin];
+            }
+        };
+        userLogin.actionBlockLogout = ^() {
+            if ([self isAnyDocumentCurrentlyLoading]) {
+                [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
+                [KVNProgress showErrorWithStatus:PUBLocalize(@"Please wait until download is completed.")];
+            }
+            else {
+                [PUBAuthentication.sharedInstance logout];
+                for (PUBDocument *document in self.publishedDocuments) {
+                    [self removePdfForDocument:document];
+                }
+                [self refreshDocumentsWithActivityViewAnimated:YES];
+                
+                [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
+                [KVNProgress showSuccessWithStatus:PUBLocalize(@"You are now logged out!")];
+            }
+        };
+        [PUBMenuItemManager.sharedInstance addMenuItem:userLogin];
+    }
     
     if (PUBConfig.sharedConfig.inAppPurchaseActive) {
         PUBMenuItem *restore = PUBMenuItem.alloc.init;
@@ -263,7 +288,17 @@
         
         self.editButtonItem.enabled = YES;
         [self.refreshControl endRefreshing];
-    }];
+    }
+                                                     error:^(NSError *error) {
+                                                         PUBAuthentication *auth = PUBAuthentication.sharedInstance;
+                                                         if ([auth isLoggedIn]) {
+                                                             [auth logout];
+                                                             [self refreshDocumentsWithActivityViewAnimated:YES];
+                                                             
+                                                             [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
+                                                             [KVNProgress showErrorWithStatus:PUBLocalize(@"You have been logged out!\nPlease login again.")];
+                                                         }
+                                                     }];
 }
 
 - (void)showMenu:(id)sender {
@@ -278,21 +313,13 @@
                       otherButtonTitles:nil] show];
 }
 
-- (UIImage *)convertViewToImage {
-    UIGraphicsBeginImageContext(self.view.bounds.size);
-    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
 - (void)showUserLogin {
-    PUBUserLoginViewController *userViewController = PUBUserLoginViewController.userLoginViewController;
-    userViewController.view.backgroundColor = [UIColor colorWithPatternImage:[[self convertViewToImage] applyDarkEffect]];
+    PUBUserLoginViewController *userViewController = [PUBUserLoginViewController userLoginViewControllerWithDelegate:self];
+    
+    userViewController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     userViewController.modalPresentationStyle = UIModalPresentationFormSheet;
-    [self.navigationController presentViewController:userViewController animated:YES completion:^{
-        
-    }];
+    
+    [self.navigationController presentViewController:userViewController animated:YES completion:^{}];
 }
 
 - (void)visitPublissSite {
@@ -301,6 +328,29 @@
         self.navigationController.delegate = nil;
         [self.navigationController pushViewController:webViewController animated:YES];
     }
+}
+
+#pragma mark - PUBUserLoginDelegate
+
+- (BOOL)pubUserLoginWillLoginWithCredentials:(NSDictionary *)credentials
+{
+    [KVNProgress setConfiguration:[self fullScreenBlockingProgressConfiguration]];
+    [KVNProgress showWithStatus:PUBLocalize(@"Authenticating ...")];
+    return YES;
+}
+
+- (void)pubUserLoginFailedWithError:(NSString *)message
+{
+    [KVNProgress showErrorWithStatus:PUBLocalize(message)];
+}
+
+- (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters
+{
+    [PUBAuthentication.sharedInstance setLoggedInWithToken:token andMetadata:response];
+    [KVNProgress showSuccessWithStatus:PUBLocalize(@"You are logged in!")];
+    
+    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+    [self refreshDocumentsWithActivityViewAnimated:YES];
 }
 
 #pragma mark - UICollectionView DataSoure
@@ -553,6 +603,18 @@
                                                                    PUBStatisticsEventKey : PUBStatisticsDeletedKey }];
         [self.collectionView reloadData];
     }];
+}
+
+- (BOOL)isAnyDocumentCurrentlyLoading {
+    BOOL isLoadingInProgress = NO;
+    
+    for (PUBDocument *document in self.publishedDocuments) {
+        if (document.state == PUBDocumentStateLoading) {
+            isLoadingInProgress = YES;
+        }
+    }
+    
+    return isLoadingInProgress;
 }
 
 #pragma mark - Notifications
@@ -904,6 +966,30 @@
     PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:path];
     
     return cell.coverImage.image;
+}
+
+#pragma mark - KVNProgress configuration
+
+- (KVNProgressConfiguration *)fullScreenBlockingProgressConfiguration {
+    KVNProgressConfiguration *configuration = [[KVNProgressConfiguration alloc] init];
+    
+    configuration.statusFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0f];
+    configuration.circleSize = 110.0f;
+    configuration.lineWidth = 1.0f;
+    configuration.fullScreen = YES;
+    
+    return configuration;
+}
+
+- (KVNProgressConfiguration *)notifyMessageConfiguration {
+    KVNProgressConfiguration *configuration = [[KVNProgressConfiguration alloc] init];
+    
+    configuration.statusFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0f];
+    configuration.circleSize = 110.0f;
+    configuration.lineWidth = 1.0f;
+    configuration.fullScreen = NO;
+    
+    return configuration;
 }
 
 @end

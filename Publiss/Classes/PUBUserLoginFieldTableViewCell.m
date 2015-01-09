@@ -36,11 +36,22 @@
     return self;
 }
 
+#pragma mark - Layout
+
+- (UIEdgeInsets)layoutMargins {
+    return UIEdgeInsetsMake(0, 0, 0, -15.0f);
+}
+
 #pragma mark - Internal functions
 
 - (NSString *)getParameterName
 {
     return self.parameterName;
+}
+
+- (NSString *)getParameterValue
+{
+    return self.defaultTextField.text;
 }
 
 @end

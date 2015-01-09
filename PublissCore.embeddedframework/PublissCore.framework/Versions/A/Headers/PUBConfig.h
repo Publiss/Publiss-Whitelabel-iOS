@@ -12,6 +12,7 @@
 
 + (PUBConfig *)sharedConfig;
 
+@property (nonatomic, strong) NSString *authToken;
 @property (nonatomic, strong) NSString *appToken;
 @property (nonatomic, strong) NSString *appSecret;
 @property (nonatomic, strong) NSString *googleAnalyticsTrackingCode;

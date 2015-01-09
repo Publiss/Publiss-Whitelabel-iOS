@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="z7E-o6-1v2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="z7E-o6-1v2">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -32,7 +32,7 @@
                                 </variation>
                             </imageView>
                             <tableView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="28I-Wg-DFE">
-                                <rect key="frame" x="0.0" y="198" width="240" height="402"/>
+                                <rect key="frame" x="0.0" y="198" width="224" height="402"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell opaque="NO" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="menu" id="gsU-wa-wnt" customClass="PUBMenuTableViewCell">
@@ -42,7 +42,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYK-Nu-G6a">
-                                                    <rect key="frame" x="62" y="11" width="170" height="22"/>
+                                                    <rect key="frame" x="62" y="11" width="154" height="22"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
@@ -78,7 +78,7 @@
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="centerX" secondItem="Sci-eg-5KB" secondAttribute="centerX" id="6bA-r1-gnj"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="28I-Wg-DFE" secondAttribute="trailing" constant="-16" id="VK6-ZI-pYH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="28I-Wg-DFE" secondAttribute="trailing" id="VK6-ZI-pYH"/>
                             <constraint firstItem="28I-Wg-DFE" firstAttribute="top" secondItem="Sci-eg-5KB" secondAttribute="bottom" constant="42" id="b04-yc-B11"/>
                             <constraint firstItem="qBx-6F-DQy" firstAttribute="top" secondItem="28I-Wg-DFE" secondAttribute="bottom" id="jGB-lo-KNK"/>
                             <constraint firstItem="Sci-eg-5KB" firstAttribute="top" secondItem="uCb-Fq-AAT" secondAttribute="bottom" id="m1G-oG-Wre"/>

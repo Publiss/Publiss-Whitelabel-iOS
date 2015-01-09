@@ -14,5 +14,6 @@
 
 - (instancetype)setupFieldWithTitle:(NSString *)title andParameterName:(NSString *)parameterName;
 - (NSString *)getParameterName;
+- (NSString *)getParameterValue;
 
 @end

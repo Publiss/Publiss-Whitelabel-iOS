@@ -12,6 +12,7 @@
 #import "PUBURLFactory.h"
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
+#import "PUBAuthentication.h"
 
 @interface PUBDocumentFetcher () <PSPDFDownloadManagerDelegate>
 @property (nonatomic, strong) PSPDFDownloadManager *downloadManager;
@@ -46,7 +47,7 @@
 
 - (void)fetchDocumentList:(void (^)(BOOL success, NSError *error, NSDictionary *result))completionHandler {
     NSString *publishedDocumentURLString = [PUBURLFactory createPublishedDocumentsPath];
-    NSDictionary *signedParameters = [PUBURLFactory createSignedParameters:[NSMutableDictionary dictionary] forPath:publishedDocumentURLString];
+    NSDictionary *signedParameters = [PUBURLFactory createSignedParameters:nil forPath:publishedDocumentURLString];
     
     if ([signedParameters isKindOfClass:NSDictionary.class] && signedParameters != nil) {
         [PUBHTTPRequestManager.sharedRequestManager GET:publishedDocumentURLString
