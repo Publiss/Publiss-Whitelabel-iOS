@@ -89,7 +89,7 @@
     cell.backgroundColor = [UIColor clearColor];
     
     PUBMenuItem *menuItem = [self menuItemForIndexPath:indexPath];
-    cell.titleLabel.text = menuItem.title;
+    cell.titleLabel.attributedText = menuItem.attributedTitle;
     cell.icon.image = menuItem.icon;
 
     return cell;

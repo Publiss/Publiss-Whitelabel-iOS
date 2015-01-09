@@ -38,3 +38,12 @@
 "Do you want to remove the PDF for this document?" = "Wollen Sie das PDF für dieses Dokument entfernen?";
 "Cancel" = "Abbrechen";
 "Yes, remove PDF" = "Ja, PDF entfernen";
+
+"Please wait until download is completed." = "Bitte warten bis alle Downloads abgeschlossen sind.";
+"Authenticating ..." = "Login läuft ...";
+"You are logged in!" = "Sie sind nun eingeloggt!";
+"Request failed: forbidden (403)" = "Entschuldigung!\nWir haben technische Schwierigkeiten.";
+"Request failed: unauthorized (401)" = "Benutzername oder Passwort falsch";
+"User not found" = "Benutzername oder Passwort falsch";
+"You are now logged out!" = "Sie wurden ausgeloggt!";
+"You have been logged out!\nPlease login again." = "Sie wurden ausgeloggt!\nBitte melden Sie sich erneut an.";

@@ -23,6 +23,8 @@
 + (NSString *)createReceiptPathForPayLoad:(NSDictionary *)payload;
 + (NSString *)createReceiptRestorePathForPayLoad:(NSDictionary *)payload;
 
++ (NSString *)createAuthenticationLoginURLString:(NSDictionary *)payload;
+
 + (NSDictionary *)createSignedParameters:(NSDictionary *)parameters forPath:(NSString *)path;
 
 @end

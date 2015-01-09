@@ -11,7 +11,7 @@
 #import "PUBHTTPRequestManager.h"
 #import "PUBStatisticsManager.h"
 #import "PUBURLFactory.h"
-#import <PublissCore.h>
+#import "PublissCore.h"
 #import "PUBConstants.h"
 
 @implementation PUBCommunication
@@ -29,7 +29,8 @@
 
 # pragma mark - fetch and save documents
 
-- (void)fetchAndSaveDocuments:(void (^)())completionHandler {
+- (void)fetchAndSaveDocuments:(void (^)())completionHandler
+                        error:(void (^)(NSError *error))errorHandler {
     [PUBDocumentFetcher.sharedFetcher fetchDocumentList:^(BOOL success, NSError *error, NSDictionary *result) {
         if (success && result) {
             if ([NSJSONSerialization isValidJSONObject:result]) {
@@ -54,7 +55,9 @@
                     }
                 }
                 
-                if (completionHandler) completionHandler();
+                if (completionHandler) {
+                    completionHandler();
+                }
             }
             else {
                 PUBLogError(@"JSON error: [%@ %@]", self.class, NSStringFromSelector(_cmd));
@@ -67,7 +70,12 @@
         }
         else {
             PUBLogError(@"PUBCommunication: Error fetching and saving document list: %@", error.localizedDescription);
-            if (completionHandler) completionHandler();
+            if (completionHandler) {
+                completionHandler();
+            }
+            if (errorHandler) {
+                errorHandler(error);
+            }
         }
     }];
 }
@@ -149,6 +157,25 @@
                                                     PUBLog(@"Status Code: %ld", (long)[operation.response statusCode]);
                                                     if (errorBlock) errorBlock(error);
                                                 }];
+    }
+}
+
+- (void)sendLogin:(NSDictionary *)parameters
+       completion:(void(^)(id responseObject))completionBlock
+            error:(void(^)(NSError *error))errorBlock {
+    
+    if ([NSJSONSerialization isValidJSONObject:parameters]) {
+        [PUBHTTPRequestManager.sharedRequestManager POST:[PUBURLFactory createAuthenticationLoginURLString:parameters]
+                                              parameters:parameters
+                                                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                     PUBLog(@"%@: [SUCCESS] sending login request.", [self class]);
+                                                     PUBLog(@"%@: Server response object: %@", [self class], responseObject);
+                                                     if (completionBlock) (completionBlock(responseObject));
+                                                 }
+                                                 failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                     PUBLogError(@"%@: [FAILURE] sending login request: %@", [self class], error.localizedDescription);
+                                                     if (errorBlock) errorBlock(error);
+                                                 }];
     }
 }
 

@@ -14,4 +14,6 @@
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) UIImage *icon;
 
+- (NSAttributedString *) attributedTitle;
+
 @end
