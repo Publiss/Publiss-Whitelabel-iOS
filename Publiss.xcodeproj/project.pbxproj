@@ -97,6 +97,9 @@
 		87ACA1A819F7EC520075364D /* PUBMenuItemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87ACA1A719F7EC520075364D /* PUBMenuItemManager.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
 		87C655891A0B7C2B0092218F /* PUBFooterReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C655881A0B7C2B0092218F /* PUBFooterReusableView.m */; };
+		87CFE2A11A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE29C1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m */; };
+		87CFE2A21A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE29E1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m */; };
+		87CFE2A31A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE2A01A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m */; };
 		87D9204119F69DAD0016872B /* PUBMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204019F69DAD0016872B /* PUBMainViewController.m */; };
 		87D9204419F6A1E70016872B /* PUBMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204319F6A1E70016872B /* PUBMenuItem.m */; };
 		87D9204719F798210016872B /* PUBMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204619F798210016872B /* PUBMenuTableViewCell.m */; };
@@ -269,6 +272,12 @@
 		87B1962819DD75EC0060353B /* Publiss.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Publiss.podspec; sourceTree = SOURCE_ROOT; };
 		87C655871A0B7C2B0092218F /* PUBFooterReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBFooterReusableView.h; path = Classes/PUBFooterReusableView.h; sourceTree = "<group>"; };
 		87C655881A0B7C2B0092218F /* PUBFooterReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBFooterReusableView.m; path = Classes/PUBFooterReusableView.m; sourceTree = "<group>"; };
+		87CFE29B1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginFieldTableViewCell.h; path = Classes/PUBUserLoginFieldTableViewCell.h; sourceTree = "<group>"; };
+		87CFE29C1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBUserLoginFieldTableViewCell.m; path = Classes/PUBUserLoginFieldTableViewCell.m; sourceTree = "<group>"; };
+		87CFE29D1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginPasswordFieldTableViewCell.h; path = Classes/PUBUserLoginPasswordFieldTableViewCell.h; sourceTree = "<group>"; };
+		87CFE29E1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBUserLoginPasswordFieldTableViewCell.m; path = Classes/PUBUserLoginPasswordFieldTableViewCell.m; sourceTree = "<group>"; };
+		87CFE29F1A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginTextFieldTableViewCell.h; path = Classes/PUBUserLoginTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		87CFE2A01A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBUserLoginTextFieldTableViewCell.m; path = Classes/PUBUserLoginTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		87D9203F19F69DAD0016872B /* PUBMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMainViewController.h; path = Classes/PUBMainViewController.h; sourceTree = "<group>"; };
 		87D9204019F69DAD0016872B /* PUBMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBMainViewController.m; path = Classes/PUBMainViewController.m; sourceTree = "<group>"; };
 		87D9204219F6A1E70016872B /* PUBMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMenuItem.h; path = Classes/PUBMenuItem.h; sourceTree = "<group>"; };
@@ -458,6 +467,12 @@
 		811A8B7C1816A48800D0F893 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				87CFE29B1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.h */,
+				87CFE29C1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m */,
+				87CFE29D1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.h */,
+				87CFE29E1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m */,
+				87CFE29F1A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.h */,
+				87CFE2A01A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m */,
 				877665EA19ACECEA000DFFF1 /* PUBNamedBadgeView.h */,
 				877665EB19ACECEA000DFFF1 /* PUBNamedBadgeView.m */,
 				877665E719ACECDE000DFFF1 /* PUBBadgeView.h */,
@@ -841,6 +856,8 @@
 				8776661A19ACED98000DFFF1 /* PUBCommunication.m in Sources */,
 				87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */,
 				877665EC19ACECEA000DFFF1 /* PUBNamedBadgeView.m in Sources */,
+				87CFE2A21A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m in Sources */,
+				87CFE2A31A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m in Sources */,
 				87D9204119F69DAD0016872B /* PUBMainViewController.m in Sources */,
 				37F2F9B419F11037003E344D /* PUBFadeTransition.m in Sources */,
 				877665F519ACED17000DFFF1 /* PUBScaleTransition.m in Sources */,
@@ -864,6 +881,7 @@
 				877665D019ACEC68000DFFF1 /* PUBLinkAnnotationView.m in Sources */,
 				877665B719ACEA06000DFFF1 /* IAPManager.m in Sources */,
 				8776661B19ACED98000DFFF1 /* PUBDocumentFetcher.m in Sources */,
+				87CFE2A11A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m in Sources */,
 				37F2F9B119EE5F73003E344D /* PUBHeaderReusableView+Documents.m in Sources */,
 				8776661319ACED83000DFFF1 /* PUBDocument+Helper.m in Sources */,
 				877665C519ACEA0C000DFFF1 /* PUBPDFViewController.m in Sources */,
