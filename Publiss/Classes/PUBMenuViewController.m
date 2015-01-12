@@ -37,6 +37,7 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0);
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 16, 0, -100);
+    self.view.layoutMargins = UIEdgeInsetsMake(0, 16, 0, 0);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
