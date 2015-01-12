@@ -154,7 +154,7 @@
 
 + (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language {
     
-    NSArray *allDistinctTags = [PUBDocument fetchAllUniqueLinkedTags];
+    NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
     
     NSMutableArray *prefferedDocuemtns = [NSMutableArray new];
     for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
@@ -172,22 +172,6 @@
     
     NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
     return [prefferedDocuemtns arrayByAddingObjectsFromArray:allWithoutLanguage];
-}
-
-+ (NSArray *)fetchAllUniqueLinkedTags {
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"PUBLanguage" inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
-    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PUBLanguage"];
-    
-    NSError *error = nil;
-    NSArray *objects = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:request error:&error];
-
-    NSMutableSet *allLinkedTags = [NSMutableSet new];
-    for (PUBLanguage *language in objects) {
-        [allLinkedTags addObject:@{@"linkedTag":language.linkedTag}];
-    }
-    
-    NSArray *uniqueLinkedTags= [allLinkedTags valueForKeyPath:@"linkedTag"];
-    return uniqueLinkedTags == nil ? [NSArray new] : uniqueLinkedTags;
 }
 
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {

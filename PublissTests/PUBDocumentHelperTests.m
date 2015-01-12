@@ -10,6 +10,7 @@
 #import <XCTest/XCTest.h>
 #import "PUBDocument+Helper.h"
 #import "PUBLanguage+Helper.h"
+#import "PUBCoreDataStack.h"
 
 @interface PUBDocumentHelperTests : XCTestCase
 
@@ -34,13 +35,18 @@
     self.d3 = [PUBDocument createEntity];
     self.d4 = nil;
     
-    self.language_a_en = @{@"linked":@"t1", @"language":@"en", @"title":@"English"};
-    self.language_a_de = @{@"linked":@"t1", @"language":@"de", @"title":@"Deutsch"};
-    self.language_b_en = @{@"linked":@"t2", @"language":@"en", @"title":@"English"};
+    self.language_a_en = @{@"linked":@"t1", @"lang":@"en", @"title":@"English"};
+    self.language_a_de = @{@"linked":@"t1", @"lang":@"de", @"title":@"Deutsch"};
+    self.language_b_en = @{@"linked":@"t2", @"lang":@"en", @"title":@"English"};
     
     self.d1.language = [PUBLanguage createOrUpdateWithDocument:self.d1 andDictionary:self.language_a_en];
     self.d2.language = [PUBLanguage createOrUpdateWithDocument:self.d2 andDictionary:self.language_a_de];
     self.d3.language = [PUBLanguage createOrUpdateWithDocument:self.d3 andDictionary:self.language_b_en];
+}
+
+- (void)tearDown {
+    [super tearDown];
+    [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext reset];
 }
 
 - (void)testFetchAllDistinctDocuments {

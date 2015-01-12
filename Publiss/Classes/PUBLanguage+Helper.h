@@ -13,4 +13,6 @@
 + (PUBLanguage *)createOrUpdateWithDocument:(PUBDocument *)document
                               andDictionary:(NSDictionary *)dictionary;
 
++ (NSArray *)fetchAllUniqueLinkedTags;
+
 @end

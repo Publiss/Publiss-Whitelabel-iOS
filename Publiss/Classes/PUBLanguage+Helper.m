@@ -52,4 +52,24 @@
     return language;
 }
 
++ (NSArray *)findAll {
+    return [self findWithPredicate:nil];
+}
+
++ (NSArray *)findWithPredicate:(NSPredicate *)predicate {
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+    fetchRequest.predicate = predicate;
+    fetchRequest.entity = [self getEntity];
+    return [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:fetchRequest error:NULL];
+}
+
++ (NSEntityDescription *)getEntity {
+    return [NSEntityDescription entityForName:@"PUBLanguage" inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
+}
+
++ (NSArray *)fetchAllUniqueLinkedTags {
+    NSArray *alllLinkedTags = [[PUBLanguage findAll] valueForKey:@"linkedTag"];
+    return [[NSSet setWithArray:alllLinkedTags] allObjects];
+}
+
 @end
