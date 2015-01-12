@@ -84,6 +84,9 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
     PUBConfig.sharedConfig.primaryColor = [UIColor colorWithRed:0.0f green:134/255.0f blue:204/255.0f alpha:1];
     PUBConfig.sharedConfig.secondaryColor = [UIColor whiteColor];
     
+    // Uncomment this line to use the language tag feature.
+    // PUBConfig.sharedConfig.preferredLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
+    
     // Uncomment the following lines to add user login to menu
     // PUBAuthentication.sharedInstance.loginEnabled = YES;
     // PUBAuthentication.sharedInstance.menuItemAccountField = @"email";

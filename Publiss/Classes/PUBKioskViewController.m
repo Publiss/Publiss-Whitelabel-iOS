@@ -271,11 +271,31 @@
     if (!self.refreshControl.isRefreshing) {
         [self.refreshControl beginRefreshing];
     }
+    
     self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
-        self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
-        self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder ascending:YES predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        
+        if (PUBConfig.sharedConfig.preferredLanguage.length > 0) {
+            self.publishedDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
+                                                                        sortedBy:SortOrder
+                                                                       ascending:YES
+                                                                       predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
+            self.featuredDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
+                                                                       sortedBy:SortOrder
+                                                                      ascending:YES
+                                                                      predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        }
+        else {
+            self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder
+                                                          ascending:YES
+                                                          predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
+            self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder
+                                                         ascending:YES
+                                                         predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        }
+        
+        
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
         if (self.publishedDocuments.count > 0) {
@@ -373,7 +393,7 @@
         [header setupWithDocuments:self.featuredDocuments];
         
         header.singleTapBlock = ^() {
-            [self presentDocumentAccordingToState:self.featuredDocuments.firstObject];
+            [self presentDocumentAccordingToState:self.featuredDocuments.firstObject atIndexPath:nil];
         };
         
         __weak typeof(header) weakHeader = header;
@@ -471,7 +491,7 @@
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     PUBDocument *document = self.publishedDocuments[indexPath.item];
-    [self presentDocumentAccordingToState:document];
+    [self presentDocumentAccordingToState:document atIndexPath:indexPath];
 }
 
 #pragma mark - Actions
@@ -799,20 +819,20 @@
 
 #pragma mark - Present Preview/Document
 
-- (void)presentDocumentAccordingToState:(PUBDocument *)document {
+- (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
     if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self presentDocument:document];
+            [self presentDocument:document atIndexPath:indexPath];
         });
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self presentPreviewForDocument:document];
+            [self presentPreviewForDocument:document atIndexPath:indexPath];
         });
     }
 }
 
-- (void)presentPreviewForDocument:(PUBDocument *)document {
+- (void)presentPreviewForDocument:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath{
     
     if (self.isPresentingController) {
         return;
@@ -823,7 +843,6 @@
     previewViewController.document = document;
     previewViewController.kioskController = self;
     
-    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionScale;
@@ -868,7 +887,7 @@
     }];
 }
 
-- (void)presentDocument:(PUBDocument *)document {
+- (void)presentDocument:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
     
     if (self.isPresentingController) {
         return;
@@ -885,7 +904,6 @@
     
     UIViewController *controllerToPresent = pdfController;
     
-    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         

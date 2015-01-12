@@ -6,7 +6,6 @@
 //
 
 #import "PUBDocument.h"
-#import "PSPDFKit.h"
 
 typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateOnline,
@@ -16,6 +15,8 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateUpdated
 };
 
+@class PSPDFViewState;
+
 @interface PUBDocument (Helper)
 
 @property (strong, nonatomic) PSPDFViewState *lastViewState;
@@ -24,7 +25,10 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID;
 + (NSArray *)findAll;
 + (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language;
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language sortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
 + (PUBDocument *)createPUBDocumentWithDictionary:(NSDictionary *)dictionary;
++ (PUBDocument *)createEntity;
 
 /// deletes the file of the document and pspdfcache
 - (void)deleteDocument:(void (^)())completionBlock;

@@ -2,10 +2,12 @@
 //  PUBDocument.m
 //  Publiss
 //
-//  Copyright (c) 2014 Publiss GmbH. All rights reserved.
+//  Created by Denis Andrasec on 12.01.15.
+//  Copyright (c) 2015 Publiss GmbH. All rights reserved.
 //
 
 #import "PUBDocument.h"
+#import "PUBLanguage.h"
 
 
 @implementation PUBDocument
@@ -29,5 +31,7 @@
 @dynamic title;
 @dynamic updatedAt;
 @dynamic featuredUpdatedAt;
+
+@dynamic language;
 
 @end

@@ -8,6 +8,7 @@
 #import "PUBPDFDocument.h"
 #import "PUBDocument+Helper.h"
 #import "PUBConstants.h"
+#import "PSPDFKit.h"
 
 @interface PUBFileAnnotationProvider : PSPDFFileAnnotationProvider
 @end
