@@ -11,6 +11,7 @@
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import "PUBDocumentFetcher.h"
+#import "PUBLanguage+Helper.h"
 
 @implementation PUBDocument (Helper)
 
@@ -98,6 +99,9 @@
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);
             document.dimensions = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.dimensions"], NSArray.class);
+            
+            document.language = [PUBLanguage createOrUpdateWithDocument:document
+                                                          andDictionary:PUBSafeCast([dictionary valueForKeyPath:@"language"], NSDictionary.class)];
         }
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
@@ -140,6 +144,34 @@
     }
 
     return results ? results : [NSArray new];
+}
+
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language sortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate {
+    NSArray *allWithPrefferedLanguage = [PUBDocument fetchAllWithPrefferedLanguage:language];
+    NSArray *allWithPredicate = [allWithPrefferedLanguage filteredArrayUsingPredicate:predicate];
+    return [allWithPredicate sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending]]];
+}
+
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language {
+    
+    NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
+    
+    NSMutableArray *prefferedDocuemtns = [NSMutableArray new];
+    for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
+        NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
+        
+        NSArray *realDocsWithPrefferedLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", language]];
+        
+        if (realDocsWithPrefferedLanguage.count > 0) {
+            [prefferedDocuemtns addObject:realDocsWithPrefferedLanguage.firstObject];
+        }
+        else {
+            [prefferedDocuemtns addObject:realDocuments.firstObject];
+        }
+    }
+    
+    NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
+    return [prefferedDocuemtns arrayByAddingObjectsFromArray:allWithoutLanguage];
 }
 
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {

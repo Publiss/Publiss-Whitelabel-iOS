@@ -8,6 +8,7 @@
 #import "PUBPreviewViewController.h"
 #import "PUBDocument+Helper.h"
 #import "PUBConstants.h"
+#import "PSPDFKit.h"
 
 @interface PUBPreviewViewController () <PSPDFViewControllerDelegate, UINavigationControllerDelegate>
 @property (nonatomic, strong) IBOutlet UICollectionView *previewCollectionView;
