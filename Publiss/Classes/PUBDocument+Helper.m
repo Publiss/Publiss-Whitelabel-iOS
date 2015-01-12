@@ -11,6 +11,7 @@
 #import "PUBCoreDataStack.h"
 #import "PUBConstants.h"
 #import "PUBDocumentFetcher.h"
+#import "PUBLanguage+Helper.h"
 
 @implementation PUBDocument (Helper)
 
@@ -98,6 +99,9 @@
             // Progressive download support
             document.sizes = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.sizes"], NSArray.class);
             document.dimensions = PUBSafeCast([dictionary valueForKeyPath:@"pages_info.dimensions"], NSArray.class);
+            
+            document.language = [PUBLanguage createOrUpdateWithDocument:document
+                                                          andDictionary:PUBSafeCast([dictionary valueForKeyPath:@"language"], NSDictionary.class)];
         }
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
