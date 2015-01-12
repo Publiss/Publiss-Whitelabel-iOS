@@ -146,6 +146,50 @@
     return results ? results : [NSArray new];
 }
 
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language sortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate {
+    NSArray *allWithPrefferedLanguage = [PUBDocument fetchAllWithPrefferedLanguage:language];
+    NSArray *allWithPredicate = [allWithPrefferedLanguage filteredArrayUsingPredicate:predicate];
+    return [allWithPredicate sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending]]];
+}
+
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language {
+    
+    NSArray *allDistinctTags = [PUBDocument fetchAllUniqueLinkedTags];
+    
+    NSMutableArray *prefferedDocuemtns = [NSMutableArray new];
+    for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
+        NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
+        
+        NSArray *realDocsWithPrefferedLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", language]];
+        
+        if (realDocsWithPrefferedLanguage.count > 0) {
+            [prefferedDocuemtns addObject:realDocsWithPrefferedLanguage.firstObject];
+        }
+        else {
+            [prefferedDocuemtns addObject:realDocuments.firstObject];
+        }
+    }
+    
+    NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
+    return [prefferedDocuemtns arrayByAddingObjectsFromArray:allWithoutLanguage];
+}
+
++ (NSArray *)fetchAllUniqueLinkedTags {
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"PUBLanguage" inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
+    NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"PUBLanguage"];
+    
+    NSError *error = nil;
+    NSArray *objects = [PUBCoreDataStack.sharedCoreDataStack.managedObjectContext executeFetchRequest:request error:&error];
+
+    NSMutableSet *allLinkedTags = [NSMutableSet new];
+    for (PUBLanguage *language in objects) {
+        [allLinkedTags addObject:@{@"linkedTag":language.linkedTag}];
+    }
+    
+    NSArray *uniqueLinkedTags= [allLinkedTags valueForKeyPath:@"linkedTag"];
+    return uniqueLinkedTags == nil ? [NSArray new] : uniqueLinkedTags;
+}
+
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.predicate = predicate;

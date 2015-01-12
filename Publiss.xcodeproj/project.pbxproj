@@ -11,6 +11,7 @@
 		37C240451A63D37A00A5CF2A /* PUBLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C240441A63D37A00A5CF2A /* PUBLanguage.m */; };
 		37C240481A63D3AB00A5CF2A /* PUBDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C240471A63D3AB00A5CF2A /* PUBDocument.m */; };
 		37C2404B1A63D40600A5CF2A /* PUBLanguage+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */; };
+		37C2404D1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */; };
 		37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A119ED6196003E344D /* PUBKioskLayout.m */; };
 		37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A419ED6E9D003E344D /* PUBImageReusableView.m */; };
 		37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9AA19EE5E80003E344D /* PUBHeaderReusableView.m */; };
@@ -53,7 +54,6 @@
 		870110FA180FCF140034B9AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DD180FCF140034B9AC /* UIKit.framework */; };
 		870110FB180FCF140034B9AC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DF180FCF140034B9AC /* CoreData.framework */; };
 		87011103180FCF140034B9AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87011101180FCF140034B9AC /* InfoPlist.strings */; };
-		87011105180FCF140034B9AC /* PublissTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 87011104180FCF140034B9AC /* PublissTests.m */; };
 		8749898319B07668006ABCA3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8749898519B07668006ABCA3 /* Localizable.strings */; };
 		877665B619ACEA06000DFFF1 /* IAPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 877665B319ACEA06000DFFF1 /* IAPController.m */; };
 		877665B719ACEA06000DFFF1 /* IAPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 877665B519ACEA06000DFFF1 /* IAPManager.m */; };
@@ -135,6 +135,7 @@
 		37C240471A63D3AB00A5CF2A /* PUBDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDocument.m; path = Classes/PUBDocument.m; sourceTree = "<group>"; };
 		37C240491A63D40600A5CF2A /* PUBLanguage+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PUBLanguage+Helper.h"; path = "Classes/PUBLanguage+Helper.h"; sourceTree = "<group>"; };
 		37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PUBLanguage+Helper.m"; path = "Classes/PUBLanguage+Helper.m"; sourceTree = "<group>"; };
+		37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBDocumentHelperTests.m; sourceTree = "<group>"; };
 		37F2F9A019ED6196003E344D /* PUBKioskLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskLayout.h; path = Classes/PUBKioskLayout.h; sourceTree = "<group>"; };
 		37F2F9A119ED6196003E344D /* PUBKioskLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBKioskLayout.m; path = Classes/PUBKioskLayout.m; sourceTree = "<group>"; };
 		37F2F9A319ED6E9D003E344D /* PUBImageReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBImageReusableView.h; path = Classes/PUBImageReusableView.h; sourceTree = "<group>"; };
@@ -193,7 +194,6 @@
 		870110F6180FCF140034B9AC /* PublissTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PublissTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		870110F7180FCF140034B9AC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		87011100180FCF140034B9AC /* PublissTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PublissTests-Info.plist"; sourceTree = "<group>"; };
-		87011104180FCF140034B9AC /* PublissTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PublissTests.m; sourceTree = "<group>"; };
 		8749896F19B06313006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8749898419B07668006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8749898619B0766A006ABCA3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -644,9 +644,9 @@
 		870110FE180FCF140034B9AC /* PublissTests */ = {
 			isa = PBXGroup;
 			children = (
-				87011104180FCF140034B9AC /* PublissTests.m */,
 				870110FF180FCF140034B9AC /* Supporting Files */,
 				8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */,
+				37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */,
 			);
 			path = PublissTests;
 			sourceTree = "<group>";
@@ -931,7 +931,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */,
-				87011105180FCF140034B9AC /* PublissTests.m in Sources */,
+				37C2404D1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

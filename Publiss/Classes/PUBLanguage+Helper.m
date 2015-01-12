@@ -14,7 +14,7 @@
 @implementation PUBLanguage (Helper)
 
 + (PUBLanguage *)createEntity {
-    PUBLanguage *newEntity = [NSEntityDescription insertNewObjectForEntityForName:@"PUBDocument"
+    PUBLanguage *newEntity = [NSEntityDescription insertNewObjectForEntityForName:@"PUBLanguage"
                                                            inManagedObjectContext:PUBCoreDataStack.sharedCoreDataStack.managedObjectContext];
     return newEntity;
 }

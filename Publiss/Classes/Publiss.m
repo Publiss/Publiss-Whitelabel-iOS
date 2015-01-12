@@ -14,6 +14,7 @@
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
+#import "PSPDFKit.h"
 
 @implementation Publiss
 
