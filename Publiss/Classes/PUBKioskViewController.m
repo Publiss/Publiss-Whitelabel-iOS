@@ -271,17 +271,31 @@
     if (!self.refreshControl.isRefreshing) {
         [self.refreshControl beginRefreshing];
     }
+    
     self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
     [PUBCommunication.sharedInstance fetchAndSaveDocuments:^{
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
-        self.publishedDocuments = [PUBDocument fetchAllWithPrefferedLanguage:@"de"
-                                                                    sortedBy:SortOrder
-                                                                   ascending:YES
-                                                                   predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
-        self.featuredDocuments = [PUBDocument fetchAllWithPrefferedLanguage:@"de"
-                                                                   sortedBy:SortOrder
-                                                                  ascending:YES
-                                                                  predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        
+        if (PUBConfig.sharedConfig.preferredLanguage.length > 0) {
+            self.publishedDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
+                                                                        sortedBy:SortOrder
+                                                                       ascending:YES
+                                                                       predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
+            self.featuredDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
+                                                                       sortedBy:SortOrder
+                                                                      ascending:YES
+                                                                      predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        }
+        else {
+            self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder
+                                                          ascending:YES
+                                                          predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
+            self.featuredDocuments = [PUBDocument fetchAllSortedBy:SortOrder
+                                                         ascending:YES
+                                                         predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+        }
+        
+        
         
         self.kioskLayout.showsHeader = self.featuredDocuments.count > 0;
         if (self.publishedDocuments.count > 0) {

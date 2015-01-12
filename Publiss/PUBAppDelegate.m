@@ -19,6 +19,10 @@
     PUBConfig.sharedConfig.appToken = @"1d3ae766-0206-4eb7-90e1-f2e2917a4635";
     PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
     [Publiss.staticInstance setupWithLicenseKey:nil];
+    
+    // Uncomment this line to use the language tag feature.
+    // PUBConfig.sharedConfig.preferredLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
+    
     // Uncomment this line to add user login to menu
     // PUBAuthentication.sharedInstance.loginEnabled = YES;
     [PUBAuthentication.sharedInstance configureCommunications];

@@ -23,4 +23,12 @@
 @property (nonatomic, strong) UIColor *primaryColor;
 @property (nonatomic, strong) UIColor *secondaryColor;
 @property (nonatomic, strong) UIColor *kioskBackgroundColor;
+
+@property (nonatomic, strong) NSString *preferredLanguage;
+
+// PIN Login
+- (BOOL)isLoggedIn;
+- (void)setLoginWithAppToken:(NSString *)token withAppSecret:(NSString *)secret;
+- (void)restoreDefaultLogin;
+
 @end
