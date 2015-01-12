@@ -229,7 +229,7 @@
                 [self refreshDocumentsWithActivityViewAnimated:YES];
                 
                 [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
-                [KVNProgress showSuccessWithStatus:PUBLocalize(@"You are now logged out!")];
+                [KVNProgress showWithStatus:PUBLocalize(@"Logging out ...")];
             }
         };
         [PUBMenuItemManager.sharedInstance addMenuItem:userLogin];
@@ -288,6 +288,8 @@
         
         self.editButtonItem.enabled = YES;
         [self.refreshControl endRefreshing];
+        
+        [KVNProgress dismissWithCompletion:^{}];
     }
                                                      error:^(NSError *error) {
                                                          PUBAuthentication *auth = PUBAuthentication.sharedInstance;
@@ -347,7 +349,7 @@
 - (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters
 {
     [PUBAuthentication.sharedInstance setLoggedInWithToken:token andMetadata:response];
-    [KVNProgress showSuccessWithStatus:PUBLocalize(@"You are logged in!")];
+    [KVNProgress showWithStatus:PUBLocalize(@"You are logged in!\n\nPreparing kiosk for your personal experience ...")];
     
     [self.navigationController dismissViewControllerAnimated:NO completion:nil];
     [self refreshDocumentsWithActivityViewAnimated:YES];

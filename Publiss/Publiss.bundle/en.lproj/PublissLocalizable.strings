@@ -47,3 +47,5 @@
 "User not found" = "Credentials are not valid";
 "You are now logged out!" = "You are now logged out!";
 "You have been logged out!\nPlease login again." = "You have been logged out!\nPlease login again.";
+"Logging out ..." = "Logging out ...";
+"You are logged in!\n\nPreparing kiosk for your personal experience ..." = "You are logged in!\n\nPreparing kiosk for your personal experience ...";
