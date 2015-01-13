@@ -277,14 +277,21 @@
         [PUBCoreDataStack.sharedCoreDataStack saveContext];
         
         if (PUBConfig.sharedConfig.preferredLanguage.length > 0) {
-            self.publishedDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
-                                                                        sortedBy:SortOrder
-                                                                       ascending:YES
-                                                                       predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
-            self.featuredDocuments = [PUBDocument fetchAllWithPrefferedLanguage:PUBConfig.sharedConfig.preferredLanguage
-                                                                       sortedBy:SortOrder
-                                                                      ascending:YES
-                                                                      predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
+            
+            NSArray *localizedDocuments = [PUBDocument fetchAllWithPreferredLanguage:PUBConfig.sharedConfig.preferredLanguage
+                                                           fallbackLanguage:PUBConfig.sharedConfig.fallbackLanguage
+                                            showingLocalizationIfNoFallback:PUBConfig.sharedConfig.showAnyLocalizationIfThereIsNoFallback
+                                                   showUnlocalizedDocuments:PUBConfig.sharedConfig.showUnlocalizedDocuments];
+            
+            self.publishedDocuments = [PUBDocument sortDocuments:localizedDocuments
+                                                        sortedBy:SortOrder
+                                                       ascending:YES
+                                                       predicate:[NSPredicate predicateWithFormat:@"showInKiosk == YES"]];
+            
+            self.featuredDocuments = [PUBDocument sortDocuments:localizedDocuments
+                                                       sortedBy:SortOrder
+                                                      ascending:YES
+                                                      predicate:[NSPredicate predicateWithFormat:@"featured == YES"]];
         }
         else {
             self.publishedDocuments = [PUBDocument fetchAllSortedBy:SortOrder

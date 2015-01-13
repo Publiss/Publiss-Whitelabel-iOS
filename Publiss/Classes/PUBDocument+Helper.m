@@ -146,35 +146,7 @@
     return results ? results : [NSArray new];
 }
 
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language sortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate {
-    NSArray *allWithPrefferedLanguage = [PUBDocument fetchAllWithPrefferedLanguage:language];
-    NSArray *allWithPredicate = [allWithPrefferedLanguage filteredArrayUsingPredicate:predicate];
-    return [allWithPredicate sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending]]];
-}
-
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language {
-    
-    NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
-    
-    NSMutableArray *prefferedDocuemtns = [NSMutableArray new];
-    for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
-        NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
-        
-        NSArray *realDocsWithPrefferedLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", language]];
-        
-        if (realDocsWithPrefferedLanguage.count > 0) {
-            [prefferedDocuemtns addObject:realDocsWithPrefferedLanguage.firstObject];
-        }
-        else {
-            [prefferedDocuemtns addObject:realDocuments.firstObject];
-        }
-    }
-    
-    NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
-    return [prefferedDocuemtns arrayByAddingObjectsFromArray:allWithoutLanguage];
-}
-
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
++ (NSArray *)fetchAllWithPreferredLanguage:(NSString *)language
                           fallbackLanguage:(NSString *)fallback
            showingLocalizationIfNoFallback:(BOOL)showingLocalizationIfNoFallback
                   showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments {
@@ -194,7 +166,7 @@
             NSArray *realDocsWithFallbackLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", fallback]];
             
             if (realDocsWithFallbackLanguage.count > 0) {
-                [prefferedDocuments addObject:realDocsWithPrefferedLanguage.firstObject];
+                [prefferedDocuments addObject:realDocsWithFallbackLanguage.firstObject];
             }
             else if (showingLocalizationIfNoFallback) {
                 [prefferedDocuments addObject:realDocuments.firstObject];
@@ -205,6 +177,14 @@
     NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
     
     return showUnlocalizedDocuments ? [prefferedDocuments arrayByAddingObjectsFromArray:allWithoutLanguage] : prefferedDocuments;
+}
+
++ (NSArray *)sortDocuments:(NSArray *)documents
+                  sortedBy:(NSString *)sortKey
+                 ascending:(BOOL)ascending
+                 predicate:(NSPredicate *)predicate; {
+    NSArray *allWithPredicate = [documents filteredArrayUsingPredicate:predicate];
+    return [allWithPredicate sortedArrayUsingDescriptors:@[[[NSSortDescriptor alloc] initWithKey:sortKey ascending:ascending]]];
 }
 
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {

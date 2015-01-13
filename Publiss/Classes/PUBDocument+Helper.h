@@ -27,15 +27,17 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 
 + (NSArray *)findAll;
 + (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language;
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
+
++ (NSArray *)fetchAllWithPreferredLanguage:(NSString *)language
                           fallbackLanguage:(NSString *)fallback
            showingLocalizationIfNoFallback:(BOOL)showingLocalizationIfNoFallback
                   showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments;
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
-                                  sortedBy:(NSString *)sortKey
-                                 ascending:(BOOL)ascending
-                                 predicate:(NSPredicate *)predicate;
+
++ (NSArray *)sortDocuments:(NSArray *)documents
+                  sortedBy:(NSString *)sortKey
+                 ascending:(BOOL)ascending
+                 predicate:(NSPredicate *)predicate;
+
 
 
 /// deletes the file of the document and pspdfcache

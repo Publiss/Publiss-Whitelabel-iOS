@@ -56,7 +56,10 @@
 
 - (void)testFetchAllDistinctDocuments {
 
-    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"en"];
+    NSArray *documents = [PUBDocument fetchAllWithPreferredLanguage:@"en"
+                                                   fallbackLanguage:@"de"
+                                    showingLocalizationIfNoFallback:YES
+                                           showUnlocalizedDocuments:YES];
     
     XCTAssertTrue([documents containsObject:self.d1]);
     XCTAssertFalse([documents containsObject:self.d2]);
@@ -64,7 +67,10 @@
 }
 
 - (void)testFetchAllDistinctDocumentsWithOneUequalToPrefferedLanguage {
-    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"de"];
+    NSArray *documents = [PUBDocument fetchAllWithPreferredLanguage:@"de"
+                                                   fallbackLanguage:@"en"
+                                    showingLocalizationIfNoFallback:YES
+                                           showUnlocalizedDocuments:YES];
     
     XCTAssertFalse([documents containsObject:self.d1]);
     XCTAssertTrue([documents containsObject:self.d2]);
@@ -74,7 +80,10 @@
 - (void)testFetchAllDistinctDocumentsWithOneWithNilLanguage {
     self.d4 = [PUBDocument createEntity];
     
-    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"en"];
+    NSArray *documents = [PUBDocument fetchAllWithPreferredLanguage:@"en"
+                                                   fallbackLanguage:@"de"
+                                    showingLocalizationIfNoFallback:YES
+                                           showUnlocalizedDocuments:YES];
     
     XCTAssertTrue([documents containsObject:self.d1]);
     XCTAssertFalse([documents containsObject:self.d2]);
@@ -85,7 +94,7 @@
 - (void)testFetchAllDistinctDocumentsWhenThereIsNoFallback {
     self.d4 = [PUBDocument createEntity];
     
-    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"de"
+    NSArray *documents = [PUBDocument fetchAllWithPreferredLanguage:@"de"
                                                    fallbackLanguage:@"fr"
                                     showingLocalizationIfNoFallback:NO
                                            showUnlocalizedDocuments:YES];
@@ -99,7 +108,7 @@
 - (void)testFetchAllDistinctDocumentsWithOneWithNilLanguageAndDeactivatedUnlocalizedDocuments {
     self.d4 = [PUBDocument createEntity];
     
-    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"en"
+    NSArray *documents = [PUBDocument fetchAllWithPreferredLanguage:@"en"
                                                    fallbackLanguage:@"en"
                                     showingLocalizationIfNoFallback:YES
                                            showUnlocalizedDocuments:NO];
