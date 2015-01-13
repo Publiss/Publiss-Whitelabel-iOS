@@ -21,8 +21,8 @@
     [Publiss.staticInstance setupWithLicenseKey:nil];
     
     // Uncomment this line to use the language tag feature.
-    // PUBConfig.sharedConfig.preferredLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
-    
+    //PUBConfig.sharedConfig.preferredLanguage = [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode];
+
     // Uncomment this line to add user login to menu
     // PUBAuthentication.sharedInstance.loginEnabled = YES;
     [PUBAuthentication.sharedInstance configureCommunications];
