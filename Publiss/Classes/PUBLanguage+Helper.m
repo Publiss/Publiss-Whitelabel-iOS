@@ -37,6 +37,9 @@
     NSString *languageTag = PUBSafeCast(dictionary[@"lang"], NSString.class);
     NSString *linkedTag = PUBSafeCast(dictionary[@"linked"], NSString.class);
     
+    languageTag = [languageTag lowercaseString];
+    linkedTag = [linkedTag lowercaseString];
+    
     if (nil == language.localizedTitle || ![language.localizedTitle isEqualToString:localizedTitle]) {
         language.localizedTitle = localizedTitle;
     }
