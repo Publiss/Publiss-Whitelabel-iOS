@@ -887,6 +887,11 @@
     }];
 }
 
+- (void)presentDocument:(PUBDocument *)document {
+    NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    [self presentDocument:document atIndexPath:indexPath];
+}
+
 - (void)presentDocument:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
     
     if (self.isPresentingController) {

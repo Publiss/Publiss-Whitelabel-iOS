@@ -11,6 +11,7 @@
 #import "PUBDocument+Helper.h"
 #import "PUBLanguage+Helper.h"
 #import "PUBCoreDataStack.h"
+#import "NSManagedObjectContext+Testing.h"
 
 @interface PUBDocumentHelperTests : XCTestCase
 
@@ -29,6 +30,10 @@
 
 - (void)setUp {
     [super setUp];
+    
+    // Overwrite context with in-memory store.
+    [PUBCoreDataStack.sharedCoreDataStack setValue:[NSManagedObjectContext testing_inMemoryContext:NSPrivateQueueConcurrencyType error:nil]
+                                            forKey:@"managedObjectContext"];
     
     self.d1 = [PUBDocument createEntity];
     self.d2 = [PUBDocument createEntity];
@@ -75,6 +80,34 @@
     XCTAssertFalse([documents containsObject:self.d2]);
     XCTAssertTrue([documents containsObject:self.d3]);
     XCTAssertTrue([documents containsObject:self.d4]);
+}
+
+- (void)testFetchAllDistinctDocumentsWhenThereIsNoFallback {
+    self.d4 = [PUBDocument createEntity];
+    
+    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"de"
+                                                   fallbackLanguage:@"fr"
+                                    showingLocalizationIfNoFallback:NO
+                                           showUnlocalizedDocuments:YES];
+    
+    XCTAssertFalse([documents containsObject:self.d1]);
+    XCTAssertTrue([documents containsObject:self.d2]);
+    XCTAssertFalse([documents containsObject:self.d3]);
+    XCTAssertTrue([documents containsObject:self.d4]);
+}
+
+- (void)testFetchAllDistinctDocumentsWithOneWithNilLanguageAndDeactivatedUnlocalizedDocuments {
+    self.d4 = [PUBDocument createEntity];
+    
+    NSArray *documents = [PUBDocument fetchAllWithPrefferedLanguage:@"en"
+                                                   fallbackLanguage:@"en"
+                                    showingLocalizationIfNoFallback:YES
+                                           showUnlocalizedDocuments:NO];
+    
+    XCTAssertTrue([documents containsObject:self.d1]);
+    XCTAssertFalse([documents containsObject:self.d2]);
+    XCTAssertTrue([documents containsObject:self.d3]);
+    XCTAssertFalse([documents containsObject:self.d4]);
 }
 
 @end

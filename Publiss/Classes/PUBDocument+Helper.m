@@ -174,6 +174,39 @@
     return [prefferedDocuemtns arrayByAddingObjectsFromArray:allWithoutLanguage];
 }
 
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
+                          fallbackLanguage:(NSString *)fallback
+           showingLocalizationIfNoFallback:(BOOL)showingLocalizationIfNoFallback
+                  showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments {
+    NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
+    
+    NSMutableArray *prefferedDocuments = [NSMutableArray new];
+    for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
+        NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
+        
+        NSArray *realDocsWithPrefferedLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", language]];
+        
+        if (realDocsWithPrefferedLanguage.count > 0) {
+            [prefferedDocuments addObject:realDocsWithPrefferedLanguage.firstObject];
+        }
+        else {
+            
+            NSArray *realDocsWithFallbackLanguage = [realDocuments filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"language.languageTag == %@", fallback]];
+            
+            if (realDocsWithFallbackLanguage.count > 0) {
+                [prefferedDocuments addObject:realDocsWithPrefferedLanguage.firstObject];
+            }
+            else if (showingLocalizationIfNoFallback) {
+                [prefferedDocuments addObject:realDocuments.firstObject];
+            }
+        }
+    }
+    
+    NSArray *allWithoutLanguage = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language == NULL"]];
+    
+    return showUnlocalizedDocuments ? [prefferedDocuments arrayByAddingObjectsFromArray:allWithoutLanguage] : prefferedDocuments;
+}
+
 + (NSArray *)findWithPredicate:(NSPredicate *)predicate {
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
     fetchRequest.predicate = predicate;

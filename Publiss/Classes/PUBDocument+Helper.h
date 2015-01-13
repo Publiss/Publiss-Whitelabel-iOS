@@ -21,14 +21,22 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 
 @property (strong, nonatomic) PSPDFViewState *lastViewState;
 
-// Fetch helper
++ (PUBDocument *)createEntity;
++ (PUBDocument *)createPUBDocumentWithDictionary:(NSDictionary *)dictionary;
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID;
+
 + (NSArray *)findAll;
 + (NSArray *)fetchAllSortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
 + (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language;
-+ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language sortedBy:(NSString *)sortKey ascending:(BOOL)ascending predicate:(NSPredicate *)predicate;
-+ (PUBDocument *)createPUBDocumentWithDictionary:(NSDictionary *)dictionary;
-+ (PUBDocument *)createEntity;
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
+                          fallbackLanguage:(NSString *)fallback
+           showingLocalizationIfNoFallback:(BOOL)showingLocalizationIfNoFallback
+                  showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments;
++ (NSArray *)fetchAllWithPrefferedLanguage:(NSString *)language
+                                  sortedBy:(NSString *)sortKey
+                                 ascending:(BOOL)ascending
+                                 predicate:(NSPredicate *)predicate;
+
 
 /// deletes the file of the document and pspdfcache
 - (void)deleteDocument:(void (^)())completionBlock;

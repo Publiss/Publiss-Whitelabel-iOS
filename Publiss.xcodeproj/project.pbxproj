@@ -12,6 +12,7 @@
 		37C240481A63D3AB00A5CF2A /* PUBDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C240471A63D3AB00A5CF2A /* PUBDocument.m */; };
 		37C2404B1A63D40600A5CF2A /* PUBLanguage+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */; };
 		37C2404D1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */; };
+		37C240501A652A3200A5CF2A /* NSManagedObjectContext+Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */; };
 		37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A119ED6196003E344D /* PUBKioskLayout.m */; };
 		37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A419ED6E9D003E344D /* PUBImageReusableView.m */; };
 		37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9AA19EE5E80003E344D /* PUBHeaderReusableView.m */; };
@@ -136,6 +137,8 @@
 		37C240491A63D40600A5CF2A /* PUBLanguage+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PUBLanguage+Helper.h"; path = "Classes/PUBLanguage+Helper.h"; sourceTree = "<group>"; };
 		37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PUBLanguage+Helper.m"; path = "Classes/PUBLanguage+Helper.m"; sourceTree = "<group>"; };
 		37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBDocumentHelperTests.m; sourceTree = "<group>"; };
+		37C2404E1A652A3200A5CF2A /* NSManagedObjectContext+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+Testing.h"; sourceTree = "<group>"; };
+		37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Testing.m"; sourceTree = "<group>"; };
 		37F2F9A019ED6196003E344D /* PUBKioskLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskLayout.h; path = Classes/PUBKioskLayout.h; sourceTree = "<group>"; };
 		37F2F9A119ED6196003E344D /* PUBKioskLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBKioskLayout.m; path = Classes/PUBKioskLayout.m; sourceTree = "<group>"; };
 		37F2F9A319ED6E9D003E344D /* PUBImageReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBImageReusableView.h; path = Classes/PUBImageReusableView.h; sourceTree = "<group>"; };
@@ -647,6 +650,8 @@
 				870110FF180FCF140034B9AC /* Supporting Files */,
 				8784A72C18F578C6001DB322 /* PUBURLFactoryTest.m */,
 				37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */,
+				37C2404E1A652A3200A5CF2A /* NSManagedObjectContext+Testing.h */,
+				37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */,
 			);
 			path = PublissTests;
 			sourceTree = "<group>";
@@ -750,6 +755,7 @@
 				ORGANIZATIONNAME = "Publiss GmbH";
 				TargetAttributes = {
 					870110D5180FCF140034B9AC = {
+						DevelopmentTeam = 563BA5NND9;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 1;
@@ -930,6 +936,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37C240501A652A3200A5CF2A /* NSManagedObjectContext+Testing.m in Sources */,
 				8784A72D18F578C6001DB322 /* PUBURLFactoryTest.m in Sources */,
 				37C2404D1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m in Sources */,
 			);
