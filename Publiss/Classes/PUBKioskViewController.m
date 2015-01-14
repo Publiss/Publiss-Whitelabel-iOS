@@ -846,6 +846,7 @@
     self.isPresentingController = YES;
     
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
+    
     ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).document = document;
     ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).kioskController = self;
     
@@ -882,7 +883,10 @@
     previewViewController.transitioningDelegate = self.transitioningDelegate;
 
     if (PUBIsiPad()) {
+        ((UINavigationController *)previewViewController).view.layer.cornerRadius = 6;
+        ((UINavigationController *)previewViewController).view.layer.masksToBounds = YES;
         previewViewController.view.frame = CGRectMake(0, 0, 540, 620);
+        previewViewController.view.autoresizingMask = UIViewAutoresizingNone;
     }
     
     [self presentViewController:previewViewController animated:YES completion:^{

@@ -45,6 +45,16 @@
     [self updateUI];
 }
 
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (PUBIsiPad()) {
+        // this sizes are for ipad only
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+            ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(242, 74, 540, 620);
+        } else {
+            ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(114, 202, 540, 620);
+        }
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -73,7 +83,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     if (PUBIsiPad()) {
         if (!CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
             self.view.frame = self.oldViewFrame;
@@ -294,13 +304,14 @@
         self.oldViewFrame = self.view.frame;
     }
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil];
-    PUBPagePreviewViewController *pagePreviewController = [storyboard instantiateViewControllerWithIdentifier:@"PagePreview"];
+    PUBPagePreviewViewController *pagePreviewController = [PUBPagePreviewViewController instantiateController];
     pagePreviewController.document = self.document;
     pagePreviewController.initialPage = indexPath.row;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
+    navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:navController animated:YES completion:NULL];
 }
 
