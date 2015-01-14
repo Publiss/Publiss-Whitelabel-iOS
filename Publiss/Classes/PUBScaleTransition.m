@@ -52,6 +52,8 @@
         UIView *transitionImageViewTarget = [toView snapshotViewAfterScreenUpdates:YES];
         if (PUBIsiPad()) {
             transitionImageViewTarget = [[UIImageView alloc] initWithFrame:toView.frame];
+            transitionImageViewTarget.layer.cornerRadius = 6;
+            transitionImageViewTarget.layer.masksToBounds = YES;
             transitionImageViewTarget.backgroundColor = [UIColor whiteColor];
             ((UIImageView *)transitionImageViewTarget).image = [self screenshot:toView];
         }
