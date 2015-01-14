@@ -6,12 +6,14 @@
 //
 
 #import "PUBPreviewViewController.h"
+#import "PUBLanguageTableViewController.h"
 #import "PUBDocument+Helper.h"
+#import "PUBLanguage.h"
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
 
-@interface PUBPreviewViewController () <UINavigationControllerDelegate, UIScrollViewDelegate>
+@interface PUBPreviewViewController () <UINavigationControllerDelegate, UIScrollViewDelegate, PUBLanguageSelectionDelegate>
 
 @property (strong, nonatomic) IBOutlet UICollectionView *previewCollectionView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -44,9 +46,15 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+    if (PUBConfig.sharedConfig.preferredLanguage && self.document.language.linkedTag.length > 0) {
+        NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                                 ascending:YES
+                                                 predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", self.document.language.linkedTag]];
         
-    if (PUBConfig.sharedConfig.preferredLanguage) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sprachen" style:UIBarButtonItemStylePlain target:self action:@selector(openLanguageSelection)];
+        if (documents.count > 1) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:PUBLocalize(@"Languages") style:UIBarButtonItemStylePlain target:self action:@selector(openLanguageSelection)];
+        }
     }
 }
 
@@ -82,6 +90,22 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
         if (!self.presentingViewController.isBeingPresented) 
             [self dismissViewControllerAnimated:YES completion:nil];
     }
+}
+
+- (void)openLanguageSelection {
+    PUBLanguageTableViewController *languageSelection = (PUBLanguageTableViewController *)[PUBLanguageTableViewController instantiateLanguageSelectionController];
+    [languageSelection setupLanguageSelectionForDocument:self.document];
+    languageSelection.delegate = self;
+
+    
+    [self.navigationController pushViewController:languageSelection
+                                         animated:YES];
+}
+
+#pragma mark - PUBLanguageSelectionDelegate
+
+- (void)didSelectLanguageForDocument:(PUBDocument *)document {
+    [self openPDFWithWithDocument:document];
 }
 
 
