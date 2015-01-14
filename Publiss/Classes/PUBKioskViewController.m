@@ -15,7 +15,6 @@
 #import "PUBScaleTransition.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBPDFViewController.h"
-#import "PUBiPhonePreviewViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "PUBPDFDocument.h"
 #import "IAPController.h"
@@ -879,12 +878,12 @@
         };
     }
     
-    UIViewController *controllerToPresent = previewViewController;
-    if (!PUBIsiPad()) {
-        controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
-    }
+    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
     controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
     controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    if (PUBIsiPad()) {
+        controllerToPresent.view.frame = CGRectMake(0, 0, 540, 620);
+    }
     
     [self presentViewController:controllerToPresent animated:YES completion:^{
         // dirty stuff ... but otherwise double opening will happen

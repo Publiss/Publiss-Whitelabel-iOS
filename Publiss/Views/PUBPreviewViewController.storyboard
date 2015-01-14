@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="yYI-hr-awl">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
-        <!--Bi Phone Preview View Controller-->
+        <!--Preview View Controller-->
         <scene sceneID="Cs6-a4-SJW">
             <objects>
-                <viewController storyboardIdentifier="iPhonePreviewVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yYI-hr-awl" customClass="PUBiPhonePreviewViewController" sceneMemberID="viewController">
+                <viewController useStoryboardIdentifierAsRestorationIdentifier="YES" id="yYI-hr-awl" customClass="PUBPreviewViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bmC-8Y-jtZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -97,6 +97,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="descriptionText" destination="zTQ-gP-Djf" id="zWE-o4-NXZ"/>
                         <outlet property="downloadButton" destination="UXT-TY-C0Y" id="2xp-QL-GN9"/>

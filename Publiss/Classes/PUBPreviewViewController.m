@@ -1,5 +1,5 @@
 //
-//  PUBPreviewViewController.m
+//  PUBiPhonePreviewViewController.m
 //  Publiss
 //
 //  Copyright (c) 2014 Publiss GmbH. All rights reserved.
@@ -7,149 +7,82 @@
 
 #import "PUBPreviewViewController.h"
 #import "PUBDocument+Helper.h"
+#import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
-#import "PSPDFKit.h"
+#import <PublissCore.h>
 
-@interface PUBPreviewViewController () <PSPDFViewControllerDelegate, UINavigationControllerDelegate>
-@property (nonatomic, strong) IBOutlet UICollectionView *previewCollectionView;
+@interface PUBPreviewViewController () <UINavigationControllerDelegate, UIScrollViewDelegate>
+
+@property (strong, nonatomic) IBOutlet UICollectionView *previewCollectionView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @end
 
 @implementation PUBPreviewViewController
 
+#pragma mark - UIViewController
+
 + (PUBPreviewViewController *)instantiatePreviewController {
-    if (PUBIsiPad()) {
-        return [[PUBPreviewViewController alloc] initWithNibName:@"PUBPreviewViewController" bundle:nil];
-    }
-    else {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBPreviewViewControlleriPhone" bundle:nil];
-        return [storyboard instantiateViewControllerWithIdentifier:@"iPhonePreviewVC"];
-    }
+    return [[UIStoryboard storyboardWithName:@"PUBPreviewViewController" bundle:nil] instantiateInitialViewController];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.previewCollectionView registerNib:[UINib nibWithNibName:@"PreviewCell" bundle:nil]
-                 forCellWithReuseIdentifier:@"PreviewCell"];
-    
+
     self.previewCollectionView.delegate = self;
     self.previewCollectionView.dataSource = self;
-    
     self.scrollView.delegate = self;
     self.scrollView.bounces = YES;
     self.scrollView.scrollEnabled = YES;
     self.scrollView.showsVerticalScrollIndicator = YES;
     
-    [self addMotionEffectForView:self.view withDepthX:20.f withDepthY:20.f];
-}
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissNavController:)];
+    self.navigationItem.leftBarButtonItems = @[doneButton];
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentFetchingNotification:) name:PUBDocumentFetcherUpdateNotification object:NULL];
-    [self updateUIDownloadState];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    if ([self.view.window.gestureRecognizers containsObject:self.recognizer]) {
-        [self.view.window removeGestureRecognizer:self.recognizer];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
+    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+        
+    if (PUBConfig.sharedConfig.preferredLanguage) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Sprachen" style:UIBarButtonItemStylePlain target:self action:@selector(openLanguageSelection)];
     }
-    [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:NULL];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
+
     // layout description text to top left corner
-    self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), 99999);
     [self.descriptionText sizeToFit];
-    CGFloat height = 502 + self.descriptionText.frame.size.height + 22;
+    CGFloat height = 86 /* Title height */ + 48 /* File info height */ + self.descriptionText.frame.size.height + self.previewCollectionView.frame.size.height;
     self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), height);
 }
 
-#define Cell_Spacing 15.f
+#pragma mark CollectionView FlowLayout
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-   return  CGSizeMake(300.0f, 300.0f);
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(240.f, 240.f);
 }
 
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView
-                        layout:(UICollectionViewLayout *)collectionViewLayout
-        insetForSectionAtIndex:(NSInteger)section {
-    return UIEdgeInsetsMake(18.0f, 20.0f, 0.0f, 20.0f);
-}
-
-
-- (CGFloat)collectionView:(UICollectionView *)collectionView
-                   layout:(UICollectionViewLayout *)collectionViewLayout
-    minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-   return  Cell_Spacing;
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section {
+    return UIEdgeInsetsMake(16.f, 15.f, 0.f, 15.f);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView
                    layout:(UICollectionViewLayout *)collectionViewLayout
-    minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return Cell_Spacing;
+minimumLineSpacingForSectionAtIndex:(NSInteger)section {
+    return 10.f;
 }
 
+#pragma mark - Private
 
-
-#pragma mark - Motion effect
-
-- (void)addMotionEffectForView:(UIView *)view withDepthX:(CGFloat)depthX withDepthY:(CGFloat)depthY {
-    UIInterpolatingMotionEffect *xAxis;
-    xAxis =
-        [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.x"
-                                                        type:UIInterpolatingMotionEffectTypeTiltAlongHorizontalAxis];
-
-    xAxis.minimumRelativeValue = @(-depthX);
-    xAxis.maximumRelativeValue = @(depthX);
-
-    UIInterpolatingMotionEffect *yAxis;
-    yAxis = [[UIInterpolatingMotionEffect alloc] initWithKeyPath:@"center.y"
-                                                            type:UIInterpolatingMotionEffectTypeTiltAlongVerticalAxis];
-
-    yAxis.minimumRelativeValue = @(-depthY);
-    yAxis.maximumRelativeValue = @(depthY);
-
-    UIMotionEffectGroup *group = [[UIMotionEffectGroup alloc] init];
-    group.motionEffects = @[ xAxis, yAxis ];
-
-    [view addMotionEffect:group];
-}
-
-#pragma mark Notifications
-
-- (void)documentFetchingNotification:(NSNotification *)notification {
-    if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
-        if (notification.userInfo[self.document.productID])
-            [self updateUIDownloadState];
+- (void)dismissNavController:(id)sender {
+    if ([sender isKindOfClass:UIBarButtonItem.class]) {
+        if (!self.presentingViewController.isBeingPresented) 
+            [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 
-#pragma mark Helpers
-
-- (void)updateUIDownloadState {
-    switch (self.document.state) {
-        case PUBDocumentStateLoading:
-            [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
-            break;
-            
-        case PUBDocumentStateDownloaded:
-            [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
-            break;
-            
-        case PUBDocumentStateUpdated:
-            [self.downloadButton setTitle:PUBLocalize(@"Update") forState:UIControlStateNormal];
-            break;
-            
-        default:
-            break;
-    }
-}
 
 @end
