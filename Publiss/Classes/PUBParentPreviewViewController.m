@@ -45,7 +45,6 @@
     [self updateUI];
 }
 
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (PUBIsiPad() && !CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
