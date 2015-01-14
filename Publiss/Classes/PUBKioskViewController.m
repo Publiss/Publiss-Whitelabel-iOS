@@ -846,8 +846,8 @@
     self.isPresentingController = YES;
     
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
-    previewViewController.document = document;
-    previewViewController.kioskController = self;
+    ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).document = document;
+    ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).kioskController = self;
     
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -878,14 +878,14 @@
         };
     }
     
-    UIViewController *controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
-    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
+    previewViewController.modalPresentationStyle = UIModalPresentationCustom;
+    previewViewController.transitioningDelegate = self.transitioningDelegate;
+
     if (PUBIsiPad()) {
-        controllerToPresent.view.frame = CGRectMake(0, 0, 540, 620);
+        previewViewController.view.frame = CGRectMake(0, 0, 540, 620);
     }
     
-    [self presentViewController:controllerToPresent animated:YES completion:^{
+    [self presentViewController:previewViewController animated:YES completion:^{
         // dirty stuff ... but otherwise double opening will happen
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.isPresentingController = NO;
