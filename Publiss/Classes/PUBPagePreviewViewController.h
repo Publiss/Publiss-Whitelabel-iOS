@@ -11,6 +11,8 @@
 
 @interface PUBPagePreviewViewController : UIViewController
 
++ (PUBPagePreviewViewController *)instantiateController;
+
 @property (nonatomic, strong) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, strong) NSString *pageName;
 @property (nonatomic, assign) NSInteger initialPage;

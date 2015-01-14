@@ -22,6 +22,10 @@
 
 @implementation PUBPagePreviewViewController
 
++ (PUBPagePreviewViewController *)instantiateController {
+    return [[UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil] instantiateViewControllerWithIdentifier:@"PagePreview"];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 

@@ -293,13 +293,14 @@
         self.oldViewFrame = self.view.frame;
     }
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil];
-    PUBPagePreviewViewController *pagePreviewController = [storyboard instantiateViewControllerWithIdentifier:@"PagePreview"];
+    PUBPagePreviewViewController *pagePreviewController = [PUBPagePreviewViewController instantiateController];
     pagePreviewController.document = self.document;
     pagePreviewController.initialPage = indexPath.row;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
+    navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     [self presentViewController:navController animated:YES completion:NULL];
 }
 
