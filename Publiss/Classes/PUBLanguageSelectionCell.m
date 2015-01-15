@@ -39,6 +39,7 @@
     }
     else {
         readButton.hidden = YES;
+        downloadButton.hidden = NO;
         UIImage *tintedImage = [downloadButton.imageView.image imageTintedWithColor:[UIColor publissPrimaryColor] fraction:0];
         [downloadButton setImage:tintedImage forState:UIControlStateNormal];
         [downloadButton setImage:tintedImage forState:UIControlStateHighlighted];

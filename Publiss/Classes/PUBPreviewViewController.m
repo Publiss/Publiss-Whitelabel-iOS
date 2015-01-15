@@ -109,5 +109,9 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     [self openPDFWithWithDocument:document];
 }
 
+- (void)didRemoveLanguageForDocument:(PUBDocument *)document {
+    [document deleteDocument:nil];
+}
+
 
 @end

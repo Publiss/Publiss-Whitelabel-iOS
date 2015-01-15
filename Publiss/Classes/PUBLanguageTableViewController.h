@@ -11,6 +11,7 @@
 @protocol PUBLanguageSelectionDelegate
 
 - (void)didSelectLanguageForDocument:(PUBDocument *)document;
+- (void)didRemoveLanguageForDocument:(PUBDocument *)document;
 
 @end
 

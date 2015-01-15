@@ -20,7 +20,7 @@
 @end
 
 @implementation PUBLanguageTableViewController {
-    NSArray *downloadedLanguageDocuments;
+    NSMutableArray *downloadedLanguageDocuments;
     NSArray *availableLanguageDocuments;
 }
 
@@ -41,9 +41,9 @@
 
 - (void)setupLanguageSelectionForDocument:(PUBDocument *)document {
     if (document.language.linkedTag.length > 0) {
-        downloadedLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+        downloadedLanguageDocuments = [NSMutableArray arrayWithArray:[PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                           ascending:YES
-                                                          predicate:[NSPredicate predicateWithFormat:@"state == %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+                                                          predicate:[NSPredicate predicateWithFormat:@"state == %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]]];
         
         availableLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                          ascending:YES
@@ -84,7 +84,7 @@
 {
     static NSString *simpleTableIdentifier = @"DocumentLanguageCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    
+
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
@@ -126,6 +126,20 @@
         [self.navigationController popToRootViewControllerAnimated:NO];
         [self.delegate didSelectLanguageForDocument:document];
     }
+}
+
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return (indexPath.section == 0 && downloadedLanguageDocuments.count > 0);
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    PUBDocument *document = [downloadedLanguageDocuments objectAtIndex:indexPath.row];
+    if (self.delegate) {
+        [self.delegate didRemoveLanguageForDocument:document];
+    }
+    
+    [self setupLanguageSelectionForDocument:document];
+    [tableView reloadData];
 }
 
 /*
