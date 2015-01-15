@@ -933,11 +933,6 @@
 
 - (void)presentDocument:(PUBDocument *)document {
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
-    
-    if (indexPath == nil && document.language.linkedTag.length > 0) {
-        indexPath = [self indexPathForLinkedTag:document.language.linkedTag];
-    }
-    
     [self presentDocument:document atIndexPath:indexPath];
 }
 
@@ -959,7 +954,7 @@
     UIViewController *controllerToPresent = pdfController;
     
     if (indexPath) {
-        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        PUBCellView *cell = (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
         self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;

@@ -88,8 +88,9 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 
 - (void)dismissNavController:(id)sender {
     if ([sender isKindOfClass:UIBarButtonItem.class]) {
-        if (!self.presentingViewController.isBeingPresented) 
+        if (!self.presentingViewController.isBeingPresented) {
             [self dismissViewControllerAnimated:YES completion:nil];
+        }
     }
 }
 
@@ -98,7 +99,6 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
     [languageSelection setupLanguageSelectionForDocument:self.document];
     languageSelection.delegate = self;
 
-    
     [self.navigationController pushViewController:languageSelection
                                          animated:YES];
 }
