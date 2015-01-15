@@ -47,7 +47,7 @@
     self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
-    if (PUBConfig.sharedConfig.preferredLanguage && self.document.language.linkedTag.length > 0) {
+    if (PUBConfig.sharedConfig.preferredLanguage.length > 0 && self.document.language.linkedTag.length > 0) {
         NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                  ascending:YES
                                                  predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", self.document.language.linkedTag]];
@@ -95,7 +95,7 @@ minimumLineSpacingForSectionAtIndex:(NSInteger)section {
 }
 
 - (void)openLanguageSelection {
-    PUBLanguageTableViewController *languageSelection = (PUBLanguageTableViewController *)[PUBLanguageTableViewController instantiateLanguageSelectionController];
+    PUBLanguageTableViewController *languageSelection = [PUBLanguageTableViewController instantiateLanguageSelectionController];
     [languageSelection setupLanguageSelectionForDocument:self.document];
     languageSelection.delegate = self;
 

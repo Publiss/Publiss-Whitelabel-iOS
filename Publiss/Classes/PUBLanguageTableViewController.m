@@ -16,45 +16,44 @@
 @interface PUBLanguageTableViewController ()
 
 @property (strong, nonatomic) IBOutlet UITableView *languageSelectionTableView;
+@property (strong, nonatomic) NSArray *downloadedLanguageDocuments;
+@property (strong, nonatomic) NSArray *availableLanguageDocuments;
 
 @end
 
-@implementation PUBLanguageTableViewController {
-    NSMutableArray *downloadedLanguageDocuments;
-    NSArray *availableLanguageDocuments;
-}
+@implementation PUBLanguageTableViewController
 
-+ (UIViewController *)instantiateLanguageSelectionController {
++ (PUBLanguageTableViewController *)instantiateLanguageSelectionController {
     return [[UIStoryboard storyboardWithName:@"PUBLanguageSelection" bundle:nil] instantiateInitialViewController];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if (!self.downloadedLanguageDocuments) {
+        self.downloadedLanguageDocuments = @[];
+    }
+    if (!self.availableLanguageDocuments) {
+        self.availableLanguageDocuments = @[];
+    }
+    
     self.title = PUBLocalize(@"Languages");
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)setupLanguageSelectionForDocument:(PUBDocument *)document {
-    if (document.language.linkedTag.length > 0) {
-        downloadedLanguageDocuments = [NSMutableArray arrayWithArray:[PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+    self.downloadedLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                                           ascending:YES
+                                                           predicate:[NSPredicate predicateWithFormat:@"state == %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+    
+    self.availableLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                           ascending:YES
-                                                          predicate:[NSPredicate predicateWithFormat:@"state == %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]]];
-        
-        availableLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
-                                                         ascending:YES
-                                                         predicate:[NSPredicate predicateWithFormat:@"state != %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
-    }
+                                                          predicate:[NSPredicate predicateWithFormat:@"state != %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (downloadedLanguageDocuments.count == 0 || availableLanguageDocuments.count == 0) {
+    if (self.downloadedLanguageDocuments.count == 0 || self.availableLanguageDocuments.count == 0) {
         return 1;
     }
     return 2;
@@ -62,94 +61,69 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0 && downloadedLanguageDocuments.count > 0) {
+    if (section == 0 && self.downloadedLanguageDocuments.count > 0) {
         return [NSString stringWithFormat:@"%@:", PUBLocalize(@"Already downloaded")];
     }
     
-    if (availableLanguageDocuments.count == 1) {
+    if (self.availableLanguageDocuments.count == 1) {
         return [NSString stringWithFormat:@"%@:", PUBLocalize(@"Alternative language")];
     }
     
-    return [NSString stringWithFormat:@"%lu %@:", (unsigned long)availableLanguageDocuments.count, PUBLocalize(@"Languages")];
+    return [NSString stringWithFormat:@"%lu %@:", (unsigned long)self.availableLanguageDocuments.count, PUBLocalize(@"Languages")];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 && downloadedLanguageDocuments.count > 0) {
-        return downloadedLanguageDocuments.count;
+    if (section == 0 && self.downloadedLanguageDocuments.count > 0) {
+        return self.downloadedLanguageDocuments.count;
     }
-    return availableLanguageDocuments.count;
+    return self.availableLanguageDocuments.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"DocumentLanguageCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
-    }
+    PUBLanguageSelectionCell *languageCell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
 
     PUBDocument *document;
-    if (indexPath.section == 0 && downloadedLanguageDocuments.count > 0) {
-        document = (PUBDocument *)[downloadedLanguageDocuments objectAtIndex:indexPath.row];
+    if (indexPath.section == 0 && self.downloadedLanguageDocuments.count > 0) {
+        document = (PUBDocument *)[self.downloadedLanguageDocuments objectAtIndex:indexPath.row];
     }
     else {
-        document = (PUBDocument *)[availableLanguageDocuments objectAtIndex:indexPath.row];
+        document = (PUBDocument *)[self.availableLanguageDocuments objectAtIndex:indexPath.row];
     }
     
-    if ([cell isKindOfClass:[PUBLanguageSelectionCell class]]) {
-        PUBLanguageSelectionCell *languageCell = (PUBLanguageSelectionCell *)cell;
-        [languageCell setupCellForDocument:document];
-    }
+    [languageCell setupCellForDocument:document];
     
-    NSMutableAttributedString *languageTitle = [[NSMutableAttributedString alloc] initWithString:document.language.localizedTitle];
-    if (PUBConfig.sharedConfig.preferredLanguage && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.preferredLanguage]) {
-        NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
-        [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
-        [languageTitle appendAttributedString:postfix];
-    }
-    [cell.textLabel setAttributedText:languageTitle];
-    
-    return cell;
+    return languageCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     PUBDocument *document = nil;
-    if (indexPath.section == 0 && downloadedLanguageDocuments.count > 0) {
-        document = [downloadedLanguageDocuments objectAtIndex:indexPath.row];
+    if (indexPath.section == 0 && self.downloadedLanguageDocuments.count > 0) {
+        document = [self.downloadedLanguageDocuments objectAtIndex:indexPath.row];
     }
     else {
-        document = [availableLanguageDocuments objectAtIndex:indexPath.row];
+        document = [self.availableLanguageDocuments objectAtIndex:indexPath.row];
     }
     
-    if (self.delegate) {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectLanguageForDocument:)]) {
         [self.navigationController popToRootViewControllerAnimated:NO];
         [self.delegate didSelectLanguageForDocument:document];
     }
 }
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return (indexPath.section == 0 && downloadedLanguageDocuments.count > 0);
+    return (indexPath.section == 0 && self.downloadedLanguageDocuments.count > 0);
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    PUBDocument *document = [downloadedLanguageDocuments objectAtIndex:indexPath.row];
-    if (self.delegate) {
+    PUBDocument *document = [self.downloadedLanguageDocuments objectAtIndex:indexPath.row];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didRemoveLanguageForDocument:)]) {
         [self.delegate didRemoveLanguageForDocument:document];
     }
     
     [self setupLanguageSelectionForDocument:document];
     [tableView reloadData];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -8,7 +8,7 @@
 
 #import "PUBDocument.h"
 
-@protocol PUBLanguageSelectionDelegate
+@protocol PUBLanguageSelectionDelegate <NSObject>
 
 - (void)didSelectLanguageForDocument:(PUBDocument *)document;
 - (void)didRemoveLanguageForDocument:(PUBDocument *)document;
@@ -19,7 +19,7 @@
 
 @property (unsafe_unretained) id<PUBLanguageSelectionDelegate> delegate;
 
-+ (UIViewController *)instantiateLanguageSelectionController;
++ (PUBLanguageTableViewController *)instantiateLanguageSelectionController;
 
 - (void)setupLanguageSelectionForDocument:(PUBDocument *)document;
 
