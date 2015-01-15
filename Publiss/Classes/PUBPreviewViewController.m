@@ -55,6 +55,7 @@
 
     // layout description text to top left corner
     [self.descriptionText sizeToFit];
+
     CGFloat height = 86 /* Title height */ + 48 /* File info height */ + self.descriptionText.frame.size.height + self.previewCollectionView.frame.size.height;
     self.scrollView.contentSize = CGSizeMake(CGRectGetWidth(self.view.bounds), height);
 }
