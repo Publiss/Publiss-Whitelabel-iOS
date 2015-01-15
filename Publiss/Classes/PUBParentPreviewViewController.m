@@ -151,7 +151,8 @@
     if (sender.state == UIGestureRecognizerStateEnded) {
         UIView *rootView = self.view.window.rootViewController.view;
         CGPoint location = [sender locationInView:rootView];
-        if (![self.view pointInside:[self.view convertPoint:location fromView:rootView] withEvent:nil]) {
+        UIView *navigationControllerView = ((UINavigationController *)self.parentViewController).view;
+        if (![navigationControllerView pointInside:[navigationControllerView convertPoint:location fromView:rootView] withEvent:nil]) {
             [self dismissViewControllerAnimated:YES completion:^{
                 [self.view.window removeGestureRecognizer:sender];
             }];

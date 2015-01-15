@@ -9,6 +9,8 @@
 #import "PUBLanguageTableViewController.h"
 #import "PUBDocument+Helper.h"
 #import "PUBLanguage+Helper.h"
+#import "UIColor+PUBDesign.h"
+#import "PUBConfig.h"
 
 @interface PUBLanguageTableViewController ()
 
@@ -27,6 +29,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.title = PUBLocalize(@"Languages");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,7 +96,13 @@
         document = (PUBDocument *)[availableLanguageDocuments objectAtIndex:indexPath.row];
     }
     
-    cell.textLabel.text = document.language.localizedTitle;
+    NSMutableAttributedString *languageTitle = [[NSMutableAttributedString alloc] initWithString:document.language.localizedTitle];
+    if (PUBConfig.sharedConfig.preferredLanguage && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.preferredLanguage]) {
+        NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
+        [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
+        [languageTitle appendAttributedString:postfix];
+    }
+    [cell.textLabel setAttributedText:languageTitle];
     
     return cell;
 }

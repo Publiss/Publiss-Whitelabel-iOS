@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Publiss GmbH. All rights reserved.
 //
 
-#import "PUBFetchedViewController.h"
 #import "PUBDocument.h"
 
 @protocol PUBLanguageSelectionDelegate

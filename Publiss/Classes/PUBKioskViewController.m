@@ -41,6 +41,7 @@
 #import <KVNProgress/KVNProgress.h>
 #import "PUBAuthentication.h"
 #import "PUBMenuItemAccount.h"
+#import "PUBLanguage+Helper.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 
@@ -57,6 +58,7 @@
 
 @property (nonatomic, strong) NSMutableSet *dynamicallyLoadedCoverImageIndexPath;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
+@property (nonatomic, strong) NSDictionary *indexPathsForDocumentsByLinkedTag;
 @property (nonatomic, strong) NSTimer *pageTracker;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -737,9 +739,35 @@
     return indexPath;
 }
 
+- (NSIndexPath *)indexPathForLinkedTag:(NSString *)linkedTag {
+    if (!self.indexPathsForDocumentsByLinkedTag) {
+        self.indexPathsForDocumentsByLinkedTag = [NSDictionary new];
+    }
+    
+    NSIndexPath *indexPath = self.indexPathsForDocumentsByLinkedTag[linkedTag];
+    if (!indexPath) {
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
+            NSLog(@"%ld: %@ ... %@", (long)i, document.language.linkedTag, linkedTag);
+            
+            if (document.language.linkedTag.length > 0 && [document.language.linkedTag isEqualToString:linkedTag]) {
+                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+                
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocumentsByLinkedTag];
+                [dictionary setObject:indexPath forKey:document.language.linkedTag];
+                self.indexPathsForDocumentsByLinkedTag = dictionary;
+                break;
+            }
+        }
+    }
+    
+    return indexPath;
+}
+
 - (void)setPublishedDocuments:(NSArray *)documentArray {
     _publishedDocuments = documentArray;
     self.indexPathsForDocuments = nil;
+    self.indexPathsForDocumentsByLinkedTag = nil;
 }
 
 #pragma mark PSPDFViewControllerDelegate
@@ -899,6 +927,11 @@
 
 - (void)presentDocument:(PUBDocument *)document {
     NSIndexPath *indexPath = [self indexPathForProductID:document.productID];
+    
+    if (indexPath == nil && document.language.linkedTag.length > 0) {
+        indexPath = [self indexPathForLinkedTag:document.language.linkedTag];
+    }
+    
     [self presentDocument:document atIndexPath:indexPath];
 }
 
