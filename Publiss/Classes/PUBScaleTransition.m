@@ -32,8 +32,6 @@
     blendOverView.contentMode = UIViewContentModeScaleAspectFill;
     blendOverView.clipsToBounds = YES;
     
-    
-    
     if (self.transitionMode == TransitionModePresent) {
         
         UIView *dimView;
@@ -55,7 +53,7 @@
             transitionImageViewTarget.layer.cornerRadius = 6;
             transitionImageViewTarget.layer.masksToBounds = YES;
             transitionImageViewTarget.backgroundColor = [UIColor whiteColor];
-            ((UIImageView *)transitionImageViewTarget).image = [self screenshot:toView];
+            ((UIImageView *)transitionImageViewTarget).image = [self captureViewWithoutStatusbar:toView];
         }
         
         transitionImageViewTarget.frame = startRect;
@@ -131,7 +129,7 @@
     }
 }
 
-- (UIImage *)screenshot:(UIView *)view {
+- (UIImage *)captureViewWithoutStatusbar:(UIView *)view {
     UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
     
     [view drawViewHierarchyInRect:CGRectMake(0, -20, view.bounds.size.width, view.bounds.size.height) afterScreenUpdates:YES];

@@ -98,6 +98,7 @@
 		87ACA1A819F7EC520075364D /* PUBMenuItemManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 87ACA1A719F7EC520075364D /* PUBMenuItemManager.m */; };
 		87B1962919DD75EC0060353B /* Publiss.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 87B1962819DD75EC0060353B /* Publiss.podspec */; };
 		87C655891A0B7C2B0092218F /* PUBFooterReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 87C655881A0B7C2B0092218F /* PUBFooterReusableView.m */; };
+		87CA58231A67C5710089F621 /* PUBLanguageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CA58221A67C5710089F621 /* PUBLanguageTableViewController.m */; };
 		87CFE2A11A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE29C1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m */; };
 		87CFE2A21A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE29E1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.m */; };
 		87CFE2A31A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87CFE2A01A60137E00B994E3 /* PUBUserLoginTextFieldTableViewCell.m */; };
@@ -276,6 +277,8 @@
 		87B1962819DD75EC0060353B /* Publiss.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Publiss.podspec; sourceTree = SOURCE_ROOT; };
 		87C655871A0B7C2B0092218F /* PUBFooterReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBFooterReusableView.h; path = Classes/PUBFooterReusableView.h; sourceTree = "<group>"; };
 		87C655881A0B7C2B0092218F /* PUBFooterReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBFooterReusableView.m; path = Classes/PUBFooterReusableView.m; sourceTree = "<group>"; };
+		87CA58211A67C5710089F621 /* PUBLanguageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBLanguageTableViewController.h; path = Classes/PUBLanguageTableViewController.h; sourceTree = "<group>"; };
+		87CA58221A67C5710089F621 /* PUBLanguageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBLanguageTableViewController.m; path = Classes/PUBLanguageTableViewController.m; sourceTree = "<group>"; };
 		87CFE29B1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginFieldTableViewCell.h; path = Classes/PUBUserLoginFieldTableViewCell.h; sourceTree = "<group>"; };
 		87CFE29C1A60137E00B994E3 /* PUBUserLoginFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBUserLoginFieldTableViewCell.m; path = Classes/PUBUserLoginFieldTableViewCell.m; sourceTree = "<group>"; };
 		87CFE29D1A60137E00B994E3 /* PUBUserLoginPasswordFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginPasswordFieldTableViewCell.h; path = Classes/PUBUserLoginPasswordFieldTableViewCell.h; sourceTree = "<group>"; };
@@ -425,6 +428,8 @@
 		811078361811368A00281106 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				87CA58211A67C5710089F621 /* PUBLanguageTableViewController.h */,
+				87CA58221A67C5710089F621 /* PUBLanguageTableViewController.m */,
 				8776660519ACED64000DFFF1 /* PUBThumbnailImageCache.h */,
 				8776660619ACED64000DFFF1 /* PUBThumbnailImageCache.m */,
 				8776660219ACED5B000DFFF1 /* PUBPagePreviewViewController.h */,
@@ -906,6 +911,7 @@
 				870110E8180FCF140034B9AC /* main.m in Sources */,
 				8776660A19ACED71000DFFF1 /* PUBStatisticsManager.m in Sources */,
 				8776661119ACED83000DFFF1 /* PUBCoreDataStack.m in Sources */,
+				87CA58231A67C5710089F621 /* PUBLanguageTableViewController.m in Sources */,
 				8776660719ACED64000DFFF1 /* PUBThumbnailImageCache.m in Sources */,
 				37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */,
 				877665B619ACEA06000DFFF1 /* IAPController.m in Sources */,
