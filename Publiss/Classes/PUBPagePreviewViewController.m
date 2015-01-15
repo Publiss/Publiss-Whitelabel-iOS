@@ -32,7 +32,7 @@
     UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissNavController:)];
     doneButton.tintColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItems = @[ doneButton ];
+    //self.navigationItem.leftBarButtonItems = @[ doneButton ];
     
     self.navigationController.navigationItem.title = self.pageName;
     self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
@@ -103,6 +103,22 @@
 
 - (void)setupBackgroundBlur {
     self.view.backgroundColor = UIColor.whiteColor;
+}
+
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (PUBIsiPad()) {
+        // this sizes are for ipad only
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+            if (PUBIsiOS8OrHigher()) {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(242, 74, 540, 620);
+            } else {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(74, 242, 620, 540);
+            }
+            
+        } else {
+            ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(114, 202, 540, 620);
+        }
+    }
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation

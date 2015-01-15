@@ -63,9 +63,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (PUBIsiPad() && !CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
-        self.view.alpha = 0.f;
-    }
+
     [self.downloadButton showActivityIndicator];
     
     [super viewWillAppear:animated];
@@ -310,9 +308,12 @@
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
-    navController.modalPresentationStyle = UIModalPresentationFormSheet;
-    navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    [self presentViewController:navController animated:YES completion:NULL];
+    //navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    //navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self.navigationController pushViewController:pagePreviewController animated:YES];
+    
+    //[self presentViewController:navController animated:YES completion:NULL];
 }
 
 #pragma mark - Helper
