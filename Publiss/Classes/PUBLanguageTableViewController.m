@@ -117,6 +117,7 @@
     }
     
     if (self.delegate) {
+        [self.navigationController popToRootViewControllerAnimated:NO];
         [self.delegate didSelectLanguageForDocument:document];
     }
 }
