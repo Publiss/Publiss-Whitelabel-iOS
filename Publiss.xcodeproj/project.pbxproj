@@ -21,6 +21,8 @@
 		37F2F9B719F11CF6003E344D /* PUBTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B619F11CF6003E344D /* PUBTransitioningDelegate.m */; };
 		37F2F9BA19F13004003E344D /* PUBDimmView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B919F13004003E344D /* PUBDimmView.m */; };
 		37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */; };
+		7205B9401A666F61000ECCF5 /* PUBLanguageSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7205B93F1A666F61000ECCF5 /* PUBLanguageSelection.storyboard */; };
+		7205B9491A668628000ECCF5 /* PUBLanguageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7205B9481A668628000ECCF5 /* PUBLanguageTableViewController.m */; };
 		728BDD731A600C49002C44D5 /* PUBMenuItemAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */; };
 		728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */; };
 		728BDD791A600C80002C44D5 /* PUBAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD781A600C80002C44D5 /* PUBAuthentication.m */; };
@@ -154,6 +156,9 @@
 		37F2F9BB19F137C4003E344D /* PUBDocumentTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBDocumentTransition.h; path = Classes/PUBDocumentTransition.h; sourceTree = "<group>"; };
 		37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDocumentTransition.m; path = Classes/PUBDocumentTransition.m; sourceTree = "<group>"; };
 		462072B4D22FBED0967E830D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		7205B93F1A666F61000ECCF5 /* PUBLanguageSelection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBLanguageSelection.storyboard; path = Views/PUBLanguageSelection.storyboard; sourceTree = "<group>"; };
+		7205B9471A668628000ECCF5 /* PUBLanguageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBLanguageTableViewController.h; path = Classes/PUBLanguageTableViewController.h; sourceTree = "<group>"; };
+		7205B9481A668628000ECCF5 /* PUBLanguageTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBLanguageTableViewController.m; path = Classes/PUBLanguageTableViewController.m; sourceTree = "<group>"; };
 		728BDD711A600C49002C44D5 /* PUBMenuItemAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMenuItemAccount.h; path = Classes/PUBMenuItemAccount.h; sourceTree = "<group>"; };
 		728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBMenuItemAccount.m; path = Classes/PUBMenuItemAccount.m; sourceTree = "<group>"; };
 		728BDD741A600C6A002C44D5 /* PUBUserLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBUserLoginViewController.h; path = Classes/PUBUserLoginViewController.h; sourceTree = "<group>"; };
@@ -448,6 +453,8 @@
 				87D9204019F69DAD0016872B /* PUBMainViewController.m */,
 				728BDD741A600C6A002C44D5 /* PUBUserLoginViewController.h */,
 				728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */,
+				7205B9471A668628000ECCF5 /* PUBLanguageTableViewController.h */,
+				7205B9481A668628000ECCF5 /* PUBLanguageTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -468,6 +475,7 @@
 				8776662819ADAFC8000DFFF1 /* PUBKiosk.storyboard */,
 				87FE340019F656AB00BED33B /* PUBMenu.storyboard */,
 				728BDD7A1A600CF8002C44D5 /* PUBUserLogin.storyboard */,
+				7205B93F1A666F61000ECCF5 /* PUBLanguageSelection.storyboard */,
 			);
 			name = Storyboard;
 			sourceTree = "<group>";
@@ -791,6 +799,7 @@
 				870110F1180FCF140034B9AC /* Images.xcassets in Resources */,
 				877666AB19AF6DD0000DFFF1 /* Publiss.bundle in Resources */,
 				8776662A19ADAFC8000DFFF1 /* PUBKiosk.storyboard in Resources */,
+				7205B9401A666F61000ECCF5 /* PUBLanguageSelection.storyboard in Resources */,
 				8749898319B07668006ABCA3 /* Localizable.strings in Resources */,
 				87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */,
 				87B1962919DD75EC0060353B /* Publiss.podspec in Resources */,
@@ -884,6 +893,7 @@
 				870110EC180FCF140034B9AC /* PUBAppDelegate.m in Sources */,
 				877665C319ACEA0C000DFFF1 /* PUBPageView.m in Sources */,
 				7864703918A532030005B3B1 /* Publiss.xcdatamodeld in Sources */,
+				7205B9491A668628000ECCF5 /* PUBLanguageTableViewController.m in Sources */,
 				87D9204419F6A1E70016872B /* PUBMenuItem.m in Sources */,
 				37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */,
 				877665D319ACEC7B000DFFF1 /* PUBProgressView.m in Sources */,
