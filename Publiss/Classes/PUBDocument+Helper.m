@@ -91,7 +91,7 @@
             document.pageCount = (uint16_t)[[dictionary valueForKeyPath:@"pages_info.count"] integerValue] - 1;
             document.fileDescription = PUBSafeCast(dictionary[@"description"], NSString.class);
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
-            document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
+            document.fileSize = (uint64_t)[dictionary[@"file_size"] longLongValue];
             document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
             document.showInKiosk = [[dictionary valueForKeyPath:@"show_in_kiosk"] boolValue];
             document.featuredUpdatedAt = onlineFeaturedUpdatedAt;

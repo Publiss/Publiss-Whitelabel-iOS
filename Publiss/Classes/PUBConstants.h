@@ -71,6 +71,7 @@ static NSString *const PurchasedMenuStyle = @"PurchasedMenuStyle";
 // Availability Macros
 #define PUBIsiPad() UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad
 #define PUBIsiPhone5() (([[UIScreen mainScreen] bounds].size.height - 568) ? NO : YES)
+#define PUBIsiOS8OrHigher() (([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) ? YES : NO)
 
 // Cast Helper
 extern id PUBSafeCast(id object, Class targetClass);
