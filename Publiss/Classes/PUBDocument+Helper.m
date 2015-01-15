@@ -152,6 +152,9 @@
                   showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments {
     NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
     
+    language = [language lowercaseString];
+    fallback = [fallback lowercaseString];
+    
     NSMutableArray *prefferedDocuments = [NSMutableArray new];
     for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
         NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
@@ -168,8 +171,10 @@
             if (realDocsWithFallbackLanguage.count > 0) {
                 [prefferedDocuments addObject:realDocsWithFallbackLanguage.firstObject];
             }
-            else if (showingLocalizationIfNoFallback) {
-                [prefferedDocuments addObject:realDocuments.firstObject];
+            else {
+                if (showingLocalizationIfNoFallback) {
+                    [prefferedDocuments addObject:realDocuments.firstObject];
+                }
             }
         }
     }
