@@ -168,7 +168,7 @@
             if (realDocsWithFallbackLanguage.count > 0) {
                 [prefferedDocuments addObject:realDocsWithFallbackLanguage.firstObject];
             }
-            else if (showingLocalizationIfNoFallback) {
+            else if (showingLocalizationIfNoFallback && realDocuments.count > 0) {
                 [prefferedDocuments addObject:realDocuments.firstObject];
             }
         }
