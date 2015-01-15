@@ -11,6 +11,7 @@
 #import "PUBLanguage+Helper.h"
 #import "UIColor+PUBDesign.h"
 #import "PUBConfig.h"
+#import "PUBLanguageSelectionCell.h"
 
 @interface PUBLanguageTableViewController ()
 
@@ -87,13 +88,18 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
-    
+
     PUBDocument *document;
     if (indexPath.section == 0 && downloadedLanguageDocuments.count > 0) {
         document = (PUBDocument *)[downloadedLanguageDocuments objectAtIndex:indexPath.row];
     }
     else {
         document = (PUBDocument *)[availableLanguageDocuments objectAtIndex:indexPath.row];
+    }
+    
+    if ([cell isKindOfClass:[PUBLanguageSelectionCell class]]) {
+        PUBLanguageSelectionCell *languageCell = (PUBLanguageSelectionCell *)cell;
+        [languageCell setupCellForDocument:document];
     }
     
     NSMutableAttributedString *languageTitle = [[NSMutableAttributedString alloc] initWithString:document.language.localizedTitle];
