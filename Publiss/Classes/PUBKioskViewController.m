@@ -853,8 +853,14 @@
 
 #pragma mark - Present Preview/Document
 
+- (NSUInteger)numberOfAvailableLanguagesForDocument:(PUBDocument *)document {
+    return [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                               ascending:YES
+                               predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", document.language.linkedTag]].count;
+}
+
 - (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
-    if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
+    if ([self numberOfAvailableLanguagesForDocument:document] == 1 && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased)) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentDocument:document atIndexPath:indexPath];
         });

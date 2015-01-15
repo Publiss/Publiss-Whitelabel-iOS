@@ -364,6 +364,9 @@
     } else {
         [self.downloadButton hideActivityIndicator];
         [self.downloadButton setTitle:PUBLocalize(@"Free") forState:UIControlStateNormal];
+        if (self.document.state == PUBDocumentStateDownloaded) {
+            [self updateUIDownloadState];
+        }
     }
 }
 
