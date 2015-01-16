@@ -508,7 +508,19 @@
     if ([button isKindOfClass:UIButton.class]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[self.collectionView convertPoint:button.superview.center fromView:button.superview]];
         PUBDocument *document = (self.publishedDocuments)[indexPath.row];
-        [self removePdfForDocument:document];
+        
+        if (document.language.linkedTag.length > 0) {
+            NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                                     ascending:YES
+                                                     predicate:[NSPredicate predicateWithFormat:@"state == %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+            
+            for (PUBDocument *documentToDelete in documents) {
+                    [self removePdfForDocument:documentToDelete];
+            }
+        }
+        else {
+            [self removePdfForDocument:document];
+        }
     }
 }
 

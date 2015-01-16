@@ -41,6 +41,25 @@
     self.title = PUBLocalize(@"Languages");
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    if (PUBIsiPad()) {
+        self.recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+        self.recognizer.numberOfTapsRequired = 1;
+        self.recognizer.cancelsTouchesInView = NO;
+        [self.view.window addGestureRecognizer:self.recognizer];
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if ([self.view.window.gestureRecognizers containsObject:self.recognizer]) {
+        [self.view.window removeGestureRecognizer:self.recognizer];
+    }
+}
+
 - (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     if (PUBIsiPad()) {
         // this sizes are for ipad only
@@ -141,6 +160,23 @@
     
     [self setupLanguageSelectionForDocument:document];
     [tableView reloadData];
+}
+
+#pragma mark - Dismiss ViewController
+
+// http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
+// FOR iOS8 and iOS7.1: http://stackoverflow.com/a/25844208
+- (void)handleTap:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        UIView *rootView = self.view.window.rootViewController.view;
+        CGPoint location = [sender locationInView:rootView];
+        UIView *navigationControllerView = ((UINavigationController *)self.parentViewController).view;
+        if (![navigationControllerView pointInside:[navigationControllerView convertPoint:location fromView:rootView] withEvent:nil]) {
+            [self dismissViewControllerAnimated:YES completion:^{
+                [self.view.window removeGestureRecognizer:sender];
+            }];
+        }
+    }
 }
 
 @end

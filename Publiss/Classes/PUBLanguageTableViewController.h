@@ -18,6 +18,7 @@
 @interface PUBLanguageTableViewController : UITableViewController
 
 @property (unsafe_unretained) id<PUBLanguageSelectionDelegate> delegate;
+@property (strong, nonatomic) UITapGestureRecognizer *recognizer;
 
 + (PUBLanguageTableViewController *)instantiateLanguageSelectionController;
 
