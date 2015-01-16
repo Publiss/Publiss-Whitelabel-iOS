@@ -43,11 +43,11 @@
 - (void)setupLanguageSelectionForDocument:(PUBDocument *)document {
     self.downloadedLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                            ascending:YES
-                                                           predicate:[NSPredicate predicateWithFormat:@"state == %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+                                                           predicate:[NSPredicate predicateWithFormat:@"state == %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
     
     self.availableLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
                                                           ascending:YES
-                                                          predicate:[NSPredicate predicateWithFormat:@"state != %llu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+                                                          predicate:[NSPredicate predicateWithFormat:@"state != %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
 }
 
 #pragma mark - UITableViewDataSource
