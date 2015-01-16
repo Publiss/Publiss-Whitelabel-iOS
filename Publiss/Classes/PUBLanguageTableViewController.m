@@ -12,6 +12,7 @@
 #import "UIColor+PUBDesign.h"
 #import "PUBConfig.h"
 #import "PUBLanguageSelectionCell.h"
+#import "PUBConstants.h"
 
 @interface PUBLanguageTableViewController ()
 
@@ -38,6 +39,22 @@
     }
     
     self.title = PUBLocalize(@"Languages");
+}
+
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (PUBIsiPad()) {
+        // this sizes are for ipad only
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+            if (PUBIsiOS8OrHigher()) {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(242, 74, 540, 620);
+            } else {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(74, 242, 620, 540);
+            }
+            
+        } else {
+            ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(114, 202, 540, 620);
+        }
+    }
 }
 
 - (void)setupLanguageSelectionForDocument:(PUBDocument *)document {
