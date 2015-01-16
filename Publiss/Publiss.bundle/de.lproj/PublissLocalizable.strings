@@ -10,6 +10,7 @@
 "Loading" = "Lädt";
 "Fetching..." = "Aktualisiere...";
 "Preview Page %d of %d" = "Vorschau Seite %d von %d";
+"Preview Page %ld of %ld" = "Vorschau Seite %ld von %ld";
 "Download stopped" = "Download abgebrochen";
 "Downloading..." = "Lädt...";
 "Close" = "Schließen";

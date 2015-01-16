@@ -244,7 +244,7 @@
     }
     
     if ([JDStatusBarNotification isVisible]) {
-        self.barView.textLabel.text = [NSString stringWithFormat:NSLocalizedString(@"Page %tu of %tu done.", nil), self.document.pageCount < pagesDoneCount + 1 ? self.document.pageCount : (NSUInteger) (pagesDoneCount + 1), self.document.pageCount];
+        self.barView.textLabel.text = [NSString stringWithFormat:PUBLocalize(@"Page %tu of %tu done."), self.document.pageCount < pagesDoneCount + 1 ? self.document.pageCount : (NSUInteger) (pagesDoneCount + 1), self.document.pageCount];
         [JDStatusBarNotification showProgress:[self.documentProgress[@"totalProgress"] floatValue]];
         if ([self.documentProgress[@"totalProgress"] floatValue] >= .99999999999f) {
             [JDStatusBarNotification dismissAfter:1];

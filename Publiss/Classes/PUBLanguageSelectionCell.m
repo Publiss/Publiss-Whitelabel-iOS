@@ -46,8 +46,17 @@
         [downloadButton setImage:tintedImage forState:UIControlStateNormal];
     }
     
+    NSArray *preferredLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                             ascending:YES
+                                             predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@ AND language.languageTag == %@", document.language.linkedTag, PUBConfig.sharedConfig.preferredLanguage]];
+    
     NSMutableAttributedString *languageTitle = [[NSMutableAttributedString alloc] initWithString:document.language.localizedTitle];
     if (PUBConfig.sharedConfig.preferredLanguage.length > 0 && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.preferredLanguage]) {
+        NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
+        [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
+        [languageTitle appendAttributedString:postfix];
+    }
+    else if (preferredLanguageDocuments.count == 0 && PUBConfig.sharedConfig.fallbackLanguage.length > 0 && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.fallbackLanguage]) {
         NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
         [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
         [languageTitle appendAttributedString:postfix];
