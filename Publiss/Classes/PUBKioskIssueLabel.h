@@ -10,4 +10,6 @@
 
 @interface PUBKioskIssueLabel : UILabel
 
+- (void)setLineSpacedText:(NSString *)text;
+
 @end

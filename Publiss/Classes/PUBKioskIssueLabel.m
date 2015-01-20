@@ -14,7 +14,7 @@
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, UIEdgeInsetsMake(2, 5, 2, 5))];
 }
 
-- (void)setText:(NSString *)text {
+- (void)setLineSpacedText:(NSString *)text {
     NSMutableParagraphStyle *style  = [[NSMutableParagraphStyle alloc] init];
     style.lineSpacing = 1.1f;
     NSDictionary *attributtes = @{NSParagraphStyleAttributeName : style};

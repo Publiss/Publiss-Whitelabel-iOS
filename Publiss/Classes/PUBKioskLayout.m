@@ -103,8 +103,10 @@
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForDecorationViewOfKind:(NSString *)decorationViewKind atIndexPath:(NSIndexPath *)indexPath {
     id shelfRect = self.shelfRects[indexPath];
-    if (!shelfRect)
+    if (!shelfRect) {
         return nil;
+    }
+    
     UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:[PUBImageReusableView kind]
                                                                                                                withIndexPath:indexPath];
     attributes.frame = [shelfRect CGRectValue];

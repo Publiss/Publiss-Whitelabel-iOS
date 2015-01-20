@@ -179,21 +179,19 @@
     self.activityIndicator.frame = [self activityIndicatorFrame];
     self.namedBadgeView.frame = [self badgeViewFrame];
 
-    self.label.frame = [self labelFrame];
-    self.label.center = self.coverImage.center;
-    CGRect frame = self.label.frame;
-    frame.origin.y = self.bounds.size.height;
-    self.label.frame = frame;
+    
+    self.label.frame = [self labelFrameRelativeToCoverImage:self.coverImage];
+
+    
     if (!PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk) {
         self.label.hidden = YES;
     }
 }
 
-- (CGRect)labelFrame {
-    CGRect frame = self.bounds;
+- (CGRect)labelFrameRelativeToCoverImage:(UIImageView *)coverImage {
+    CGRect frame = coverImage.frame;
     frame.size.height = 32;
     frame.origin.y = self.bounds.size.height;
-    frame.size.width = self.coverImage.frame.size.width;
     return frame;
 }
 

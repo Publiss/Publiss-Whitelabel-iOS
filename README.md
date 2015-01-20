@@ -87,6 +87,9 @@ pod 'Publiss', :git => "https://github.com/Publiss/Publiss-Whitelabel-iOS.git"
     // Uncomment this line to use the language tag feature.
     // PUBConfig.sharedConfig.preferredLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
     
+    // Uncomment this line to get labels below issues
+    // PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk = YES;
+    
     // Uncomment the following lines to add user login to menu
     // PUBAuthentication.sharedInstance.loginEnabled = YES;
     // PUBAuthentication.sharedInstance.menuItemAccountField = @"email";
