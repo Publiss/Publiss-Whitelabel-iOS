@@ -426,9 +426,11 @@
         self.headerView = header;
         return header;
     } else {
-        return [collectionView dequeueReusableSupplementaryViewOfKind:kind
-                                                  withReuseIdentifier:@"PUBFooterReusableView"
-                                                         forIndexPath:indexPath];
+        PUBFooterReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:kind
+                                                                           withReuseIdentifier:@"PUBFooterReusableView"
+                                                                                  forIndexPath:indexPath];
+        [collectionView sendSubviewToBack:footer];
+        return footer;
     }
 }
 

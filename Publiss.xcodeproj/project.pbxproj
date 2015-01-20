@@ -108,6 +108,7 @@
 		87D9204419F6A1E70016872B /* PUBMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204319F6A1E70016872B /* PUBMenuItem.m */; };
 		87D9204719F798210016872B /* PUBMenuTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 87D9204619F798210016872B /* PUBMenuTableViewCell.m */; };
 		87F1294519E2850300A082E2 /* PUBNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F1294419E2850300A082E2 /* PUBNavigationViewController.m */; };
+		87F6568C1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 87F6568B1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m */; };
 		87FE33FF19F6526C00BED33B /* PUBMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */; };
 		87FE340119F656AB00BED33B /* PUBMenu.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87FE340019F656AB00BED33B /* PUBMenu.storyboard */; };
 		EB07BD7ACAD44CFFA2E7A71C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A7EC5682127449A88DBB3A62 /* libPods.a */; };
@@ -298,6 +299,8 @@
 		87D9204619F798210016872B /* PUBMenuTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBMenuTableViewCell.m; path = Classes/PUBMenuTableViewCell.m; sourceTree = "<group>"; };
 		87F1294319E2850300A082E2 /* PUBNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBNavigationViewController.h; path = Classes/PUBNavigationViewController.h; sourceTree = "<group>"; };
 		87F1294419E2850300A082E2 /* PUBNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBNavigationViewController.m; path = Classes/PUBNavigationViewController.m; sourceTree = "<group>"; };
+		87F6568A1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskIssueLabel.h; path = Classes/PUBKioskIssueLabel.h; sourceTree = "<group>"; };
+		87F6568B1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBKioskIssueLabel.m; path = Classes/PUBKioskIssueLabel.m; sourceTree = "<group>"; };
 		87FE33FD19F6526C00BED33B /* PUBMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMenuViewController.h; path = Classes/PUBMenuViewController.h; sourceTree = "<group>"; };
 		87FE33FE19F6526C00BED33B /* PUBMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBMenuViewController.m; path = Classes/PUBMenuViewController.m; sourceTree = "<group>"; };
 		87FE340019F656AB00BED33B /* PUBMenu.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBMenu.storyboard; path = Views/PUBMenu.storyboard; sourceTree = "<group>"; };
@@ -522,6 +525,8 @@
 				87C655881A0B7C2B0092218F /* PUBFooterReusableView.m */,
 				72D34B381A67CB5A004971A4 /* PUBLanguageSelectionCell.h */,
 				72D34B391A67CB5A004971A4 /* PUBLanguageSelectionCell.m */,
+				87F6568A1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.h */,
+				87F6568B1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -868,6 +873,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F6568C1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m in Sources */,
 				8776662319ACEDBE000DFFF1 /* Publiss.m in Sources */,
 				877665FE19ACED47000DFFF1 /* PUBPreviewViewController.m in Sources */,
 				8776661A19ACED98000DFFF1 /* PUBCommunication.m in Sources */,

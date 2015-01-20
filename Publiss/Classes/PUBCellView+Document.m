@@ -35,6 +35,8 @@
             [self documentPurchased];
             break;
     }
+    
+    self.label.text = document.title;
 }
 
 - (void)documentOnline {

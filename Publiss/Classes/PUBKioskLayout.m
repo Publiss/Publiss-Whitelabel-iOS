@@ -82,7 +82,7 @@
     
     [self.shelfRects enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         if (CGRectIntersectsRect([obj CGRectValue], rect)) {
-            UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:[PUBImageReusableView kind] withIndexPath:key];
+            UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForDecorationViewOfKind:[PUBImageReusableView kind] atIndexPath:key];
             attributes.frame = [obj CGRectValue];
             attributes.zIndex = 0;
             [newArray addObject:attributes];
@@ -119,7 +119,7 @@
     // the bottom inset is 0 because it gets set in the content inset below
     self.sectionInset = PUBIsiPad() ? UIEdgeInsetsMake(30.f, 30.0f, 0, 30.0f) : UIEdgeInsetsMake(50.f, 15.f, 0, 15.f);
     self.minimumInteritemSpacing = PUBIsiPad() ? 20.0f : 10.0f;
-    self.minimumLineSpacing = PUBIsiPad() ? 31.0f : 51.0f;
+    self.minimumLineSpacing = PUBIsiPad() ? 46.0f : 64.0f;
     
     CGFloat fraction = UIInterfaceOrientationIsPortrait([self orientation]) ? 2 : 3;
     

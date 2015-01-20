@@ -8,6 +8,7 @@
 #import "PUBCellView.h"
 #import "PUBBadgeView.h"
 #import "UIColor+PUBDesign.h"
+#import <PublissCore/PublissCore.h>
 #import <tgmath.h>
 
 @interface PUBCellView ()
@@ -26,6 +27,7 @@
     [self.contentView addSubview:self.deleteButton];
     [self.contentView addSubview:self.namedBadgeView];
     [self.contentView addSubview:self.progressView];
+    [self.contentView addSubview:self.label];
     [self bringSubviewToFront:self.progressView];
     [self insertSubview:self.activityIndicator aboveSubview:self.coverImage];
     self.yOffset = 0;
@@ -35,6 +37,20 @@
 }
 
 #pragma mark - Custom Getter
+
+- (UILabel *)label {
+    if (!_label) {
+        _label = [[PUBKioskIssueLabel alloc] initWithFrame:self.bounds];
+        _label.backgroundColor = PUBConfig.sharedConfig.secondaryColor;
+        _label.clipsToBounds = YES;
+        _label.numberOfLines = 2;
+        _label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
+        _label.textColor = [UIColor darkGrayColor];
+        _label.textAlignment = NSTextAlignmentCenter;
+        [self addSubview:_label];
+    }
+    return _label;
+}
 
 - (UIActivityIndicatorView *)activityIndicator
 {
@@ -162,6 +178,19 @@
     self.badgeView.frame = [self badgeViewFrame];
     self.activityIndicator.frame = [self activityIndicatorFrame];
     self.namedBadgeView.frame = [self badgeViewFrame];
+    self.label.frame = [self labelFrame];
+    self.label.center = self.coverImage.center;
+    CGRect frame = self.label.frame;
+    frame.origin.y = self.bounds.size.height;
+    self.label.frame = frame;
+}
+
+- (CGRect)labelFrame {
+    CGRect frame = self.bounds;
+    frame.size.height = 32;
+    frame.origin.y = self.bounds.size.height;
+    frame.size.width = self.coverImage.frame.size.width;
+    return frame;
 }
 
 - (CGRect)coverImageFrame {

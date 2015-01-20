@@ -8,6 +8,7 @@
 #import "PUBCoverImageCell.h"
 #import "PUBBadgeView.h"
 #import "PUBNamedBadgeView.h"
+#import "PUBKioskIssueLabel.h"
 
 @class PUBDocument;
 
@@ -20,6 +21,7 @@
 @property (strong, nonatomic) PUBBadgeView *badgeView;
 @property (strong, nonatomic) PUBNamedBadgeView *namedBadgeView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicator;
+@property (strong, nonatomic) PUBKioskIssueLabel *label;
 @property (assign, assign) CGFloat yOffset;
 - (void)setBadgeViewHidden:(BOOL)hidden animated:(BOOL)animated;
 
