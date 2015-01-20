@@ -63,6 +63,8 @@
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
 
+@property (nonatomic, strong) UIActivityIndicatorView *progressView;
+
 @end
 
 #define LINE_HEIGHT 30.f
@@ -126,7 +128,7 @@
     
     if (self.shouldRetrieveDocuments) {
         self.shouldRetrieveDocuments = NO;
-        [self refreshDocumentsWithActivityViewAnimated:YES];
+        [self refreshDocumentsWithActivityViewAnimated:NO];
     }
 }
 
@@ -181,6 +183,15 @@
         [self.refreshControl addTarget:self action:@selector(refreshDocumentsWithActivityViewAnimated:) forControlEvents:UIControlEventValueChanged];
         [self.collectionView addSubview:self.refreshControl];
     }
+}
+
+- (UIActivityIndicatorView *)progressView {
+    if (!_progressView) {
+        _progressView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        _progressView.color = [UIColor publissPrimaryColor];
+        [self.view addSubview:_progressView];
+    }
+    return _progressView;
 }
 
 - (void)setupMenu {
@@ -269,8 +280,12 @@
 - (void)refreshDocumentsWithActivityViewAnimated:(BOOL)animated {    
     self.editButtonItem.enabled = NO;
     
-    if (!self.refreshControl.isRefreshing) {
-        [self.refreshControl beginRefreshing];
+    if (animated) {
+        self.progressView.center = self.view.center;
+        [self.progressView startAnimating];
+        if (!self.refreshControl.isRefreshing) {
+            [self.refreshControl beginRefreshing];
+        }
     }
     
     self.dynamicallyLoadedCoverImageIndexPath = [NSMutableSet set];
@@ -318,17 +333,18 @@
         [self.refreshControl endRefreshing];
         
         [KVNProgress dismissWithCompletion:^{}];
-    }
-                                                     error:^(NSError *error) {
-                                                         PUBAuthentication *auth = PUBAuthentication.sharedInstance;
-                                                         if ([auth isLoggedIn]) {
-                                                             [auth logout];
-                                                             [self refreshDocumentsWithActivityViewAnimated:YES];
-                                                             
-                                                             [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
-                                                             [KVNProgress showErrorWithStatus:PUBLocalize(@"You have been logged out!\nPlease login again.")];
-                                                         }
-                                                     }];
+        [self.progressView removeFromSuperview];
+        self.progressView = nil;
+    } error:^(NSError *error) {
+        PUBAuthentication *auth = PUBAuthentication.sharedInstance;
+        if ([auth isLoggedIn]) {
+            [auth logout];
+            [self refreshDocumentsWithActivityViewAnimated:YES];
+            
+            [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
+            [KVNProgress showErrorWithStatus:PUBLocalize(@"You have been logged out!\nPlease login again.")];
+        }
+    }];
 }
 
 - (void)showMenu:(id)sender {
@@ -461,9 +477,8 @@
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
-                                            
                                             [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
-                                            // has to called later becuase the cache needs some time to write
+                                            // has to called later because the cache needs some time to write
                                             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                                                 [collectionView reloadItemsAtIndexPaths:@[indexPath]];
                                             });

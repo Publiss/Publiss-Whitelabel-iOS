@@ -35,4 +35,7 @@ extern NSString *const DEFAULT_FALLBACK_LANGUAGE_EN;
 /// Specify if documents that have any localizations (linked and language categories) should be shown. Default is "YES"
 @property (nonatomic, assign) BOOL showUnlocalizedDocuments;
 
+/// Specify if labels are shown below each issue in the kiosk
+@property (nonatomic, assign) BOOL showLabelsBelowIssuesInKiosk;
+
 @end

@@ -9,6 +9,7 @@
 #import "PUBKioskLayout.h"
 #import "PUBConstants.h"
 #import "PUBImageReusableView.h"
+#import <PublissCore/PublissCore.h>
 
 @interface PUBKioskLayout()
 
@@ -119,7 +120,7 @@
     // the bottom inset is 0 because it gets set in the content inset below
     self.sectionInset = PUBIsiPad() ? UIEdgeInsetsMake(30.f, 30.0f, 0, 30.0f) : UIEdgeInsetsMake(50.f, 15.f, 0, 15.f);
     self.minimumInteritemSpacing = PUBIsiPad() ? 20.0f : 10.0f;
-    self.minimumLineSpacing = PUBIsiPad() ? 46.0f : 64.0f;
+    self.minimumLineSpacing = PUBIsiPad() ? 31.0f : 51.0f + (PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk ? 14.0f : 0);
     
     CGFloat fraction = UIInterfaceOrientationIsPortrait([self orientation]) ? 2 : 3;
     

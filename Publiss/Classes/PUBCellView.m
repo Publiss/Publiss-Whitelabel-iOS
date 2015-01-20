@@ -178,11 +178,15 @@
     self.badgeView.frame = [self badgeViewFrame];
     self.activityIndicator.frame = [self activityIndicatorFrame];
     self.namedBadgeView.frame = [self badgeViewFrame];
+
     self.label.frame = [self labelFrame];
     self.label.center = self.coverImage.center;
     CGRect frame = self.label.frame;
     frame.origin.y = self.bounds.size.height;
     self.label.frame = frame;
+    if (!PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk) {
+        self.label.hidden = YES;
+    }
 }
 
 - (CGRect)labelFrame {
