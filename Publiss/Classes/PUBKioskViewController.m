@@ -448,7 +448,7 @@
     }
 }
 
-- (void)prepareCellWithoutThumbnail:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView thumbnailURL:(NSURL *)thumbnailURL
+- (void)prepareCellWithoutThumbnail:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath collectionView:(UICollectionView *)collectionView thumbnailURL:(NSURL *)thumbnailURL document:(PUBDocument *)document
 {
     [cell.activityIndicator startAnimating];
     cell.coverImage.hidden = YES;
@@ -457,6 +457,7 @@
     if (![self.dynamicallyLoadedCoverImageIndexPath containsObject:indexPath]) {
         NSURLRequest *URLRequest = [NSURLRequest requestWithURL:thumbnailURL];
         [self.dynamicallyLoadedCoverImageIndexPath addObject:indexPath];
+        CGSize cellSize = cell.frame.size;
         [cell.coverImage setImageWithURLRequest:URLRequest
                                placeholderImage:nil
                                         success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
@@ -467,9 +468,16 @@
                                                 [collectionView reloadItemsAtIndexPaths:@[indexPath]];
                                             });
                                         } failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error) {
-                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                                                [collectionView reloadItemsAtIndexPaths:@[indexPath]];
-                                            });
+                                            [PSPDFKit.sharedInstance.cache imageFromDocument:[PUBPDFDocument documentWithPUBDocument:document]
+                                                                                        page:0
+                                                                                        size:cellSize
+                                                                                     options:PSPDFCacheOptionDiskLoadAsyncAndPreload
+                                                                             completionBlock:^(UIImage *image, PSPDFDocument *document2, NSUInteger page, CGSize size) {
+                                                                                 [PUBThumbnailImageCache.sharedInstance setImage:image forURLString:thumbnailURL.absoluteString];
+                                                                                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                                                     [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+                                                                                 });
+                                                                             }];
                                         }];
     }
 }
@@ -491,7 +499,7 @@
     if (nil != thumbnail) {
         [self prepareCellWithThumbnail:thumbnail cell:cell indexPath:indexPath document:document];
     } else {
-        [self prepareCellWithoutThumbnail:cell indexPath:indexPath collectionView:collectionView thumbnailURL:thumbnailURL];
+        [self prepareCellWithoutThumbnail:cell indexPath:indexPath collectionView:collectionView thumbnailURL:thumbnailURL document:document];
     }
     [cell setNeedsLayout];
     return cell;
