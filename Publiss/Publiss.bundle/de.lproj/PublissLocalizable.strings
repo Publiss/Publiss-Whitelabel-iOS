@@ -10,6 +10,7 @@
 "Loading" = "Lädt";
 "Fetching..." = "Aktualisiere...";
 "Preview Page %d of %d" = "Vorschau Seite %d von %d";
+"Preview Page %ld of %ld" = "Vorschau Seite %ld von %ld";
 "Download stopped" = "Download abgebrochen";
 "Downloading..." = "Lädt...";
 "Close" = "Schließen";
@@ -49,3 +50,8 @@
 "You have been logged out!\nPlease login again." = "Sie wurden ausgeloggt!\nBitte melden Sie sich erneut an.";
 "Logging out ..." = "Abmeldung läuft ...";
 "You are logged in!\n\nPreparing kiosk for your personal experience ..." = "Sie wurden angemeldet!\n\nIhr Kiosk wird fürs Sie vorbereitet ...";
+
+"Already downloaded" = "Bereits geladen";
+"Alternative language" = "Alternative Sprache";
+"Languages" = "Sprachen";
+"Open" = "Öffnen";

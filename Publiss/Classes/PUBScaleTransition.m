@@ -32,8 +32,6 @@
     blendOverView.contentMode = UIViewContentModeScaleAspectFill;
     blendOverView.clipsToBounds = YES;
     
-    UIView *transitionImageViewTarget;
-    
     if (self.transitionMode == TransitionModePresent) {
         
         UIView *dimView;
@@ -45,10 +43,19 @@
         
         [container addSubview:toView];
         
+        
         startRect = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
         endRect = [self endFrameForController:toVC inContainer:container];
         
-        transitionImageViewTarget = [toView snapshotViewAfterScreenUpdates:YES];
+        UIView *transitionImageViewTarget = [toView snapshotViewAfterScreenUpdates:YES];
+        if (PUBIsiPad()) {
+            transitionImageViewTarget = [[UIImageView alloc] initWithFrame:toView.frame];
+            transitionImageViewTarget.layer.cornerRadius = 6;
+            transitionImageViewTarget.layer.masksToBounds = YES;
+            transitionImageViewTarget.backgroundColor = [UIColor whiteColor];
+            ((UIImageView *)transitionImageViewTarget).image = [self captureViewWithoutStatusbar:toView];
+        }
+        
         transitionImageViewTarget.frame = startRect;
         [container addSubview:transitionImageViewTarget];
         
@@ -90,7 +97,7 @@
         startRect = [self endFrameForController:fromVC inContainer:container];
         endRect = [self.transitionSourceView convertRect:self.transitionSourceView.bounds toView:container];
         
-        transitionImageViewTarget = [fromView snapshotViewAfterScreenUpdates:YES];
+        UIView *transitionImageViewTarget = [fromView snapshotViewAfterScreenUpdates:YES];
         transitionImageViewTarget.frame = startRect;
         [container addSubview:transitionImageViewTarget];
         
@@ -120,6 +127,16 @@
                              self.transitionSourceView.superview.hidden = NO;
                          }];
     }
+}
+
+- (UIImage *)captureViewWithoutStatusbar:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
+    
+    [view drawViewHierarchyInRect:CGRectMake(0, -20, view.bounds.size.width, view.bounds.size.height) afterScreenUpdates:YES];
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 - (CGRect)endFrameForController:(UIViewController *)controller inContainer:(UIView *)container {

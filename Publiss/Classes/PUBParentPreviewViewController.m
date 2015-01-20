@@ -24,9 +24,8 @@
 
 @end
 
-
-
 @implementation PUBParentPreviewViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,25 +45,42 @@
     [self updateUI];
 }
 
+- (void)willAnimateRotationToInterfaceOrientation: (UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    if (PUBIsiPad()) {
+        // this sizes are for ipad only
+        if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || toInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+            if (PUBIsiOS8OrHigher()) {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(242, 74, 540, 620);
+            } else {
+                ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(74, 242, 620, 540);
+            }
+            
+        } else {
+            ((UINavigationController *)self.parentViewController).view.frame = CGRectMake(114, 202, 540, 620);
+        }
+    }
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if (PUBIsiPad() && !CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
-        self.view.alpha = 0.f;
-    }
+
     [self.downloadButton showActivityIndicator];
+    
+    [super viewWillAppear:animated];
+    [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(documentFetchingNotification:) name:PUBDocumentFetcherUpdateNotification object:NULL];
+    [self updateUIDownloadState];
 }
 
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    // layout description text to top left corner
-    [self.descriptionText sizeToFit];
+- (void)documentFetchingNotification:(NSNotification *)notification {
+    if ([notification.userInfo isKindOfClass:NSDictionary.class]) {
+        if (notification.userInfo[self.document.productID])
+            [self updateUIDownloadState];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     if (PUBIsiPad()) {
         if (!CGRectEqualToRect(self.oldViewFrame, CGRectZero)) {
             self.view.frame = self.oldViewFrame;
@@ -91,6 +107,39 @@
     }];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    if ([self.view.window.gestureRecognizers containsObject:self.recognizer]) {
+        [self.view.window removeGestureRecognizer:self.recognizer];
+    }
+    [NSNotificationCenter.defaultCenter removeObserver:self name:PUBDocumentFetcherUpdateNotification object:NULL];
+}
+
+
+- (void)updateUIDownloadState {
+    switch (self.document.state) {
+        case PUBDocumentStateLoading:
+            self.navigationItem.title = PUBLocalize(@"Downloading...");
+            [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
+            break;
+            
+        case PUBDocumentStateDownloaded:
+            self.navigationItem.title = nil;
+            [self.downloadButton setTitle:PUBLocalize(@"Read") forState:UIControlStateNormal];
+            break;
+            
+        case PUBDocumentStateUpdated:
+            self.navigationItem.title = nil;
+            [self.downloadButton setTitle:PUBLocalize(@"Update") forState:UIControlStateNormal];
+            break;
+            
+        default:
+            self.navigationItem.title = nil;
+            break;
+    }
+}
+
 #pragma mark - Dismiss ViewController
 
 // http://stackoverflow.com/questions/2623417/iphone-sdk-dismissing-modal-viewcontrollers-on-ipad-by-clicking-outside-of-it
@@ -99,7 +148,8 @@
     if (sender.state == UIGestureRecognizerStateEnded) {
         UIView *rootView = self.view.window.rootViewController.view;
         CGPoint location = [sender locationInView:rootView];
-        if (![self.view pointInside:[self.view convertPoint:location fromView:rootView] withEvent:nil]) {
+        UIView *navigationControllerView = ((UINavigationController *)self.parentViewController).view;
+        if (![navigationControllerView pointInside:[navigationControllerView convertPoint:location fromView:rootView] withEvent:nil]) {
             [self dismissViewControllerAnimated:YES completion:^{
                 [self.view.window removeGestureRecognizer:sender];
             }];
@@ -252,14 +302,18 @@
         self.oldViewFrame = self.view.frame;
     }
     
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"PUBKiosk" bundle:nil];
-    PUBPagePreviewViewController *pagePreviewController = [storyboard instantiateViewControllerWithIdentifier:@"PagePreview"];
+    PUBPagePreviewViewController *pagePreviewController = [PUBPagePreviewViewController instantiateController];
     pagePreviewController.document = self.document;
     pagePreviewController.initialPage = indexPath.row;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
-    [self presentViewController:navController animated:YES completion:NULL];
+    //navController.modalPresentationStyle = UIModalPresentationFormSheet;
+    //navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    [self.navigationController pushViewController:pagePreviewController animated:YES];
+    
+    //[self presentViewController:navController animated:YES completion:NULL];
 }
 
 #pragma mark - Helper
@@ -316,6 +370,9 @@
     } else {
         [self.downloadButton hideActivityIndicator];
         [self.downloadButton setTitle:PUBLocalize(@"Free") forState:UIControlStateNormal];
+        if (self.document.state == PUBDocumentStateDownloaded) {
+            [self updateUIDownloadState];
+        }
     }
 }
 
@@ -325,38 +382,14 @@
     self.descriptionTitle.text = PUBLocalize(@"Description");
     self.descriptionText.text = self.document.fileDescription.length > 0 ? self.document.fileDescription : @"";
     
-    if (PUBIsiPad()) {
-        UIFont *fontTtitle = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-        
-        UIFont *fontDescription = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-        
-        UIFont *fontDescriptionTitle = [UIFont boldSystemFontOfSize:12.0f];
-        
-        UIColor *textColorBlack = [UIColor blackColor];
-        UIColor *textColorGray =  [UIColor lightGrayColor];
-        
-        NSDictionary *attrsDescription =
-        @{ NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontDescription };
-        NSDictionary *attrsTitle = @{ NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontTtitle };
-        NSDictionary *attrsDescriptionTitle = @{NSForegroundColorAttributeName: textColorBlack, NSFontAttributeName : fontDescriptionTitle };
-        NSDictionary *attrsFileDescription =
-        @{ NSForegroundColorAttributeName : textColorGray, NSFontAttributeName : fontDescription };
-        
-        self.descriptionText.attributedText =  [[NSAttributedString alloc] initWithString:self.descriptionText.text attributes:attrsDescription];
-        self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:self.titleLabel.text attributes:attrsTitle];
-        self.descriptionTitle.attributedText =  [[NSAttributedString alloc] initWithString:self.descriptionTitle.text attributes:attrsDescriptionTitle];
-        self.fileDescription.attributedText =  [[NSAttributedString alloc] initWithString:self.fileDescription.text attributes:attrsFileDescription];
-    } else {
-        UIFont *fontTitle = [UIFont boldSystemFontOfSize:14.f];
-        UIFont *fontDescription = [UIFont systemFontOfSize:11.f];
-        UIColor *textColorBlack = [UIColor blackColor];
-        UIColor *textColorGray =  [UIColor lightGrayColor];
-        
-        self.descriptionText.attributedText = [[NSAttributedString alloc] initWithString:self.descriptionText.text attributes:@{NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontDescription}];
-        self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:self.titleLabel.text attributes:@{NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontTitle}];
-        self.fileDescription.attributedText = [[NSAttributedString alloc] initWithString:self.fileDescription.text attributes:@{NSForegroundColorAttributeName : textColorGray, NSFontAttributeName : fontDescription}];
-    }
-
+    UIFont *fontTitle = [UIFont boldSystemFontOfSize:14.f];
+    UIFont *fontDescription = [UIFont systemFontOfSize:11.f];
+    UIColor *textColorBlack = [UIColor blackColor];
+    UIColor *textColorGray =  [UIColor lightGrayColor];
+    
+    self.descriptionText.attributedText = [[NSAttributedString alloc] initWithString:self.descriptionText.text attributes:@{NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontDescription}];
+    self.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:self.titleLabel.text attributes:@{NSForegroundColorAttributeName : textColorBlack, NSFontAttributeName : fontTitle}];
+    self.fileDescription.attributedText = [[NSAttributedString alloc] initWithString:self.fileDescription.text attributes:@{NSForegroundColorAttributeName : textColorGray, NSFontAttributeName : fontDescription}];
 }
 
 @end

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ZaB-P3-aKq">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Language Table View Controller-->
+        <scene sceneID="oFt-cU-fWq">
+            <objects>
+                <tableViewController id="ZaB-P3-aKq" customClass="PUBLanguageTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="o4d-rs-ESv">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="DocumentLanguageCell" id="GzC-S1-Rrs" customClass="PUBLanguageSelectionCell">
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="GzC-S1-Rrs" id="htC-UC-SSR">
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yaI-zv-Wfp">
+                                            <rect key="frame" x="561" y="11" width="23" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="PtH-O8-bnn"/>
+                                                <constraint firstAttribute="width" constant="23" id="Vmk-Z5-zTv"/>
+                                            </constraints>
+                                            <state key="normal" image="download">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                        <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="400-XA-p1m">
+                                            <rect key="frame" x="484" y="7" width="100" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="GGE-2J-ba0"/>
+                                                <constraint firstAttribute="width" constant="100" id="mXF-lg-6IE"/>
+                                            </constraints>
+                                            <state key="normal" title="Open">
+                                                <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                            </state>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="400-XA-p1m" firstAttribute="top" secondItem="htC-UC-SSR" secondAttribute="topMargin" constant="-1" id="ClY-RN-xcT"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="400-XA-p1m" secondAttribute="trailing" constant="8" id="uB7-Hv-zai"/>
+                                        <constraint firstItem="yaI-zv-Wfp" firstAttribute="top" secondItem="htC-UC-SSR" secondAttribute="topMargin" constant="3" id="z89-Lw-bAd"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="yaI-zv-Wfp" secondAttribute="trailing" constant="8" id="zgk-au-jBs"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="downloadButton" destination="yaI-zv-Wfp" id="Ggu-88-RlF"/>
+                                    <outlet property="readButton" destination="400-XA-p1m" id="fXC-0I-S3I"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ZaB-P3-aKq" id="dy7-Zr-dfg"/>
+                            <outlet property="delegate" destination="ZaB-P3-aKq" id="Vf9-LD-uCf"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="languageSelectionTableView" destination="o4d-rs-ESv" id="d2e-c3-lNT"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5tT-6w-d3y" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="840" y="-76"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="download" width="21" height="20"/>
+    </resources>
+</document>

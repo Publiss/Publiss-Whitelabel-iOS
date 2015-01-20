@@ -15,7 +15,6 @@
 #import "PUBScaleTransition.h"
 #import "PUBThumbnailImageCache.h"
 #import "PUBPDFViewController.h"
-#import "PUBiPhonePreviewViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "PUBPDFDocument.h"
 #import "IAPController.h"
@@ -42,6 +41,7 @@
 #import <KVNProgress/KVNProgress.h>
 #import "PUBAuthentication.h"
 #import "PUBMenuItemAccount.h"
+#import "PUBLanguage+Helper.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 
@@ -58,6 +58,7 @@
 
 @property (nonatomic, strong) NSMutableSet *dynamicallyLoadedCoverImageIndexPath;
 @property (nonatomic, strong) NSDictionary *indexPathsForDocuments;
+@property (nonatomic, strong) NSDictionary *indexPathsForDocumentsByLinkedTag;
 @property (nonatomic, strong) NSTimer *pageTracker;
 
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
@@ -507,7 +508,19 @@
     if ([button isKindOfClass:UIButton.class]) {
         NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[self.collectionView convertPoint:button.superview.center fromView:button.superview]];
         PUBDocument *document = (self.publishedDocuments)[indexPath.row];
-        [self removePdfForDocument:document];
+        
+        if (document.language.linkedTag.length > 0) {
+            NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                                     ascending:YES
+                                                     predicate:[NSPredicate predicateWithFormat:@"state == %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+            
+            for (PUBDocument *documentToDelete in documents) {
+                    [self removePdfForDocument:documentToDelete];
+            }
+        }
+        else {
+            [self removePdfForDocument:document];
+        }
     }
 }
 
@@ -738,9 +751,35 @@
     return indexPath;
 }
 
+- (NSIndexPath *)indexPathForLinkedTag:(NSString *)linkedTag {
+    if (!self.indexPathsForDocumentsByLinkedTag) {
+        self.indexPathsForDocumentsByLinkedTag = [NSDictionary new];
+    }
+    
+    NSIndexPath *indexPath = self.indexPathsForDocumentsByLinkedTag[linkedTag];
+    if (!indexPath) {
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
+            NSLog(@"%ld: %@ ... %@", (long)i, document.language.linkedTag, linkedTag);
+            
+            if (document.language.linkedTag.length > 0 && [document.language.linkedTag isEqualToString:linkedTag]) {
+                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+                
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocumentsByLinkedTag];
+                [dictionary setObject:indexPath forKey:document.language.linkedTag];
+                self.indexPathsForDocumentsByLinkedTag = dictionary;
+                break;
+            }
+        }
+    }
+    
+    return indexPath;
+}
+
 - (void)setPublishedDocuments:(NSArray *)documentArray {
     _publishedDocuments = documentArray;
     self.indexPathsForDocuments = nil;
+    self.indexPathsForDocumentsByLinkedTag = nil;
 }
 
 #pragma mark PSPDFViewControllerDelegate
@@ -826,8 +865,14 @@
 
 #pragma mark - Present Preview/Document
 
+- (NSUInteger)numberOfAvailableLanguagesForDocument:(PUBDocument *)document {
+    return [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                               ascending:YES
+                               predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", document.language.linkedTag]].count;
+}
+
 - (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
-    if (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased) {
+    if ([self numberOfAvailableLanguagesForDocument:document] == 1 && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased)) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentDocument:document atIndexPath:indexPath];
         });
@@ -847,8 +892,9 @@
     self.isPresentingController = YES;
     
     PUBPreviewViewController *previewViewController = [PUBPreviewViewController instantiatePreviewController];
-    previewViewController.document = document;
-    previewViewController.kioskController = self;
+    
+    ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).document = document;
+    ((PUBPreviewViewController *)[((UINavigationController *)previewViewController).viewControllers firstObject]).kioskController = self;
     
     if (indexPath) {
         PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -879,14 +925,17 @@
         };
     }
     
-    UIViewController *controllerToPresent = previewViewController;
-    if (!PUBIsiPad()) {
-        controllerToPresent = [[UINavigationController alloc] initWithRootViewController:previewViewController];
+    previewViewController.modalPresentationStyle = UIModalPresentationCustom;
+    previewViewController.transitioningDelegate = self.transitioningDelegate;
+
+    if (PUBIsiPad()) {
+        ((UINavigationController *)previewViewController).view.layer.cornerRadius = 6;
+        ((UINavigationController *)previewViewController).view.layer.masksToBounds = YES;
+        previewViewController.view.frame = CGRectMake(0, 0, 540, 620);
+        previewViewController.view.autoresizingMask = UIViewAutoresizingNone;
     }
-    controllerToPresent.modalPresentationStyle = UIModalPresentationCustom;
-    controllerToPresent.transitioningDelegate = self.transitioningDelegate;
     
-    [self presentViewController:controllerToPresent animated:YES completion:^{
+    [self presentViewController:previewViewController animated:YES completion:^{
         // dirty stuff ... but otherwise double opening will happen
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self.isPresentingController = NO;
@@ -917,7 +966,7 @@
     UIViewController *controllerToPresent = pdfController;
     
     if (indexPath) {
-        PUBCellView *cell =  (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
+        PUBCellView *cell = (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
         
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
         self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;

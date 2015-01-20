@@ -27,5 +27,6 @@
 
 - (void)updateUI;
 - (void)defineDescriptionText;
+- (void)openPDFWithWithDocument:(PUBDocument *)document;
 
 @end

@@ -91,7 +91,7 @@
             document.pageCount = (uint16_t)[[dictionary valueForKeyPath:@"pages_info.count"] integerValue] - 1;
             document.fileDescription = PUBSafeCast(dictionary[@"description"], NSString.class);
             document.paid = [[dictionary valueForKeyPath:@"paid"] boolValue];
-            document.fileSize = (uint64_t) [dictionary[@"file_size"] longLongValue];
+            document.fileSize = (uint64_t)[dictionary[@"file_size"] longLongValue];
             document.featured = [[dictionary valueForKeyPath:@"featured"] boolValue];
             document.showInKiosk = [[dictionary valueForKeyPath:@"show_in_kiosk"] boolValue];
             document.featuredUpdatedAt = onlineFeaturedUpdatedAt;
@@ -152,9 +152,6 @@
                   showUnlocalizedDocuments:(BOOL)showUnlocalizedDocuments {
     NSArray *allDistinctTags = [PUBLanguage fetchAllUniqueLinkedTags];
     
-    language = [language lowercaseString];
-    fallback = [fallback lowercaseString];
-    
     NSMutableArray *prefferedDocuments = [NSMutableArray new];
     for (NSString *virtualDocumentLinkedTag in allDistinctTags) {
         NSArray *realDocuments = [PUBDocument findWithPredicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@", virtualDocumentLinkedTag]];
@@ -171,10 +168,8 @@
             if (realDocsWithFallbackLanguage.count > 0) {
                 [prefferedDocuments addObject:realDocsWithFallbackLanguage.firstObject];
             }
-            else {
-                if (showingLocalizationIfNoFallback) {
-                    [prefferedDocuments addObject:realDocuments.firstObject];
-                }
+            else if (showingLocalizationIfNoFallback && realDocuments.count > 0) {
+                [prefferedDocuments addObject:realDocuments.firstObject];
             }
         }
     }
