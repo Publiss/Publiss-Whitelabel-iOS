@@ -93,18 +93,8 @@
         self.recognizer.cancelsTouchesInView = NO;
         [self.view.window addGestureRecognizer:self.recognizer];
     }
-    
-    [PUBDocumentFetcher.sharedFetcher checkIfDocumentIsUnpublished:self.document competionHandler:^(BOOL unpublished) {
-        if (unpublished) {
-            [self dismissViewControllerAnimated:YES completion:^{
-                if (self.kioskController) {
-                    [self.kioskController refreshDocumentsWithActivityViewAnimated:YES];
-                }
-            }];
-        } else {
-            [self updateButtonUI];
-        }
-    }];
+
+    [self updateButtonUI];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

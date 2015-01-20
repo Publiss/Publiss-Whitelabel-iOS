@@ -41,12 +41,18 @@
 - (UILabel *)label {
     if (!_label) {
         _label = [[PUBKioskIssueLabel alloc] initWithFrame:self.bounds];
-        _label.backgroundColor = PUBConfig.sharedConfig.secondaryColor;
-        _label.clipsToBounds = YES;
+//        _label.backgroundColor = [PUBConfig.sharedConfig.secondaryColor colorWithAlphaComponent:1];
+
         _label.numberOfLines = 2;
-        _label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        _label.textColor = [UIColor darkGrayColor];
+        _label.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+        _label.textColor = [UIColor colorWithWhite:0.45f alpha:1];
         _label.textAlignment = NSTextAlignmentCenter;
+        
+//        _label.layer.shadowColor = [UIColor blackColor].CGColor;
+//        _label.layer.shadowOffset = CGSizeMake(-.3f, 0.f);
+//        _label.layer.shadowRadius = 1.f;
+//        _label.layer.shadowOpacity = .1f;
+        
         [self addSubview:_label];
     }
     return _label;
@@ -179,19 +185,19 @@
     self.activityIndicator.frame = [self activityIndicatorFrame];
     self.namedBadgeView.frame = [self badgeViewFrame];
 
-    
-    self.label.frame = [self labelFrameRelativeToCoverImage:self.coverImage];
-
-    
+    [self.label sizeToFit];
+    self.label.frame = [self labelFrame];
+    self.label.center = self.coverImage.center;
+    self.label.frame = [self labelFrame];
     if (!PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk) {
         self.label.hidden = YES;
     }
 }
 
-- (CGRect)labelFrameRelativeToCoverImage:(UIImageView *)coverImage {
-    CGRect frame = coverImage.frame;
-    frame.size.height = 32;
-    frame.origin.y = self.bounds.size.height;
+- (CGRect)labelFrame {
+    CGRect frame = self.label.frame;
+    frame.size.width = self.bounds.size.width;
+    frame.origin.y = self.bounds.size.height + 6;
     return frame;
 }
 

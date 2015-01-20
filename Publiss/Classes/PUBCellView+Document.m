@@ -36,7 +36,8 @@
             break;
     }
     
-    [self.label setLineSpacedText:document.title];
+    self.label.text = document.title;
+//    [self.label setLineSpacedText:document.title];
 }
 
 - (void)documentOnline {
