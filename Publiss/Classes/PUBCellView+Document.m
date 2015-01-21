@@ -31,8 +31,10 @@
         case PUBDocumentStateLoading:
             [self documentLoadingForDocument:document];
             break;
-        case PUBDocumentPurchased:
+        case PUBDocumentStatePurchased:
             [self documentPurchased];
+        case PUBDocumentStateNew:
+            [self documentNew];
             break;
     }
     
@@ -43,6 +45,14 @@
 - (void)documentOnline {
     [self setBadgeViewHidden:NO animated:NO];
     self.progressView.hidden = YES;
+}
+
+- (void)documentNew {
+    self.namedBadgeView.hidden = NO;
+    [self.namedBadgeView setBadgeText:PUBLocalize(@"NEW")];
+    self.progressView.hidden = YES;
+    
+    [self.namedBadgeView setNeedsDisplay];
 }
 
 - (void)documentUpdated {

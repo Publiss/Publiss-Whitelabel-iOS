@@ -11,8 +11,9 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
     PUBDocumentStateOnline,
     PUBDocumentStateDownloaded,
     PUBDocumentStateLoading,
-    PUBDocumentPurchased,  // just for UI stuff
-    PUBDocumentStateUpdated
+    PUBDocumentStatePurchased,  // just for UI stuff
+    PUBDocumentStateUpdated,
+    PUBDocumentStateNew,
 };
 
 @class PSPDFViewState;
@@ -53,6 +54,10 @@ typedef NS_ENUM(int16_t, PUBDocumentState) {
 - (NSURL *)localXFDFURL;
 - (BOOL)removedLastViewState;
 - (void)removeFeaturedImage;
+
+- (void)documentSeen;
++ (BOOL)shouldShowNewFlag;
++ (void)setShouldShowNewFlag:(BOOL)flag;
 
 @property (copy, nonatomic) NSArray *sizes;      // wrapped integers
 @property (copy, nonatomic) NSArray *dimensions; // wrapped CGSizes.

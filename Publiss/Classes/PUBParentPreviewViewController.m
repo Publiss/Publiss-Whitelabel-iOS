@@ -93,7 +93,7 @@
         self.recognizer.cancelsTouchesInView = NO;
         [self.view.window addGestureRecognizer:self.recognizer];
     }
-
+    [self.document documentSeen];
     [self updateButtonUI];
 }
 

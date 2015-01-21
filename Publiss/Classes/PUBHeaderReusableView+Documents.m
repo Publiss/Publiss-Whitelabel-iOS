@@ -23,7 +23,7 @@
         UIImage *featuredImage = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:featuredImageUrl.absoluteString];
         
         self.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        self.cloudImageView.hidden = document.state == PUBDocumentPurchased || document.state == PUBDocumentStateDownloaded;
+        self.cloudImageView.hidden = document.state == PUBDocumentStatePurchased || document.state == PUBDocumentStateDownloaded;
         
         if (featuredImage) {
             self.imageView.image = featuredImage;

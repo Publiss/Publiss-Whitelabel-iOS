@@ -50,6 +50,9 @@
     if (!document) {
         document = [PUBDocument createEntity];
         shouldUpdateValues = YES;
+        if ([self.class shouldShowNewFlag]) {
+            document.state = PUBDocumentStateNew;
+        }
     } else {
         // Check if exsisting document should be updated
         shouldUpdateValues = ![document.updatedAt isEqualToDate:onlineUpdatedAt];
@@ -110,7 +113,6 @@
 
     return document;
 }
-
 
 + (PUBDocument *)findExistingPUBDocumentWithProductID:(NSString *)productID {
     NSFetchRequest *fetchRequest = [NSFetchRequest new];
@@ -225,6 +227,22 @@
         if (document.state == PUBDocumentStateLoading) {
             document.state = PUBDocumentStateOnline;
         }
+    }
+}
+
++ (BOOL)shouldShowNewFlag {
+    return [NSUserDefaults.standardUserDefaults boolForKey:@"showNewFlag"];
+}
+
++ (void)setShouldShowNewFlag:(BOOL)flag {
+    [NSUserDefaults.standardUserDefaults setBool:flag forKey:@"showNewFlag"];
+    [NSUserDefaults.standardUserDefaults synchronize];
+}
+
+- (void)documentSeen {
+    if (self.state == PUBDocumentStateNew) {
+        self.state = PUBDocumentStateOnline;
+        [PUBCoreDataStack.sharedCoreDataStack saveContext];
     }
 }
 

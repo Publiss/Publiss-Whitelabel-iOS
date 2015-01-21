@@ -234,6 +234,7 @@
                 [KVNProgress showErrorWithStatus:PUBLocalize(@"Please wait until download is completed.")];
             }
             else {
+                [PUBDocument setShouldShowNewFlag:NO];
                 [PUBAuthentication.sharedInstance logout];
                 for (PUBDocument *document in self.publishedDocuments) {
                     [self removePdfForDocument:document];
@@ -335,10 +336,12 @@
         [KVNProgress dismissWithCompletion:^{}];
         [self.progressView removeFromSuperview];
         self.progressView = nil;
+        [PUBDocument setShouldShowNewFlag:YES];
     } error:^(NSError *error) {
         PUBAuthentication *auth = PUBAuthentication.sharedInstance;
         if ([auth isLoggedIn]) {
             [auth logout];
+            [PUBDocument setShouldShowNewFlag:NO];
             [self refreshDocumentsWithActivityViewAnimated:YES];
             
             [KVNProgress setConfiguration:[self notifyMessageConfiguration]];
@@ -570,7 +573,7 @@
                                                                      // update state of documents
                                                                      for (PUBDocument *document in [PUBDocument findAll]) {
                                                                          if ([productIDs containsObject:document.productID]) {
-                                                                             document.state = PUBDocumentPurchased;
+                                                                             document.state = PUBDocumentStatePurchased;
                                                                          }
                                                                      }
                                                                      [PUBCoreDataStack.sharedCoreDataStack saveContext];
@@ -744,7 +747,7 @@
         PUBDocument *document = self.publishedDocuments[indexPath.item];
         
         if (document) {
-            document.state = PUBDocumentPurchased;
+            document.state = PUBDocumentStatePurchased;
             [PUBCoreDataStack.sharedCoreDataStack saveContext];
             
             PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
@@ -897,7 +900,7 @@
 }
 
 - (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
-    if ([self numberOfAvailableLanguagesForDocument:document] == 1 && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentPurchased)) {
+    if ([self numberOfAvailableLanguagesForDocument:document] == 1 && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStatePurchased)) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentDocument:document atIndexPath:indexPath];
         });

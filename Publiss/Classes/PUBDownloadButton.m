@@ -82,7 +82,7 @@
             }
             break;
             
-        case PUBDocumentPurchased:
+        case PUBDocumentStatePurchased:
             [self enableReading];
             break;
             
