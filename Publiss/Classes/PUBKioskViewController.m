@@ -900,7 +900,7 @@
 }
 
 - (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
-    if ([self numberOfAvailableLanguagesForDocument:document] == 1 && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStatePurchased)) {
+    if (([self numberOfAvailableLanguagesForDocument:document] == 1 || document.language.linkedTag == nil) && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStatePurchased)) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentDocument:document atIndexPath:indexPath];
         });
