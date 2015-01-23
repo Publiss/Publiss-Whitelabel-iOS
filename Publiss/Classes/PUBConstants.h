@@ -69,8 +69,9 @@ static NSString *const PurchasingMenuStyle = @"PurchasingMenuStyle";
 static NSString *const PurchasedMenuStyle = @"PurchasedMenuStyle";
 
 // PushNotification
-static NSString *const PUBPushToken = @"token";
-static NSString *const PUBDeviceType = @"type";
+static NSString *const PUBDeviceTypeIos = @"ios";
+static NSString *const PUBPushToken = @"push_token";
+static NSString *const PUBDeviceType = @"device_type";
 static NSString *const PUBDeviceLang = @"lang";
 
 // Availability Macros

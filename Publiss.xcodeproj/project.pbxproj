@@ -13,6 +13,7 @@
 		37C2404B1A63D40600A5CF2A /* PUBLanguage+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */; };
 		37C2404D1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */; };
 		37C240501A652A3200A5CF2A /* NSManagedObjectContext+Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */; };
+		37CD79CA1A72604900E7F6AB /* PUBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD79C91A72604900E7F6AB /* PUBPreferences.m */; };
 		37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A119ED6196003E344D /* PUBKioskLayout.m */; };
 		37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A419ED6E9D003E344D /* PUBImageReusableView.m */; };
 		37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9AA19EE5E80003E344D /* PUBHeaderReusableView.m */; };
@@ -140,6 +141,8 @@
 		37C2404C1A63DA8B00A5CF2A /* PUBDocumentHelperTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBDocumentHelperTests.m; sourceTree = "<group>"; };
 		37C2404E1A652A3200A5CF2A /* NSManagedObjectContext+Testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+Testing.h"; sourceTree = "<group>"; };
 		37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+Testing.m"; sourceTree = "<group>"; };
+		37CD79C81A72604900E7F6AB /* PUBPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBPreferences.h; path = Classes/PUBPreferences.h; sourceTree = "<group>"; };
+		37CD79C91A72604900E7F6AB /* PUBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBPreferences.m; path = Classes/PUBPreferences.m; sourceTree = "<group>"; };
 		37F2F9A019ED6196003E344D /* PUBKioskLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskLayout.h; path = Classes/PUBKioskLayout.h; sourceTree = "<group>"; };
 		37F2F9A119ED6196003E344D /* PUBKioskLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBKioskLayout.m; path = Classes/PUBKioskLayout.m; sourceTree = "<group>"; };
 		37F2F9A319ED6E9D003E344D /* PUBImageReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBImageReusableView.h; path = Classes/PUBImageReusableView.h; sourceTree = "<group>"; };
@@ -646,6 +649,8 @@
 				870110E7180FCF140034B9AC /* main.m */,
 				870110E9180FCF140034B9AC /* Publiss-Prefix.pch */,
 				8749898519B07668006ABCA3 /* Localizable.strings */,
+				37CD79C81A72604900E7F6AB /* PUBPreferences.h */,
+				37CD79C91A72604900E7F6AB /* PUBPreferences.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -913,6 +918,7 @@
 				8776661319ACED83000DFFF1 /* PUBDocument+Helper.m in Sources */,
 				877665C519ACEA0C000DFFF1 /* PUBPDFViewController.m in Sources */,
 				877665F819ACED26000DFFF1 /* PUBKioskViewController.m in Sources */,
+				37CD79CA1A72604900E7F6AB /* PUBPreferences.m in Sources */,
 				87C655891A0B7C2B0092218F /* PUBFooterReusableView.m in Sources */,
 				877665E219ACECA6000DFFF1 /* PUBCellView+Document.m in Sources */,
 				877665CD19ACEC26000DFFF1 /* UIImage+PUBTinting.m in Sources */,
