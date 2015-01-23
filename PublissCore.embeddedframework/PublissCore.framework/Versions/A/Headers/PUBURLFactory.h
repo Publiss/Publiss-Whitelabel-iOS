@@ -25,6 +25,8 @@
 
 + (NSString *)createAuthenticationLoginURLString:(NSDictionary *)payload;
 
++ (NSString *)createPushTokenURLStringWith:(NSString *)deviceId parameters:(NSDictionary *)parameters;
+
 + (NSDictionary *)createSignedParameters:(NSDictionary *)parameters forPath:(NSString *)path;
 
 @end

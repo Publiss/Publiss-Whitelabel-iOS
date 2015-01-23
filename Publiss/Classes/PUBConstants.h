@@ -68,6 +68,11 @@ static NSString *const PUBiAPSecrets = @"purchase_secrets";
 static NSString *const PurchasingMenuStyle = @"PurchasingMenuStyle";
 static NSString *const PurchasedMenuStyle = @"PurchasedMenuStyle";
 
+// PushNotification
+static NSString *const PUBPushToken = @"token";
+static NSString *const PUBDeviceType = @"type";
+static NSString *const PUBDeviceLang = @"lang";
+
 // Availability Macros
 #define PUBIsiPad() UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad
 #define PUBIsiPhone5() (([[UIScreen mainScreen] bounds].size.height - 568) ? NO : YES)

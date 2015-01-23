@@ -160,6 +160,35 @@
     }
 }
 
+- (void)sendPushTokenToBackend:(NSString *)deviceId
+                     pushToken:(NSString *)pushToken
+                    deviceType:(NSString *)type
+                      language:(NSString *)lang
+                    completion:(void(^)(id responseObject))completionBlock
+                         error:(void(^)(NSError *error))errorBlock {
+    if (deviceId.length == 0 || pushToken.length == 0 || type.length == 0 || lang.length == 0) {
+        return;
+    }
+    
+    NSDictionary *parameters = @{PUBPushToken: pushToken,
+                                 PUBDeviceType: type,
+                                 PUBDeviceLang: lang};
+    
+    if ([NSJSONSerialization isValidJSONObject:parameters]) {
+        [PUBHTTPRequestManager.sharedRequestManager PUT:[PUBURLFactory createPushTokenURLStringWith:deviceId parameters:parameters]
+                                              parameters:parameters
+                                                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                     PUBLog(@"%@: [SUCCESS] sending push data.", [self class]);
+                                                     PUBLog(@"%@: Server response object: %@", [self class], responseObject);
+                                                     if (completionBlock) (completionBlock(responseObject));
+                                                 }
+                                                 failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                     PUBLogError(@"%@: [FAILURE] sending push data: %@", [self class], error.localizedDescription);
+                                                     if (errorBlock) errorBlock(error);
+                                                 }];
+    }
+}
+
 - (void)sendLogin:(NSDictionary *)parameters
        completion:(void(^)(id responseObject))completionBlock
             error:(void(^)(NSError *error))errorBlock {

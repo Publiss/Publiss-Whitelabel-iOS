@@ -26,6 +26,13 @@
                     completion:(void(^)(id responseObject))completionBlock
                          error:(void(^)(NSError *error))errorBlock;
 
+- (void)sendPushTokenToBackend:(NSString *)deviceId
+                     pushToken:(NSString *)pushToken
+                    deviceType:(NSString *)type
+                      language:(NSString *)lang
+                    completion:(void(^)(id responseObject))completionBlock
+                         error:(void(^)(NSError *error))errorBlock;
+
 #pragma mark - Publiss Authentication API
 
 - (void)sendLogin:(NSDictionary *)parameters
