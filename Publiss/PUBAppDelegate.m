@@ -47,34 +47,19 @@
         [UIApplication.sharedApplication registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [UIApplication.sharedApplication registerForRemoteNotifications];
     } else {
-        // i0s 7
+        // iOS 7
         [UIApplication.sharedApplication registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
     }
 }
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    [self validateAndPersistDeviceToken:deviceToken];
+    [PUBPreferences validateAndPersistPushToken:deviceToken];
     [self sendPushTokenToServer];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"%@", error);
-}
-
-- (void)validateAndPersistDeviceToken:(NSData *)deviceToken {
-    NSString *newToken = [NSString stringWithFormat:@"%@", deviceToken];
-    
-    NSError *error = NULL;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[^a-z0-9]*"
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:&error];
-    
-    NSString *modifiedString = [regex stringByReplacingMatchesInString:newToken
-                                                               options:0
-                                                                 range:NSMakeRange(0, newToken.length)
-                                                          withTemplate:@""];
-    [PUBPreferences setPushToken:modifiedString];
+    PUBLog(@"%@", error);
 }
 
 - (void)sendPushTokenToServer {

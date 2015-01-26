@@ -10,8 +10,11 @@
 
 @interface PUBPreferences : NSObject
 
+/// After validation this method calls setPushToken:
++ (void)validateAndPersistPushToken:(NSData *)pushToken;
 + (void)setPushToken:(NSString *)pushToken;
 + (NSString *)pushToken;
+
 
 + (NSString *)deviceIdentifier;
 

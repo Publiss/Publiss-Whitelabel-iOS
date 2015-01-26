@@ -14,6 +14,21 @@ static NSString *PUBPushTokenKey = @"PUBPushTokenKey";
 
 @implementation PUBPreferences
 
++ (void)validateAndPersistPushToken:(NSData *)pushToken {
+    NSString *newToken = [NSString stringWithFormat:@"%@", pushToken];
+    
+    NSError *error = NULL;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"[^a-z0-9]*"
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    NSString *modifiedString = [regex stringByReplacingMatchesInString:newToken
+                                                               options:0
+                                                                 range:NSMakeRange(0, newToken.length)
+                                                          withTemplate:@""];
+    [self.class setPushToken:modifiedString];
+}
+
 + (void)setPushToken:(NSString *)pushToken {
     [[NSUserDefaults standardUserDefaults] setObject:pushToken forKey:PUBPushTokenKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
