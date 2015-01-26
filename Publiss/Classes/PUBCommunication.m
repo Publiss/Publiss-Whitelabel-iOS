@@ -178,8 +178,6 @@
         [PUBHTTPRequestManager.sharedRequestManager POST:[PUBURLFactory createPushTokenURLStringWith:deviceId payload:parameters]
                                               parameters:parameters
                                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                                     PUBLog(@"%@: [SUCCESS] sending push data.", [self class]);
-                                                     PUBLog(@"%@: Server response object: %@", [self class], responseObject);
                                                      if (completionBlock) {
                                                          (completionBlock(responseObject));
                                                      }
