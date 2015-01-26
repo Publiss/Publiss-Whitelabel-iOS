@@ -8,6 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum : NSUInteger {
+    PUBBlurEffectStyleDark = 0,
+    PUBBlurEffectStyleLight
+} PUBBlurEffectStyle;
+
 @interface PUBConfig : NSObject
 
 
@@ -31,6 +36,8 @@
 /// Specify if labels are shown below each issue in the kiosk
 @property (nonatomic, assign) BOOL showLabelsBelowIssuesInKiosk;
 
+/// Default is black
+@property (nonatomic, assign) PUBBlurEffectStyle blurEffectStyle;
 
 // LANGAUAGE
 ////////////////////////////////////////////////////////////////////////////////////////////////////

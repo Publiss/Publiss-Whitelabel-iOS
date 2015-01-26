@@ -24,6 +24,7 @@ NSString *const DEFAULT_FALLBACK_LANGUAGE_EN = @"en";
         _sharedAppearence.showUnlocalizedDocuments = YES;
         _sharedAppearence.showLabelsBelowIssuesInKiosk = NO;
         
+        _sharedAppearence.blurEffectStyle = PUBBlurEffectStyleDark;
         _sharedAppearence.statusBarStyle = UIStatusBarStyleLightContent;
         [[UIApplication sharedApplication] setStatusBarStyle:_sharedAppearence.statusBarStyle];
     });

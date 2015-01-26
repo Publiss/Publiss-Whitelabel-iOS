@@ -10,6 +10,7 @@
 #import "REFrostedViewController.h"
 #import "PUBKioskViewController.h"
 #import "PUBMenuViewController.h"
+#import "PUBConfig.h"
 
 @interface PUBMainViewController ()
 
@@ -18,7 +19,14 @@
 @implementation PUBMainViewController
 
 + (REFrostedViewController *)mainViewController {
-    return [PUBMainViewController mainViewControllerKioskController:PUBKioskViewController.kioskViewController andMenuController:PUBMenuViewController.menuViewController];
+    REFrostedViewController *fvc = [PUBMainViewController mainViewControllerKioskController:PUBKioskViewController.kioskViewController
+                                                                          andMenuController:PUBMenuViewController.menuViewController];
+
+    if (PUBConfig.sharedConfig.blurEffectStyle == PUBBlurEffectStyleLight) {
+        fvc.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    }
+    
+    return fvc;
 }
 
 + (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk andMenuController:(PUBMenuViewController *)menu {
@@ -29,28 +37,13 @@
     frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleDark;
     frostedViewController.limitMenuViewSize = YES;
     frostedViewController.menuViewSize = CGSizeMake(240, 0);
+    
+    if (PUBConfig.sharedConfig.blurEffectStyle == PUBBlurEffectStyleLight) {
+        frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    }
+    
     return frostedViewController;
 }
 
-+ (REFrostedViewController *)mainViewControllerWithMenuColor:(PUBMenuColor)menuColor {
-    REFrostedViewController *fvc = [self.class mainViewController];
-    
-    if (menuColor == PUBMenuColorLight) {
-        fvc.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    }
-    
-    return fvc;
-}
-
-+ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk
-                                             andMenuController:(PUBMenuViewController *)menu
-                                                 withMenuColor:(PUBMenuColor)menuColor {
-    REFrostedViewController *fvc = [self.class mainViewControllerKioskController:kiosk andMenuController:menu];
-    if (menuColor == PUBMenuColorLight) {
-        fvc.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
-    }
-    
-    return fvc;
-}
 
 @end

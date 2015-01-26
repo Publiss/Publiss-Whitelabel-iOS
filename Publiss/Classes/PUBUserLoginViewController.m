@@ -64,7 +64,12 @@
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    [self.background setImage:[img applyDarkEffect]];
+    if (PUBConfig.sharedConfig.blurEffectStyle == PUBBlurEffectStyleLight) {
+        [self.background setImage:[img applyLightEffect]];
+    }
+    else {
+        [self.background setImage:[img applyDarkEffect]];
+    }
 }
 
 - (void)didRotate:(NSNotification *)notification {
