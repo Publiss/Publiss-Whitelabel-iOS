@@ -17,6 +17,9 @@
     self = [super init];
     
     if (self) {
+        
+        self.icon = [[UIImage imageNamed:@"profile"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
+        
         __weak typeof(self) welf = self;
         self.actionBlock = ^() {
             __strong typeof(welf) sself = welf;
@@ -47,6 +50,7 @@
         title = [NSString stringWithFormat:@"%@ %@", title, [[auth getMetadata] objectForKey:PUBAuthentication.sharedInstance.menuItemAccountField]];
         
         NSMutableAttributedString *formattedTitle = [[NSMutableAttributedString alloc] initWithString:title];
+        
         [formattedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Thin" size:12.0f] range:NSMakeRange(startUserIndex+1, title.length-startUserIndex-1)];
 
         return formattedTitle;
@@ -59,10 +63,6 @@
     [attributedTitle addAttribute:NSParagraphStyleAttributeName value:paragraph range:NSMakeRange(0, [attributedTitle length])];
     
     return attributedTitle;
-}
-
-- (UIImage *)icon {
-    return [[UIImage imageNamed:@"profile"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
 }
 
 @end
