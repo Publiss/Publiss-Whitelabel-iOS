@@ -47,7 +47,7 @@
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle {
-    return PUBAppearence.sharedAppearence.statusBarStyle;
+    return PUBConfig.sharedConfig.statusBarStyle;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

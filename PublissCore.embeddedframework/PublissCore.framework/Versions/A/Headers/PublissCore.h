@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#import "PUBConfig.h"
+#import "PUBURLConfig.h"
 #import "PUBURLFactory.h"
     
 // common

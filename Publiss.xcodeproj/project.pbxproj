@@ -15,7 +15,7 @@
 		37C240501A652A3200A5CF2A /* NSManagedObjectContext+Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */; };
 		37CD79CA1A72604900E7F6AB /* PUBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD79C91A72604900E7F6AB /* PUBPreferences.m */; };
 		37CD7A1A1A76793500E7F6AB /* UINavigationController+Appearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A191A76793500E7F6AB /* UINavigationController+Appearence.m */; };
-		37CD7A201A767A8F00E7F6AB /* PUBAppearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A1F1A767A8F00E7F6AB /* PUBAppearence.m */; };
+		37CD7A201A767A8F00E7F6AB /* PUBConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A1F1A767A8F00E7F6AB /* PUBConfig.m */; };
 		37CD7A231A767E6500E7F6AB /* PUBWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A221A767E6500E7F6AB /* PUBWebViewController.m */; };
 		37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A119ED6196003E344D /* PUBKioskLayout.m */; };
 		37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A419ED6E9D003E344D /* PUBImageReusableView.m */; };
@@ -147,8 +147,8 @@
 		37CD79C91A72604900E7F6AB /* PUBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBPreferences.m; path = Classes/PUBPreferences.m; sourceTree = "<group>"; };
 		37CD7A181A76793500E7F6AB /* UINavigationController+Appearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Appearence.h"; path = "Classes/UINavigationController+Appearence.h"; sourceTree = "<group>"; };
 		37CD7A191A76793500E7F6AB /* UINavigationController+Appearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Appearence.m"; path = "Classes/UINavigationController+Appearence.m"; sourceTree = "<group>"; };
-		37CD7A1E1A767A8F00E7F6AB /* PUBAppearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBAppearence.h; path = Classes/PUBAppearence.h; sourceTree = "<group>"; };
-		37CD7A1F1A767A8F00E7F6AB /* PUBAppearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBAppearence.m; path = Classes/PUBAppearence.m; sourceTree = "<group>"; };
+		37CD7A1E1A767A8F00E7F6AB /* PUBConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBConfig.h; path = Classes/PUBConfig.h; sourceTree = "<group>"; };
+		37CD7A1F1A767A8F00E7F6AB /* PUBConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBConfig.m; path = Classes/PUBConfig.m; sourceTree = "<group>"; };
 		37CD7A211A767E6500E7F6AB /* PUBWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBWebViewController.h; sourceTree = "<group>"; };
 		37CD7A221A767E6500E7F6AB /* PUBWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBWebViewController.m; sourceTree = "<group>"; };
 		37F2F9A019ED6196003E344D /* PUBKioskLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBKioskLayout.h; path = Classes/PUBKioskLayout.h; sourceTree = "<group>"; };
@@ -547,8 +547,6 @@
 				877665CC19ACEC26000DFFF1 /* UIImage+PUBTinting.m */,
 				877665C819ACEC19000DFFF1 /* UIColor+PUBDesign.h */,
 				877665C919ACEC19000DFFF1 /* UIColor+PUBDesign.m */,
-				37CD7A1E1A767A8F00E7F6AB /* PUBAppearence.h */,
-				37CD7A1F1A767A8F00E7F6AB /* PUBAppearence.m */,
 			);
 			name = Design;
 			sourceTree = "<group>";
@@ -649,6 +647,8 @@
 			isa = PBXGroup;
 			children = (
 				87B1962819DD75EC0060353B /* Publiss.podspec */,
+				37CD7A1E1A767A8F00E7F6AB /* PUBConfig.h */,
+				37CD7A1F1A767A8F00E7F6AB /* PUBConfig.m */,
 				8776661D19ACEDBE000DFFF1 /* PUBConstants.h */,
 				8776661E19ACEDBE000DFFF1 /* PUBConstants.m */,
 				8776661F19ACEDBE000DFFF1 /* Publiss.h */,
@@ -889,7 +889,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87F6568C1A6E7FEC003BF4F6 /* PUBKioskIssueLabel.m in Sources */,
-				37CD7A201A767A8F00E7F6AB /* PUBAppearence.m in Sources */,
+				37CD7A201A767A8F00E7F6AB /* PUBConfig.m in Sources */,
 				8776662319ACEDBE000DFFF1 /* Publiss.m in Sources */,
 				877665FE19ACED47000DFFF1 /* PUBPreviewViewController.m in Sources */,
 				8776661A19ACED98000DFFF1 /* PUBCommunication.m in Sources */,

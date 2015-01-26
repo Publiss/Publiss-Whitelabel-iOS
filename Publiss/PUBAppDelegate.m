@@ -32,7 +32,7 @@
     self.window.tintColor = PUBConfig.sharedConfig.primaryColor;
     
     // Uncomment for dark status bar
-    //PUBAppearence.sharedAppearence.statusBarStyle = UIStatusBarStyleDefault;
+    //PUBConfig.sharedConfig.statusBarStyle = UIStatusBarStyleDefault;
     
     [UINavigationBar.appearance setTintColor:PUBConfig.sharedConfig.secondaryColor];
     [UINavigationBar.appearance setBarTintColor:self.window.tintColor];

@@ -42,7 +42,6 @@
 #import "PUBAuthentication.h"
 #import "PUBMenuItemAccount.h"
 #import "PUBLanguage+Helper.h"
-#import "PUBAppearence.h"
 #import "PUBWebViewController.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
@@ -191,7 +190,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return PUBAppearence.sharedAppearence.statusBarStyle;
+    return PUBConfig.sharedConfig.statusBarStyle;
 }
 
 - (void)setupMenu {

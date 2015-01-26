@@ -15,6 +15,6 @@
     #import <Foundation/Foundation.h>
     #import <CoreData/CoreData.h>
     #import "Publiss.h"
-    #import "PUBAppearence.h"
+    #import "PUBConfig.h"
     #import "UINavigationController+Appearence.h"
 #endif
