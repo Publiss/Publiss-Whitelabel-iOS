@@ -42,13 +42,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SYK-Nu-G6a">
-                                                    <rect key="frame" x="62" y="11" width="154" height="22"/>
+                                                    <rect key="frame" x="46" y="11" width="170" height="22"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="A8q-jX-8gi">
-                                                    <rect key="frame" x="16" y="7" width="30" height="30"/>
+                                                    <rect key="frame" x="8" y="7" width="30" height="30"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="30" id="0tS-de-yLl"/>
                                                         <constraint firstAttribute="height" constant="30" id="XSN-CR-uT3"/>
@@ -59,8 +59,8 @@
                                                 <constraint firstItem="SYK-Nu-G6a" firstAttribute="trailing" secondItem="TV2-E8-lYV" secondAttribute="trailingMargin" id="1MU-wY-9ER"/>
                                                 <constraint firstItem="SYK-Nu-G6a" firstAttribute="centerY" secondItem="A8q-jX-8gi" secondAttribute="centerY" constant="-0.5" id="2MZ-Iy-oAn"/>
                                                 <constraint firstItem="A8q-jX-8gi" firstAttribute="top" secondItem="TV2-E8-lYV" secondAttribute="topMargin" constant="-1" id="2yY-kl-rJE"/>
-                                                <constraint firstItem="A8q-jX-8gi" firstAttribute="leading" secondItem="TV2-E8-lYV" secondAttribute="leadingMargin" constant="8" id="5MS-5f-O6G"/>
-                                                <constraint firstItem="SYK-Nu-G6a" firstAttribute="leading" secondItem="A8q-jX-8gi" secondAttribute="trailing" constant="16" id="VT6-Pb-nhK"/>
+                                                <constraint firstItem="A8q-jX-8gi" firstAttribute="leading" secondItem="TV2-E8-lYV" secondAttribute="leadingMargin" id="5MS-5f-O6G"/>
+                                                <constraint firstItem="SYK-Nu-G6a" firstAttribute="leading" secondItem="A8q-jX-8gi" secondAttribute="trailing" constant="8" id="VT6-Pb-nhK"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

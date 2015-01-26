@@ -14,6 +14,10 @@
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) UIImage *icon;
 
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *highlightedTextColor;
+
 - (NSAttributedString *) attributedTitle;
 
 @end

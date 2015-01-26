@@ -37,9 +37,9 @@
     self.tableView.backgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     self.tableView.contentInset = UIEdgeInsetsMake(14, 0, 0, 0);
-    self.tableView.separatorInset = UIEdgeInsetsMake(0, 16, 0, -100);
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 8 + 30 + 8, 0, -100);
     if (PUBIsiOS8OrHigher()) {
-        self.view.layoutMargins = UIEdgeInsetsMake(0, 16, 0, 0);
+        self.view.layoutMargins = UIEdgeInsetsMake(0, 8 + 30 + 8, 0, 0);
     }
 }
 
@@ -95,7 +95,10 @@
     PUBMenuItem *menuItem = [self menuItemForIndexPath:indexPath];
     cell.titleLabel.attributedText = menuItem.attributedTitle;
     cell.icon.image = menuItem.icon;
-
+    cell.textColor = menuItem.textColor;
+    cell.highlightedTextColor = menuItem.highlightedTextColor;
+    cell.font = menuItem.font;
+    
     return cell;
 }
 

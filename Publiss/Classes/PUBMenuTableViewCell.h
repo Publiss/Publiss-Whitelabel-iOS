@@ -13,4 +13,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *icon;
 
+@property (strong, nonatomic) UIFont *font;
+@property (strong, nonatomic) UIColor *textColor;
+@property (strong, nonatomic) UIColor *highlightedTextColor;
+
 @end

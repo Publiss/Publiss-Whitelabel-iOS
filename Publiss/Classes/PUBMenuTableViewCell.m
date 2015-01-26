@@ -17,14 +17,31 @@
     self.tintColor = PUBConfig.sharedConfig.secondaryColor;
 }
 
+- (void)setFont:(UIFont *)font {
+    _font = font;
+    if (_font) {
+        self.titleLabel.font = font;
+    }
+}
+
+- (void)setTextColor:(UIColor *)textColor {
+    _textColor = textColor;
+    
+    if (_textColor) {
+        self.titleLabel.textColor = _textColor;
+    }
+}
+
 - (void)setHighlighted:(BOOL)highlighted animated:(BOOL)animated{
     [super setHighlighted:highlighted animated:animated];
     if (highlighted) {
-        self.titleLabel.textColor = PUBConfig.sharedConfig.primaryColor;
-        self.icon.image = [self.icon.image imageTintedWithColor:PUBConfig.sharedConfig.primaryColor fraction:0.f];
+        UIColor *color = !self.highlightedTextColor ? PUBConfig.sharedConfig.primaryColor : self.highlightedTextColor;
+        self.titleLabel.textColor = color;
+        self.icon.image = [self.icon.image imageTintedWithColor:color fraction:0.f];
     } else {
-        self.titleLabel.textColor = self.tintColor;
-        self.icon.image = [self.icon.image imageTintedWithColor:self.tintColor fraction:0.f];
+        UIColor *color = !self.textColor ? self.tintColor : self.textColor;
+        self.titleLabel.textColor = color;
+        self.icon.image = [self.icon.image imageTintedWithColor:color fraction:0.f];
     }
 }
 
