@@ -160,6 +160,39 @@
     }
 }
 
+- (void)sendPushTokenToBackend:(NSString *)deviceId
+                     pushToken:(NSString *)pushToken
+                    deviceType:(NSString *)deviceType
+                      language:(NSString *)lang
+                    completion:(void(^)(id responseObject))completionBlock
+                         error:(void(^)(NSError *error))errorBlock {
+    if (deviceId.length == 0 || pushToken.length == 0 || deviceType.length == 0 || lang.length == 0) {
+        return;
+    }
+    
+    NSDictionary *parameters = @{PUBPushToken: pushToken,
+                                 PUBDeviceType: deviceType,
+                                 PUBDeviceLang: lang};
+    
+    if ([NSJSONSerialization isValidJSONObject:parameters]) {
+        [PUBHTTPRequestManager.sharedRequestManager POST:[PUBURLFactory createPushTokenURLStringWith:deviceId payload:parameters]
+                                              parameters:parameters
+                                                 success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                     PUBLog(@"%@: [SUCCESS] sending push data.", [self class]);
+                                                     PUBLog(@"%@: Server response object: %@", [self class], responseObject);
+                                                     if (completionBlock) {
+                                                         (completionBlock(responseObject));
+                                                     }
+                                                 }
+                                                 failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                     PUBLogError(@"%@: [FAILURE] sending push data: %@", [self class], error.localizedDescription);
+                                                     if (errorBlock) {
+                                                         errorBlock(error);
+                                                     }
+                                                 }];
+    }
+}
+
 - (void)sendLogin:(NSDictionary *)parameters
        completion:(void(^)(id responseObject))completionBlock
             error:(void(^)(NSError *error))errorBlock {
