@@ -10,6 +10,7 @@
 #import "PUBConstants.h"
 #import "PUBImageReusableView.h"
 #import <PublissCore/PublissCore.h>
+#import "PUBConfig.h"
 
 @interface PUBKioskLayout()
 

@@ -43,6 +43,8 @@
 #import "PUBMenuItemAccount.h"
 #import "PUBLanguage+Helper.h"
 #import "PUBWebViewController.h"
+#import "PUBConfig.h"
+#import "UINavigationController+Appearence.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 

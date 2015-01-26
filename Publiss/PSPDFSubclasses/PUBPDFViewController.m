@@ -19,6 +19,7 @@
 #import "PUBLinkAnnotationView.h"
 #import "PSPDFSpeechController.h"
 #import "PUBConstants.h"
+#import "PUBConfig.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;

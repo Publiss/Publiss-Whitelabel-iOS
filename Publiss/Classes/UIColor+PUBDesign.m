@@ -7,6 +7,7 @@
 
 #import "UIColor+PUBDesign.h"
 #import <PublissCore.h>
+#import "PUBConfig.h"
 
 @implementation UIColor (PUBDesign)
 

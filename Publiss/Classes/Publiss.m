@@ -15,6 +15,7 @@
 #import "PUBConstants.h"
 #import <PublissCore.h>
 #import "PSPDFKit.h"
+#import "PUBConfig.h"
 
 @implementation Publiss
 

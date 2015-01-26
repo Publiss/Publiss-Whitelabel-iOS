@@ -7,6 +7,7 @@
 //
 
 #import "PUBWebViewController.h"
+#import "PUBConfig.h"
 
 @implementation PUBWebViewController
 

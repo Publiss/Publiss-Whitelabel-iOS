@@ -10,6 +10,7 @@
 #import "UIColor+PUBDesign.h"
 #import <PublissCore/PublissCore.h>
 #import <tgmath.h>
+#import "PUBConfig.h"
 
 @interface PUBCellView ()
 @property (nonatomic, strong) UIView *overlayView;

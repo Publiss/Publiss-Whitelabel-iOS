@@ -8,6 +8,7 @@
 #import "PUBHTTPRequestManager.h"
 #import "AFNetworkActivityIndicatorManager.h"
 #import <PublissCore.h>
+#import "PUBConfig.h"
 
 @implementation PUBHTTPRequestManager
 

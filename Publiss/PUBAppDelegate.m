@@ -13,6 +13,7 @@
 #import "PUBAuthentication.h"
 #import "PUBPreferences.h"
 #import "PUBCommunication.h"
+#import "PUBConfig.h"
 
 @implementation PUBAppDelegate
 

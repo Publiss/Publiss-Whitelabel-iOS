@@ -12,6 +12,7 @@
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
+#import "PUBConfig.h"
 
 @interface PUBPreviewViewController () <UINavigationControllerDelegate, UIScrollViewDelegate, PUBLanguageSelectionDelegate>
 
