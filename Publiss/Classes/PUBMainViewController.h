@@ -8,11 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, PUBMenuColor) {
+    PUBMenuColorDark = 0,
+    PUBMenuColorLight
+};
+
 @class REFrostedViewController, PUBKioskViewController, PUBMenuViewController;
 
 @interface PUBMainViewController : UIViewController
 
 + (REFrostedViewController *)mainViewController;
-+ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk andMenuController:(PUBMenuViewController *)menu;
++ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk
+                                             andMenuController:(PUBMenuViewController *)menu;
 
++ (REFrostedViewController *)mainViewControllerWithMenuColor:(PUBMenuColor)menuColor;
++ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk
+                                             andMenuController:(PUBMenuViewController *)menu
+                                                 withMenuColor:(PUBMenuColor)menuColor;
 @end
+

@@ -32,4 +32,25 @@
     return frostedViewController;
 }
 
++ (REFrostedViewController *)mainViewControllerWithMenuColor:(PUBMenuColor)menuColor {
+    REFrostedViewController *fvc = [self.class mainViewController];
+    
+    if (menuColor == PUBMenuColorLight) {
+        fvc.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    }
+    
+    return fvc;
+}
+
++ (REFrostedViewController *)mainViewControllerKioskController:(PUBKioskViewController *)kiosk
+                                             andMenuController:(PUBMenuViewController *)menu
+                                                 withMenuColor:(PUBMenuColor)menuColor {
+    REFrostedViewController *fvc = [self.class mainViewControllerKioskController:kiosk andMenuController:menu];
+    if (menuColor == PUBMenuColorLight) {
+        fvc.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    }
+    
+    return fvc;
+}
+
 @end
