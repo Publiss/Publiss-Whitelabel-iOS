@@ -42,4 +42,8 @@
     return self.menuItemsStore.copy;
 }
 
+- (void)clear {
+    self.menuItemsStore = NSMutableArray.array;
+}
+
 @end

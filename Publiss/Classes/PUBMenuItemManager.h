@@ -19,5 +19,6 @@
 - (void)addMenuItem:(PUBMenuItem *)item;
 - (void)removeMenuItem:(PUBMenuItem *)item;
 - (void)removeMenuItemAtIndex:(NSUInteger)index;
+- (void)clear;
 
 @end
