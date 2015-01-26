@@ -29,13 +29,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIApplication.sharedApplication.statusBarStyle = UIStatusBarStyleLightContent;
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissNavController:)];
     doneButton.tintColor = [UIColor whiteColor];
     //self.navigationItem.leftBarButtonItems = @[ doneButton ];
     
     self.navigationController.navigationItem.title = self.pageName;
-    self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
 
     [self setupCollectionView];
     [self setupBackgroundBlur];
@@ -216,7 +214,6 @@
 - (void)updateTitle {
     self.navigationItem.title =
         [NSString stringWithFormat:PUBLocalize(@"Preview Page %ld of %ld"), (long)self.currentPage + 1, (long)MIN(5,self.document.pageCount + 1)];
-     self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
 }
 
 @end

@@ -30,6 +30,10 @@
     [PUBAuthentication.sharedInstance configureCommunications];
     
     self.window.tintColor = PUBConfig.sharedConfig.primaryColor;
+    
+    // The default statusbar color is white. Uncomment to use black.
+    //PUBAppearence.sharedAppearence.statusBarStyle = UIStatusBarStyleDefault; // Uncomment for datk status bar
+    
     [UINavigationBar.appearance setTintColor:PUBConfig.sharedConfig.secondaryColor];
     [UINavigationBar.appearance setBarTintColor:self.window.tintColor];
     [UINavigationBar.appearance setTitleTextAttributes:@{NSForegroundColorAttributeName:PUBConfig.sharedConfig.secondaryColor}];

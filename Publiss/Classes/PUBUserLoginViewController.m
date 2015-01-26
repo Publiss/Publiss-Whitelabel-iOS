@@ -46,8 +46,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didRotate:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+- (UIStatusBarStyle) preferredStatusBarStyle {
+    return PUBAppearence.sharedAppearence.statusBarStyle;
 }
 
 - (void)viewWillAppear:(BOOL)animated {

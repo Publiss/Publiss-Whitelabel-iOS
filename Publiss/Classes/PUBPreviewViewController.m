@@ -42,10 +42,6 @@
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissNavController:)];
     self.navigationItem.leftBarButtonItems = @[doneButton];
-
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    self.navigationController.navigationBar.barTintColor = [UIColor publissPrimaryColor];
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
     
     if (PUBConfig.sharedConfig.preferredLanguage.length > 0 && self.document.language.linkedTag.length > 0) {
         NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"

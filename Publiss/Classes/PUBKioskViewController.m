@@ -42,6 +42,8 @@
 #import "PUBAuthentication.h"
 #import "PUBMenuItemAccount.h"
 #import "PUBLanguage+Helper.h"
+#import "PUBAppearence.h"
+#import "PUBWebViewController.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 
@@ -152,12 +154,6 @@
 #pragma mark - Setup
 
 - (void)setupNavigationItems {
-    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.tintColor = UIColor.publissSecondaryColor;
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIColor.publissSecondaryColor};
-    
     self.navigationItem.title = PUBLocalize(@"Publiss");
 }
 
@@ -192,6 +188,10 @@
         [self.view addSubview:_progressView];
     }
     return _progressView;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return PUBAppearence.sharedAppearence.statusBarStyle;
 }
 
 - (void)setupMenu {
@@ -373,7 +373,7 @@
 
 - (void)visitPublissSite {
     if (self.navigationController.topViewController == self) {
-        PSPDFWebViewController *webViewController = [[PSPDFWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
+        PUBWebViewController *webViewController = [[PUBWebViewController alloc] initWithURL:[NSURL URLWithString:PUBLocalize(@"Menu Website URL")]];
         self.navigationController.delegate = nil;
         [self.navigationController pushViewController:webViewController animated:YES];
     }

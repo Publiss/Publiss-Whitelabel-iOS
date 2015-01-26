@@ -298,12 +298,8 @@
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:pagePreviewController];
     navController.navigationBar.tintColor = [UIColor publissPrimaryColor];
-    //navController.modalPresentationStyle = UIModalPresentationFormSheet;
-    //navController.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     
     [self.navigationController pushViewController:pagePreviewController animated:YES];
-    
-    //[self presentViewController:navController animated:YES completion:NULL];
 }
 
 #pragma mark - Helper

@@ -124,11 +124,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - UIViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self setupUserInterface];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.navigationController.navigationBarHidden = YES;
@@ -153,7 +148,7 @@
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent;
+    return PUBAppearence.sharedAppearence.statusBarStyle;
 }
 
 - (void)hideStatusBarInJustTheReightWay {
@@ -177,14 +172,6 @@
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
-}
-
-- (void)setupUserInterface {
-    self.navigationController.toolbar.tintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.tintColor = UIColor.publissSecondaryColor;
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-    self.navigationController.navigationBar.barTintColor = UIColor.publissPrimaryColor;
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:UIColor.publissSecondaryColor};
 }
 
 // Blurring of gallery
