@@ -68,9 +68,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
                                                    deviceType:PUBDeviceTypeIos
                                                      language:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]
                                                    completion:^(id responseObject) {
-                                                       NSLog(@"Successfully send push token.");
+                                                       PUBLog(@"Successfully send push token.");
                                                    } error:^(NSError *error) {
-                                                       NSLog(@"Error sending push token.");
+                                                       PUBLogError(@"Error sending push token. %@", error);
                                                    }];
 }
 
