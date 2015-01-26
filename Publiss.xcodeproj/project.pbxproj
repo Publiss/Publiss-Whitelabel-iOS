@@ -15,7 +15,6 @@
 		37C240501A652A3200A5CF2A /* NSManagedObjectContext+Testing.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404F1A652A3200A5CF2A /* NSManagedObjectContext+Testing.m */; };
 		37CD79CA1A72604900E7F6AB /* PUBPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD79C91A72604900E7F6AB /* PUBPreferences.m */; };
 		37CD7A1A1A76793500E7F6AB /* UINavigationController+Appearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A191A76793500E7F6AB /* UINavigationController+Appearence.m */; };
-		37CD7A1D1A76798200E7F6AB /* PUBConfig+Appearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A1C1A76798200E7F6AB /* PUBConfig+Appearence.m */; };
 		37CD7A201A767A8F00E7F6AB /* PUBAppearence.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A1F1A767A8F00E7F6AB /* PUBAppearence.m */; };
 		37CD7A231A767E6500E7F6AB /* PUBWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37CD7A221A767E6500E7F6AB /* PUBWebViewController.m */; };
 		37F2F9A219ED6196003E344D /* PUBKioskLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9A119ED6196003E344D /* PUBKioskLayout.m */; };
@@ -148,8 +147,6 @@
 		37CD79C91A72604900E7F6AB /* PUBPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBPreferences.m; path = Classes/PUBPreferences.m; sourceTree = "<group>"; };
 		37CD7A181A76793500E7F6AB /* UINavigationController+Appearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationController+Appearence.h"; path = "Classes/UINavigationController+Appearence.h"; sourceTree = "<group>"; };
 		37CD7A191A76793500E7F6AB /* UINavigationController+Appearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UINavigationController+Appearence.m"; path = "Classes/UINavigationController+Appearence.m"; sourceTree = "<group>"; };
-		37CD7A1B1A76798200E7F6AB /* PUBConfig+Appearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PUBConfig+Appearence.h"; path = "Classes/PUBConfig+Appearence.h"; sourceTree = "<group>"; };
-		37CD7A1C1A76798200E7F6AB /* PUBConfig+Appearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PUBConfig+Appearence.m"; path = "Classes/PUBConfig+Appearence.m"; sourceTree = "<group>"; };
 		37CD7A1E1A767A8F00E7F6AB /* PUBAppearence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBAppearence.h; path = Classes/PUBAppearence.h; sourceTree = "<group>"; };
 		37CD7A1F1A767A8F00E7F6AB /* PUBAppearence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBAppearence.m; path = Classes/PUBAppearence.m; sourceTree = "<group>"; };
 		37CD7A211A767E6500E7F6AB /* PUBWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBWebViewController.h; sourceTree = "<group>"; };
@@ -468,8 +465,6 @@
 				72D34B3C1A67E95F004971A4 /* PUBLanguageTableViewController.m */,
 				37CD7A181A76793500E7F6AB /* UINavigationController+Appearence.h */,
 				37CD7A191A76793500E7F6AB /* UINavigationController+Appearence.m */,
-				37CD7A1B1A76798200E7F6AB /* PUBConfig+Appearence.h */,
-				37CD7A1C1A76798200E7F6AB /* PUBConfig+Appearence.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -911,7 +906,6 @@
 				728BDD731A600C49002C44D5 /* PUBMenuItemAccount.m in Sources */,
 				877665DF19ACEC9E000DFFF1 /* PUBCellView.m in Sources */,
 				8776661C19ACED98000DFFF1 /* PUBHTTPRequestManager.m in Sources */,
-				37CD7A1D1A76798200E7F6AB /* PUBConfig+Appearence.m in Sources */,
 				728BDD791A600C80002C44D5 /* PUBAuthentication.m in Sources */,
 				728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */,
 				37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */,
