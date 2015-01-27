@@ -397,10 +397,15 @@
 - (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters
 {
     [PUBAuthentication.sharedInstance setLoggedInWithToken:token andMetadata:response];
-    [KVNProgress showWithStatus:PUBLocalize(@"You are logged in!\n\nPreparing kiosk for your personal experience ...")];
-    
-    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
-    [self refreshDocumentsWithActivityViewAnimated:YES];
+    [PUBCommunication.sharedInstance fetchPermissionsWitCompletion:^(NSDictionary *permissionsDictionary) {
+        [[PUBAuthentication sharedInstance] setPermissions:permissionsDictionary];
+        
+        [KVNProgress showWithStatus:PUBLocalize(@"You are logged in!\n\nPreparing kiosk for your personal experience ...")];
+        [self.navigationController dismissViewControllerAnimated:NO completion:nil];
+        [self refreshDocumentsWithActivityViewAnimated:YES];
+    } error:^(NSError *error) {
+        [PUBAuthentication.sharedInstance logout];
+    }];
 }
 
 #pragma mark - UICollectionView DataSoure

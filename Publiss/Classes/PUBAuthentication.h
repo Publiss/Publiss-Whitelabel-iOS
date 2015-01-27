@@ -23,4 +23,7 @@
 - (NSDictionary *)getMetadata;
 - (NSString *)getAuthToken;
 
+- (void)setPermissions:(NSDictionary *)permissions;
+- (NSDictionary *)getPermissions;
+
 @end

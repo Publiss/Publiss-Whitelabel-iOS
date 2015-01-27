@@ -49,6 +49,7 @@
 - (void)logout {
     [NSUserDefaults.standardUserDefaults removeObjectForKey:@"com.publiss.extauth.user.token"];
     [NSUserDefaults.standardUserDefaults removeObjectForKey:@"com.publiss.extauth.user.meta"];
+    [NSUserDefaults.standardUserDefaults removeObjectForKey:@"com.publiss.extauth.permissions"];
     [NSUserDefaults.standardUserDefaults synchronize];
     
     PUBConfig.sharedConfig.authToken = nil;
@@ -64,6 +65,14 @@
 
 - (NSString *)getAuthToken {
     return (NSString *)[[NSUserDefaults standardUserDefaults] objectForKey:@"com.publiss.extauth.user.token"];
+}
+
+- (void)setPermissions:(NSDictionary *)permissions {
+    [NSUserDefaults.standardUserDefaults setObject:permissions forKey:@"com.publiss.extauth.permissions"];
+}
+
+- (NSDictionary *)getPermissions {
+    return (NSDictionary *)[[NSUserDefaults standardUserDefaults] objectForKey:@"com.publiss.extauth.permissions"];
 }
 
 @end
