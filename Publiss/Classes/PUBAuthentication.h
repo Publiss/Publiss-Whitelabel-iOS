@@ -13,6 +13,7 @@
 @property (nonatomic, assign) BOOL loginEnabled;
 @property (nonatomic, strong) NSArray *loginFields;
 @property (nonatomic, strong) NSString *menuItemAccountField;
+@property (nonatomic, strong) NSDictionary *additionalLoginParameters;
 
 + (instancetype)sharedInstance;
 

@@ -107,6 +107,10 @@
         [parameters setObject:[cell getParameterValue] forKey:[cell getParameterName]];
     }
     
+    if (PUBAuthentication.sharedInstance.additionalLoginParameters) {
+        [parameters addEntriesFromDictionary:PUBAuthentication.sharedInstance.additionalLoginParameters];
+    }
+    
     if ([self.delegate respondsToSelector:@selector(pubUserLoginWillLoginWithCredentials:)]) {
         validationOkay = [self.delegate pubUserLoginWillLoginWithCredentials:parameters];
     }
