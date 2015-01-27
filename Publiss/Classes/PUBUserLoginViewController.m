@@ -132,7 +132,7 @@
                                             }
                                             else {
                                                 if ([self.delegate respondsToSelector:@selector(pubUserLoginSucceededWithToken:andResponse:andParameters:)]) {
-                                                    [self.delegate pubUserLoginSucceededWithToken:[response objectForKey:@"auth_token"] andResponse:response andParameters:parameters];
+                                                    [self.delegate pubUserLoginSucceededWithToken:[response objectForKey:@"access_token"] andResponse:response andParameters:parameters];
                                                 }
                                             }
                                         }
