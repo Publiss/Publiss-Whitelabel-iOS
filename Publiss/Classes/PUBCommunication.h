@@ -39,4 +39,7 @@
        completion:(void(^)(id responseObject))completionBlock
             error:(void(^)(NSError *error))errorBlock;
 
+- (void)fetchPermissionsWitCompletion:(void(^)(NSDictionary *permissionsDictionary))completionBlock
+                                error:(void(^)(NSError *error))errorBlock;
+
 @end

@@ -24,6 +24,7 @@
 + (NSString *)createReceiptRestorePathForPayLoad:(NSDictionary *)payload;
 
 + (NSString *)createAuthenticationLoginURLString:(NSDictionary *)payload;
++ (NSString *)createAuthenticationPermissionsUrlString;
 
 + (NSString *)createPushTokenURLStringWith:(NSString *)deviceId payload:(NSDictionary *)payload;
 

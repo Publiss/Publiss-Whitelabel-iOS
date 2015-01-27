@@ -210,4 +210,24 @@
     }
 }
 
+- (void)fetchPermissionsWitCompletion:(void(^)(NSDictionary *permissionsDictionary))completionBlock
+                                error:(void(^)(NSError *error))errorBlock {
+    [PUBHTTPRequestManager.sharedRequestManager GET:[PUBURLFactory createAuthenticationPermissionsUrlString]
+                                         parameters:nil
+                                            success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                PUBLog(@"%@: [SUCCESS] fetching permissions.", [self class]);
+                                                PUBLog(@"%@: Server response object: %@", [self class], responseObject);
+                                                if (completionBlock) {
+                                                    NSDictionary *dictionary = [responseObject isKindOfClass:[NSDictionary class]] ? responseObject : [NSDictionary dictionary];
+                                                    completionBlock(dictionary);
+                                                }
+                                            } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                                                PUBLogError(@"%@: [FAILURE] fetching permissions: %@", [self class], error.localizedDescription);
+                                                if (errorBlock) {
+                                                    errorBlock(error);
+                                                }
+                                            }];
+}
+
+
 @end
