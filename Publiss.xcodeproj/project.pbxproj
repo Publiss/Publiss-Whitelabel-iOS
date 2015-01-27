@@ -25,6 +25,7 @@
 		37F2F9B719F11CF6003E344D /* PUBTransitioningDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B619F11CF6003E344D /* PUBTransitioningDelegate.m */; };
 		37F2F9BA19F13004003E344D /* PUBDimmView.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9B919F13004003E344D /* PUBDimmView.m */; };
 		37F2F9BD19F137C4003E344D /* PUBDocumentTransition.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */; };
+		37FB223B1A77CA41004006BE /* NSDictionary+Cleanup.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FB223A1A77CA41004006BE /* NSDictionary+Cleanup.m */; };
 		7205B9401A666F61000ECCF5 /* PUBLanguageSelection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7205B93F1A666F61000ECCF5 /* PUBLanguageSelection.storyboard */; };
 		728BDD731A600C49002C44D5 /* PUBMenuItemAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD721A600C49002C44D5 /* PUBMenuItemAccount.m */; };
 		728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 728BDD751A600C6A002C44D5 /* PUBUserLoginViewController.m */; };
@@ -167,6 +168,8 @@
 		37F2F9B919F13004003E344D /* PUBDimmView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDimmView.m; path = Classes/PUBDimmView.m; sourceTree = "<group>"; };
 		37F2F9BB19F137C4003E344D /* PUBDocumentTransition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBDocumentTransition.h; path = Classes/PUBDocumentTransition.h; sourceTree = "<group>"; };
 		37F2F9BC19F137C4003E344D /* PUBDocumentTransition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PUBDocumentTransition.m; path = Classes/PUBDocumentTransition.m; sourceTree = "<group>"; };
+		37FB22391A77CA41004006BE /* NSDictionary+Cleanup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+Cleanup.h"; path = "Classes/NSDictionary+Cleanup.h"; sourceTree = "<group>"; };
+		37FB223A1A77CA41004006BE /* NSDictionary+Cleanup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+Cleanup.m"; path = "Classes/NSDictionary+Cleanup.m"; sourceTree = "<group>"; };
 		462072B4D22FBED0967E830D /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7205B93F1A666F61000ECCF5 /* PUBLanguageSelection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = PUBLanguageSelection.storyboard; path = Views/PUBLanguageSelection.storyboard; sourceTree = "<group>"; };
 		728BDD711A600C49002C44D5 /* PUBMenuItemAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PUBMenuItemAccount.h; path = Classes/PUBMenuItemAccount.h; sourceTree = "<group>"; };
@@ -392,6 +395,15 @@
 			children = (
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		37FB22351A77C9DD004006BE /* Catagories */ = {
+			isa = PBXGroup;
+			children = (
+				37FB22391A77CA41004006BE /* NSDictionary+Cleanup.h */,
+				37FB223A1A77CA41004006BE /* NSDictionary+Cleanup.m */,
+			);
+			name = Catagories;
 			sourceTree = "<group>";
 		};
 		8103B57A1846C14E00E8E77E /* Preview */ = {
@@ -631,6 +643,7 @@
 				877665B819ACEA0C000DFFF1 /* PSPDFSubclasses */,
 				81B3AF3B1817B71D00CB5CF1 /* Design */,
 				8110784A18114CD700281106 /* AppDelegate */,
+				37FB22351A77C9DD004006BE /* Catagories */,
 				811A8B7618169FBD00D0F893 /* Storyboard */,
 				811A8B7C1816A48800D0F893 /* View */,
 				811078361811368A00281106 /* ViewControllers */,
@@ -907,6 +920,7 @@
 				877665DF19ACEC9E000DFFF1 /* PUBCellView.m in Sources */,
 				8776661C19ACED98000DFFF1 /* PUBHTTPRequestManager.m in Sources */,
 				728BDD791A600C80002C44D5 /* PUBAuthentication.m in Sources */,
+				37FB223B1A77CA41004006BE /* NSDictionary+Cleanup.m in Sources */,
 				728BDD761A600C6A002C44D5 /* PUBUserLoginViewController.m in Sources */,
 				37F2F9AB19EE5E80003E344D /* PUBHeaderReusableView.m in Sources */,
 				37F2F9A519ED6E9D003E344D /* PUBImageReusableView.m in Sources */,

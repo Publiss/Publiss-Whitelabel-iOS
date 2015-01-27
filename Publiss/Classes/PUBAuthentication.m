@@ -8,6 +8,7 @@
 
 #import "PUBAuthentication.h"
 #import "PUBConfig.h"
+#import "NSDictionary+Cleanup.h"
 
 @implementation PUBAuthentication
 
@@ -39,8 +40,10 @@
 #pragma mark - Authentication methods
 
 - (void)setLoggedInWithToken:(NSString *)token andMetadata:(NSDictionary *)metadata {
+    
+    NSDictionary *cleanMetadata = [metadata dictionaryWithoutEmptyStringsForMissingValues];
     [NSUserDefaults.standardUserDefaults setObject:token forKey:@"com.publiss.extauth.user.token"];
-    [NSUserDefaults.standardUserDefaults setObject:metadata forKey:@"com.publiss.extauth.user.meta"];
+    [NSUserDefaults.standardUserDefaults setObject:cleanMetadata forKey:@"com.publiss.extauth.user.meta"];
     [NSUserDefaults.standardUserDefaults synchronize];
     
     PUBConfig.sharedConfig.authToken = token;
