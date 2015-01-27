@@ -18,7 +18,8 @@
 @implementation PUBAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    application.applicationIconBadgeNumber = 0;
+    
     PUBConfig.sharedConfig.appToken = @"1d3ae766-0206-4eb7-90e1-f2e2917a4635";
     PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
     [Publiss.staticInstance setupWithLicenseKey:nil];
