@@ -7,6 +7,7 @@
 //
 
 #import "PUBFooterReusableView.h"
+#import "PUBConfig.h"
 
 @implementation PUBFooterReusableView
 
@@ -35,7 +36,12 @@
 }
 
 - (void)setup {
-    self.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    if ([PUBConfig sharedConfig].kioskShelveBackgroundImage == nil) {
+        self.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    }
+    else {
+        self.backgroundColor = [[UIColor colorWithPatternImage:[PUBConfig sharedConfig].kioskShelveBackgroundImage] colorWithAlphaComponent:1.0f];
+    }
 }
 
 @end

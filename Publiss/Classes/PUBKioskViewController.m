@@ -159,7 +159,10 @@
 }
 
 - (void)setupCollectionView {
-    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+    
+    UIImage *shelveBackgrondImage = [PUBConfig sharedConfig].kioskShelveBackgroundImage ? [PUBConfig sharedConfig].kioskShelveBackgroundImage : [UIImage imageNamed:@"KioskShelveBackground"];
+    self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:shelveBackgrondImage] colorWithAlphaComponent:1.0f];
+    
     self.kioskLayout = [[PUBKioskLayout alloc] init];
     self.collectionView.collectionViewLayout = self.kioskLayout;
     [self.collectionView.collectionViewLayout invalidateLayout];
@@ -326,7 +329,8 @@
         if (self.publishedDocuments.count > 0) {
             self.collectionView.backgroundColor = [UIColor kioskBackgroundColor];
         } else {
-            self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:[UIImage imageNamed:@"KioskShelveBackground"]] colorWithAlphaComponent:1.0f];
+            UIImage *shelveBackgrondImage = [PUBConfig sharedConfig].kioskShelveBackgroundImage ? [PUBConfig sharedConfig].kioskShelveBackgroundImage : [UIImage imageNamed:@"KioskShelveBackground"];
+            self.collectionView.backgroundColor = [[UIColor colorWithPatternImage:shelveBackgrondImage] colorWithAlphaComponent:1.0f];
         }
         
         [self.collectionView reloadData];

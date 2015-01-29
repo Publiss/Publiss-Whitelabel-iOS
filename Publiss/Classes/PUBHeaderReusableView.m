@@ -7,6 +7,7 @@
 //
 
 #import "PUBHeaderReusableView.h"
+#import "PUBConfig.h"
 
 @interface PUBHeaderReusableView()
 
@@ -42,7 +43,8 @@
 }
 
 - (void)setup {
-    self.imageView.image = [UIImage imageNamed:@"HeaderBackground"];
+    UIImage *headerBackground = [PUBConfig sharedConfig].kioskFeaturedBackgroundImage ? [PUBConfig sharedConfig].kioskFeaturedBackgroundImage : [UIImage imageNamed:@"HeaderBackground"];
+    self.imageView.image = headerBackground;
     [self addSubview:self.cloudImageView];
     
     [self removeGestureRecognizer:self.singleTapRecognizer];

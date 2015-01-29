@@ -33,6 +33,9 @@ typedef enum : NSUInteger {
 @property (nonatomic, strong) UIColor *kioskBackgroundColor;
 @property (nonatomic, assign) UIStatusBarStyle statusBarStyle;
 
+@property (nonatomic, strong) UIImage *kioskFeaturedBackgroundImage;
+@property (nonatomic, strong) UIImage *kioskShelveBackgroundImage;
+
 /// Specify if labels are shown below each issue in the kiosk
 @property (nonatomic, assign) BOOL showLabelsBelowIssuesInKiosk;
 

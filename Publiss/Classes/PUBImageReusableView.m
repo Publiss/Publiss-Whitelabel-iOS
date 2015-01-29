@@ -7,6 +7,7 @@
 //
 
 #import "PUBImageReusableView.h"
+#import "PUBConfig.h"
 
 @implementation PUBImageReusableView
 
@@ -15,7 +16,14 @@
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _imageView.contentMode = UIViewContentModeScaleToFill;
         _imageView.clipsToBounds = YES;
-        _imageView.image = [UIImage imageNamed:@"KioskShelveBackground"];
+        
+        if ([PUBConfig sharedConfig].kioskShelveBackgroundImage == nil) {
+            _imageView.image = [UIImage imageNamed:@"KioskShelveBackground"];
+        }
+        else {
+            _imageView.image = [PUBConfig sharedConfig].kioskShelveBackgroundImage;
+        }
+        
         [self addSubview:_imageView];
     }
     return _imageView;
