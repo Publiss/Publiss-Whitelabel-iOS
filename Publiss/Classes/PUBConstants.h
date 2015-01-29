@@ -28,6 +28,9 @@ static NSString *const PUBDocumentPurchaseUIUpdateNotification = @"PUBDocumentPu
 static NSString *const PUBDocumentFetcherUpdateNotification = @"PUBDocumentFetcherUpdateNotification";
 static NSString *const PUBStatisticsDocumentDeletedNotification = @"PUBStatisticsDocumentDeletedNotification";
 
+static NSString *const PUBAuthenticationLoginSuccess = @"PUBAuthenticationLoginSuccess";
+static NSString *const PUBAuthenticationLogoutSuccess = @"PUBAuthenticationLogoutSuccess";
+
 // Cell Notifications
 static NSString *const PUBDeleteDocumentNotification = @"PUBDeleteDocumentNotification";
 

@@ -396,6 +396,8 @@
 
 - (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:PUBAuthenticationLoginSuccess object:nil];
+    
     [PUBAuthentication.sharedInstance setLoggedInWithToken:token andMetadata:response];
     [KVNProgress showWithStatus:PUBLocalize(@"You are logged in!\n\nPreparing kiosk for your personal experience ...")];
     

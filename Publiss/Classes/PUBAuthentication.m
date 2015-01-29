@@ -9,6 +9,7 @@
 #import "PUBAuthentication.h"
 #import "PUBConfig.h"
 #import "NSDictionary+Cleanup.h"
+#import "PUBConstants.h"
 
 @implementation PUBAuthentication
 
@@ -56,6 +57,8 @@
     [NSUserDefaults.standardUserDefaults synchronize];
     
     PUBConfig.sharedConfig.authToken = nil;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PUBAuthenticationLogoutSuccess object:nil];
 }
 
 - (BOOL)isLoggedIn {
