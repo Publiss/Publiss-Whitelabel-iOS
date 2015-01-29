@@ -10,6 +10,12 @@
 
 @interface PUBMenuItemAccount : PUBMenuItem
 
+@property (nonatomic, strong) NSString *loggedOutTitle;
+@property (nonatomic, strong) NSString *loggedInTitle;
+
+@property (nonatomic, strong) NSString *loggedOutSubTitle;
+@property (nonatomic, strong) NSString *loggedInSubTitle;
+
 @property (nonatomic, copy) void(^actionBlockLogin)();
 @property (nonatomic, copy) void(^actionBlockLogout)();
 

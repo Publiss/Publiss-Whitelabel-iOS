@@ -11,6 +11,12 @@
 #import "UIColor+PUBDesign.h"
 #import "UIImage+PUBTinting.h"
 
+@interface PUBMenuItem()
+
+
+
+@end
+
 @implementation PUBMenuItemAccount
 
 - (instancetype)init {
@@ -19,6 +25,10 @@
     if (self) {
         
         self.icon = [[UIImage imageNamed:@"profile"] imageTintedWithColor:[UIColor publissSecondaryColor] fraction:0.f];
+        self.loggedOutTitle = PUBLocalize(@"Login");
+        self.loggedInTitle = PUBLocalize(@"Logout");
+        
+        self.loggedInSubTitle = [[PUBAuthentication.sharedInstance getMetadata] objectForKey:PUBAuthentication.sharedInstance.menuItemAccountField];
         
         __weak typeof(self) welf = self;
         self.actionBlock = ^() {
@@ -40,19 +50,17 @@
 }
 
 - (NSAttributedString *)attributedTitle {
-    NSString *title = PUBLocalize(@"Login");
-    NSUInteger startUserIndex = title.length;
-    PUBAuthentication *auth = PUBAuthentication.sharedInstance;
+    NSString *title = [PUBAuthentication.sharedInstance isLoggedIn] ? self.loggedInTitle : self.loggedOutTitle;
+    NSString *subtitle = [PUBAuthentication.sharedInstance isLoggedIn] ? self.loggedInSubTitle : self.loggedOutSubTitle;
     
-    if ([auth isLoggedIn]) {
-        title = PUBLocalize(@"Logout");
-        startUserIndex = title.length;
-        title = [NSString stringWithFormat:@"%@ %@", title, [[auth getMetadata] objectForKey:PUBAuthentication.sharedInstance.menuItemAccountField]];
-        
+    if (subtitle.length > 0) {
+        NSUInteger titleEndIndex = title.length;
+        title = [NSString stringWithFormat:@"%@ %@", title, subtitle];
+
         NSMutableAttributedString *formattedTitle = [[NSMutableAttributedString alloc] initWithString:title];
         
-        [formattedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Thin" size:12.0f] range:NSMakeRange(startUserIndex+1, title.length-startUserIndex-1)];
-
+        [formattedTitle addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Thin" size:12.0f] range:NSMakeRange(titleEndIndex + 1, title.length-titleEndIndex-1)];
+        
         return formattedTitle;
     }
     
