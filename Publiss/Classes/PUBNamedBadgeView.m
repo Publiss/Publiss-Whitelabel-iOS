@@ -20,6 +20,7 @@
 - (id)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
+        self.tintColor = [UIColor publissPrimaryColor];
         self.backgroundColor = [UIColor clearColor];
     }
     return self;
@@ -36,7 +37,7 @@
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    CGContextSetFillColor(ctx, CGColorGetComponents([[UIColor publissPrimaryColor] CGColor]));
+    CGContextSetFillColor(ctx, CGColorGetComponents(self.tintColor.CGColor));
     
     [path moveToPoint:CGPointMake(0, 0)];
     [path addLineToPoint:CGPointMake(self.bounds.size.width, self.bounds.size.height)];
