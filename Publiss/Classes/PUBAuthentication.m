@@ -21,7 +21,7 @@
     dispatch_once(&onceToken, ^{
         _sharedInstance = [PUBAuthentication new];
         _sharedInstance.loginFields = @[
-                                        @{@"title": @"Email",      @"class": @"PUBUserLoginTextFieldCell",         @"parameter_name": @"email"},
+                                        @{@"title": @"Email",      @"class": @"PUBUserLoginTextFieldCell",         @"parameter_name": @"username"},
                                         @{@"title": @"Password",   @"class": @"PUBUserLoginPasswordFieldCell",     @"parameter_name": @"password"}
                                         ];
         _sharedInstance.menuItemAccountField = @"email";

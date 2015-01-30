@@ -12,6 +12,7 @@
 #import "PUBConstants.h"
 #import "PUBDocumentFetcher.h"
 #import "PUBLanguage+Helper.h"
+#import "PUBPermission+Helper.h"
 
 @implementation PUBDocument (Helper)
 
@@ -105,6 +106,17 @@
             
             document.language = [PUBLanguage createOrUpdateWithDocument:document
                                                           andDictionary:PUBSafeCast([dictionary valueForKeyPath:@"language"], NSDictionary.class)];
+            
+
+            document.permissions = nil;
+            NSArray *permissions = PUBSafeCast([dictionary valueForKeyPath:@"permissions"], NSArray.class);
+            if (permissions.count) {
+                for (NSString *name in permissions) {
+                    PUBPermission *permission = [PUBPermission createEntity];
+                    permission.name = name;
+                    [document addPermissionsObject:permission];
+                }
+            }
         }
         @catch (NSException *exception) {
             PUBLogError(@"Exception while parsing JSON: %@", exception);
