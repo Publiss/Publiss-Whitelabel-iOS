@@ -47,16 +47,16 @@
     }
     
     NSArray *preferredLanguageDocuments = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
-                                             ascending:YES
-                                             predicate:[NSPredicate predicateWithFormat:@"language.linkedTag == %@ AND language.languageTag == %@", document.language.linkedTag, PUBConfig.sharedConfig.preferredLanguage]];
+                                                              ascending:YES
+                                                              predicate:[NSPredicate predicateWithFormat:@"language.linkedTag ==[c] %@ AND language.languageTag ==[c] %@", document.language.linkedTag, PUBConfig.sharedConfig.preferredLanguage]];
     
     NSMutableAttributedString *languageTitle = [[NSMutableAttributedString alloc] initWithString:document.language.localizedTitle];
-    if (PUBConfig.sharedConfig.preferredLanguage.length > 0 && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.preferredLanguage]) {
+    if (PUBConfig.sharedConfig.preferredLanguage.length > 0 && [document.language.languageTag.lowercaseString isEqualToString:PUBConfig.sharedConfig.preferredLanguage.lowercaseString]) {
         NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
         [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
         [languageTitle appendAttributedString:postfix];
     }
-    else if (preferredLanguageDocuments.count == 0 && PUBConfig.sharedConfig.fallbackLanguage.length > 0 && [document.language.languageTag isEqualToString:PUBConfig.sharedConfig.fallbackLanguage]) {
+    else if (preferredLanguageDocuments.count == 0 && PUBConfig.sharedConfig.fallbackLanguage.length > 0 && [document.language.languageTag.lowercaseString isEqualToString:PUBConfig.sharedConfig.fallbackLanguage.lowercaseString]) {
         NSMutableAttributedString *postfix = [NSMutableAttributedString.alloc initWithString:[NSString stringWithFormat:@" (%@)", PUBLocalize(@"Default")]];
         [postfix addAttribute:NSForegroundColorAttributeName value:[UIColor grayColor] range:NSMakeRange(0,postfix.length)];
         [languageTitle appendAttributedString:postfix];
