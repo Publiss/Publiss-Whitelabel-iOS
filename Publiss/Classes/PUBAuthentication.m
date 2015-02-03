@@ -74,7 +74,8 @@
 }
 
 - (void)setPermissions:(NSDictionary *)permissions {
-    [NSUserDefaults.standardUserDefaults setObject:permissions forKey:@"com.publiss.extauth.permissions"];
+    NSDictionary *cleanPermissions = [permissions dictionaryWithoutEmptyStringsForMissingValues];
+    [NSUserDefaults.standardUserDefaults setObject:cleanPermissions forKey:@"com.publiss.extauth.permissions"];
 }
 
 - (NSDictionary *)getPermissions {

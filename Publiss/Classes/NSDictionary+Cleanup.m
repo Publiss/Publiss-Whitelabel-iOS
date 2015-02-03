@@ -11,15 +11,20 @@
 @implementation NSDictionary (Cleanup)
 
 - (NSDictionary *)dictionaryWithoutEmptyStringsForMissingValues {
-    NSMutableDictionary *mutablemeta = [NSMutableDictionary dictionaryWithDictionary:self];
-    NSMutableDictionary *replacedmeta = [mutablemeta mutableCopy];
-    for (NSString* key in mutablemeta) {
-        if ([mutablemeta objectForKey:key] == nil || [mutablemeta objectForKey:key] == [NSNull null]) {
-            [replacedmeta setObject:@"" forKey:key];
+    const NSMutableDictionary *replaced = [NSMutableDictionary dictionaryWithDictionary:self];
+    const id nul = [NSNull null];
+    const NSString *blank = @"";
+    
+    for (NSString *key in self) {
+        const id object = [self objectForKey: key];
+        if (object == nul) {
+            [replaced setObject:blank forKey:key];
+        }
+        else if ([object isKindOfClass: [NSDictionary class]]) {
+            [replaced setObject: [(NSDictionary *)object dictionaryWithoutEmptyStringsForMissingValues] forKey:key];
         }
     }
-    
-    return replacedmeta.copy;
+    return [NSDictionary dictionaryWithDictionary:replaced.copy];
 }
 
 @end
