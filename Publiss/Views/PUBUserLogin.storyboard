@@ -154,7 +154,7 @@
                                 </variation>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.87058823529411766" green="0.87058823529411766" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.9137254901960784" green="0.9137254901960784" blue="0.9137254901960784" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="cKk-VC-BBi" firstAttribute="leading" secondItem="xYB-wC-24M" secondAttribute="leading" id="2wf-Nj-nyD"/>
                             <constraint firstItem="qTE-Rg-7yc" firstAttribute="top" secondItem="5FN-wB-nFb" secondAttribute="bottom" constant="20" id="77F-lw-o30"/>
