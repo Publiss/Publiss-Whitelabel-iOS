@@ -45,6 +45,8 @@
 #import "PUBWebViewController.h"
 #import "PUBConfig.h"
 #import "UINavigationController+Appearence.h"
+#import "PUBAuthentication.h"
+#import "PUBCommunication+Push.h"
 
 @interface PUBKioskViewController () <PSPDFViewControllerDelegate, PUBDocumentTransitionDataSource, PUBUserLoginDelegate>
 
@@ -112,6 +114,14 @@
     [self.view addGestureRecognizer:[UIPanGestureRecognizer.alloc initWithTarget:self action:@selector(panGestureRecognized:)]];
     
     [self setupRefreshControl];
+    
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc addObserver:self selector:@selector(logout) name:PUBAuthenticationLogoutSuccess object:nil];
+}
+
+- (void)dealloc {
+    NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
+    [dnc removeObserver:self name:PUBAuthenticationLogoutSuccess object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -124,6 +134,7 @@
     [dnc addObserver:self selector:@selector(documentFetcherDidUpdate:) name:PUBDocumentFetcherUpdateNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentFetcherDidFinish:) name:PUBDocumentDownloadNotification object:NULL];
     [dnc addObserver:self selector:@selector(documentPurchased:) name:PUBDocumentPurchaseFinishedNotification object:nil];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -386,26 +397,18 @@
 
 #pragma mark - PUBUserLoginDelegate
 
-- (BOOL)pubUserLoginWillLoginWithCredentials:(NSDictionary *)credentials
-{
+- (BOOL)pubUserShouldLoginWithCredentials:(NSDictionary *)credentials {
     [KVNProgress setConfiguration:[self fullScreenBlockingProgressConfiguration]];
     [KVNProgress showWithStatus:PUBLocalize(@"Authenticating ...")];
     return YES;
 }
 
-- (void)pubUserLoginFailedWithError:(NSString *)message
-{
+- (void)pubUserFailedLoginWithError:(NSString *)message {
     [KVNProgress showErrorWithStatus:PUBLocalize(message)];
 }
 
-- (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters
-{
-    [[NSNotificationCenter defaultCenter] postNotificationName:PUBAuthenticationLoginSuccess object:nil];
-    
-    [PUBAuthentication.sharedInstance setLoggedInWithToken:token andMetadata:response];
+- (void)pubUserDidLoginSuccessfully {
     [KVNProgress showWithStatus:PUBLocalize(@"You are logged in!\n\nPreparing kiosk for your personal experience ...")];
-    
-    [self.navigationController dismissViewControllerAnimated:NO completion:nil];
     [self refreshDocumentsWithActivityViewAnimated:YES];
 }
 
@@ -695,6 +698,10 @@
 }
 
 #pragma mark - Notifications
+
+- (void)logout {
+    [PUBCommunication.sharedInstance sendPushTokenToServer];
+}
 
 - (void)trackPage {
     [self.pageTracker fire];

@@ -12,7 +12,7 @@
 #import "PUBMainViewController.h"
 #import "PUBAuthentication.h"
 #import "PUBPreferences.h"
-#import "PUBCommunication.h"
+#import "PUBCommunication+Push.h"
 #import "PUBConfig.h"
 
 
@@ -36,12 +36,12 @@
      "eKjpcLFhULk+m5OJ5Ap6yAJ6gy0DaCEouw13MS9Tl+GfP+6kzg5GMw=="];
     
     // Uncomment this line to use the language tag feature.
-    PUBConfig.sharedConfig.preferredLanguage = [[NSLocale preferredLanguages] objectAtIndex:0];
+    //PUBConfig.sharedConfig.preferredLanguage = [[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode];
 
     PUBConfig.sharedConfig.showLabelsBelowIssuesInKiosk = YES;
     
     // Uncomment this line to add user login to menu
-    // PUBAuthentication.sharedInstance.loginEnabled = YES;
+    PUBAuthentication.sharedInstance.loginEnabled = YES;
     [PUBAuthentication.sharedInstance configureCommunications];
     
     self.window.tintColor = PUBConfig.sharedConfig.primaryColor;
@@ -52,24 +52,32 @@
     self.window.rootViewController = (UIViewController *)PUBMainViewController.mainViewController;
     [self.window makeKeyAndVisible];
     
+    [self registerForPush];
+
+    return YES;
+}
+
+- (void)registerForPush {
     if ([UIApplication.sharedApplication respondsToSelector:@selector(registerUserNotificationSettings:)]) {
         [UIApplication.sharedApplication registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
         [UIApplication.sharedApplication registerForRemoteNotifications];
     } else {
-        // i0s 7
+        // iOS 7
         [UIApplication.sharedApplication registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)];
     }
-    
-    return YES;
 }
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-   NSLog(@"%@", deviceToken);
+    [PUBPreferences validateAndPersistPushToken:deviceToken];
+    [PUBCommunication.sharedInstance sendPushTokenToServer];
+    NSLog(@"%@", deviceToken);
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
-    NSLog(@"%@", error);
+    PUBLog(@"%@", error);
+    [PUBCommunication.sharedInstance sendPushTokenToServer];
 }
+
 
 @end

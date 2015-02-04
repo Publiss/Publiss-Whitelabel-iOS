@@ -111,8 +111,8 @@
         [parameters addEntriesFromDictionary:PUBAuthentication.sharedInstance.additionalLoginParameters];
     }
     
-    if ([self.delegate respondsToSelector:@selector(pubUserLoginWillLoginWithCredentials:)]) {
-        validationOkay = [self.delegate pubUserLoginWillLoginWithCredentials:parameters];
+    if ([self.delegate respondsToSelector:@selector(pubUserShouldLoginWithCredentials:)]) {
+        validationOkay = [self.delegate pubUserShouldLoginWithCredentials:parameters];
     }
 
     if (validationOkay) {
@@ -126,20 +126,22 @@
                                         if ([responseObject isKindOfClass:[NSDictionary class]]) {
                                             NSDictionary *response = (NSDictionary *)responseObject;
                                             if ([[response allKeys] containsObject:@"error"]) {
-                                                if ([self.delegate respondsToSelector:@selector(pubUserLoginFailedWithError:)]) {
-                                                    [self.delegate pubUserLoginFailedWithError:[response objectForKey:@"error"]];
+                                                if ([self.delegate respondsToSelector:@selector(pubUserFailedLoginWithError:)]) {
+                                                    [self.delegate pubUserFailedLoginWithError:[response objectForKey:@"error"]];
                                                 }
                                             }
                                             else {
-                                                if ([self.delegate respondsToSelector:@selector(pubUserLoginSucceededWithToken:andResponse:andParameters:)]) {
-                                                    [self.delegate pubUserLoginSucceededWithToken:[response objectForKey:@"access_token"] andResponse:response andParameters:parameters];
+                                                if ([self.delegate respondsToSelector:@selector(pubUserDidLoginSuccessfully)]) {
+                                                    [self dismissViewControllerAnimated:YES completion:^{
+                                                        [self.delegate pubUserDidLoginSuccessfully];
+                                                    }];
                                                 }
                                             }
                                         }
                                     }
                                          error:^(NSError *error){
-                                             if ([self.delegate respondsToSelector:@selector(pubUserLoginFailedWithError:)]) {
-                                                 [self.delegate pubUserLoginFailedWithError:[error localizedDescription]];
+                                             if ([self.delegate respondsToSelector:@selector(pubUserFailedLoginWithError:)]) {
+                                                 [self.delegate pubUserFailedLoginWithError:[error localizedDescription]];
                                              }
                                          }];
 }

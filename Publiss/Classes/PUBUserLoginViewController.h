@@ -14,9 +14,9 @@
 
 @protocol PUBUserLoginDelegate <NSObject>
 
-- (BOOL)pubUserLoginWillLoginWithCredentials:(NSDictionary *)credentials;
-- (void)pubUserLoginFailedWithError:(NSString *)message;
-- (void)pubUserLoginSucceededWithToken:(NSString *)token andResponse:(NSDictionary *)response andParameters:(NSDictionary *)parameters;
+- (BOOL)pubUserShouldLoginWithCredentials:(NSDictionary *)credentials;
+- (void)pubUserDidLoginSuccessfully;
+- (void)pubUserFailedLoginWithError:(NSString *)message;
 
 @end
 

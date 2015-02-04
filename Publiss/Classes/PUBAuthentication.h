@@ -26,5 +26,6 @@
 
 - (void)setPermissions:(NSDictionary *)permissions;
 - (NSDictionary *)getPermissions;
+- (NSArray *)permissionsArray;
 
 @end

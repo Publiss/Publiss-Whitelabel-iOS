@@ -76,6 +76,7 @@ static NSString *const PUBDeviceTypeIos = @"ios";
 static NSString *const PUBPushToken = @"push_token";
 static NSString *const PUBDeviceType = @"device_type";
 static NSString *const PUBDeviceLang = @"lang";
+static NSString *const PUBDevicePermissions = @"permissions";
 
 // Availability Macros
 #define PUBIsiPad() UIDevice.currentDevice.userInterfaceIdiom == UIUserInterfaceIdiomPad

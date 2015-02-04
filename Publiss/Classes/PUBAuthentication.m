@@ -41,13 +41,14 @@
 #pragma mark - Authentication methods
 
 - (void)setLoggedInWithToken:(NSString *)token andMetadata:(NSDictionary *)metadata {
-    
     NSDictionary *cleanMetadata = [metadata dictionaryWithoutEmptyStringsForMissingValues];
     [NSUserDefaults.standardUserDefaults setObject:token forKey:@"com.publiss.extauth.user.token"];
     [NSUserDefaults.standardUserDefaults setObject:cleanMetadata forKey:@"com.publiss.extauth.user.meta"];
     [NSUserDefaults.standardUserDefaults synchronize];
     
     PUBConfig.sharedConfig.authToken = token;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:PUBAuthenticationLoginSuccess object:nil];
 }
 
 - (void)logout {
@@ -80,6 +81,15 @@
 
 - (NSDictionary *)getPermissions {
     return (NSDictionary *)[[NSUserDefaults standardUserDefaults] objectForKey:@"com.publiss.extauth.permissions"];
+}
+
+- (NSArray *)permissionsArray {
+    NSDictionary *permissions = [PUBAuthentication.sharedInstance getPermissions];
+    NSArray *permissionsArray = permissions[@"permissions"];
+    if (!permissionsArray) {
+        permissionsArray = permissions[@"Permissions"];
+    }
+    return permissionsArray;
 }
 
 @end

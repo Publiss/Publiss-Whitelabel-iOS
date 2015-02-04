@@ -13,6 +13,8 @@
 #import "PUBURLFactory.h"
 #import "PublissCore.h"
 #import "PUBConstants.h"
+#import "PUBAuthentication.h"
+#import "PUBCommunication+Push.h"
 
 @implementation PUBCommunication
 
@@ -164,6 +166,7 @@
                      pushToken:(NSString *)pushToken
                     deviceType:(NSString *)deviceType
                       language:(NSString *)lang
+                   permissions:(NSArray *)permissions
                     completion:(void(^)(id responseObject))completionBlock
                          error:(void(^)(NSError *error))errorBlock {
     if (deviceId.length == 0 || pushToken.length == 0 || deviceType.length == 0 || lang.length == 0) {
@@ -173,6 +176,12 @@
     NSDictionary *parameters = @{PUBPushToken: pushToken,
                                  PUBDeviceType: deviceType,
                                  PUBDeviceLang: lang};
+    
+    if (permissions) {
+        NSMutableDictionary *extended = parameters.mutableCopy;
+        [extended setValue:permissions forKey:PUBDevicePermissions];
+        parameters = extended.copy;
+    }
     
     if ([NSJSONSerialization isValidJSONObject:parameters]) {
         [PUBHTTPRequestManager.sharedRequestManager POST:[PUBURLFactory createPushTokenURLStringWith:deviceId payload:parameters]
@@ -201,6 +210,21 @@
                                                  success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                                      PUBLog(@"%@: [SUCCESS] sending login request.", [self class]);
                                                      PUBLog(@"%@: Server response object: %@", [self class], responseObject);
+                                                     
+                                                     if ([responseObject isKindOfClass:[NSDictionary class]]) {
+                                                         NSDictionary *response = (NSDictionary *)responseObject;
+                                                         
+                                                         
+                                                         [PUBAuthentication.sharedInstance setLoggedInWithToken:[response objectForKey:@"access_token"] andMetadata:response];
+                                                         
+                                                         [PUBCommunication.sharedInstance fetchPermissionsWitCompletion:^(NSDictionary *permissionsDictionary) {
+                                                             PUBLog(@"%@: [SUCCESS] asked for permissions after login.", [self class]);
+                                                             [PUBCommunication.sharedInstance sendPushTokenToServer];
+                                                         } error:^(NSError *error) {
+                                                             PUBLog(@"%@: [FAILURE] asking for permissions after login.", [self class]);
+                                                         }];
+                                                     }
+                                                     
                                                      if (completionBlock) (completionBlock(responseObject));
                                                  }
                                                  failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -219,6 +243,8 @@
                                                 PUBLog(@"%@: Server response object: %@", [self class], responseObject);
                                                 if (completionBlock) {
                                                     NSDictionary *dictionary = [responseObject isKindOfClass:[NSDictionary class]] ? responseObject : [NSDictionary dictionary];
+                                                    
+                                                    [PUBAuthentication.sharedInstance setPermissions:dictionary];
                                                     completionBlock(dictionary);
                                                 }
                                             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -228,6 +254,5 @@
                                                 }
                                             }];
 }
-
 
 @end

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		377774861A825D7400D0DFAD /* PUBCommunication+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = 377774851A825D7400D0DFAD /* PUBCommunication+Push.m */; };
 		37B57E9B19ECFC76000B893A /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B57E9919ECFC76000B893A /* PublissCore.framework */; };
 		37C240451A63D37A00A5CF2A /* PUBLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C240441A63D37A00A5CF2A /* PUBLanguage.m */; };
 		37C2404B1A63D40600A5CF2A /* PUBLanguage+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */; };
@@ -134,6 +135,8 @@
 
 /* Begin PBXFileReference section */
 		3744FE8C1A3F358A00F2BAB7 /* Publiss_2.1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.1.xcdatamodel; sourceTree = "<group>"; };
+		377774841A825D7400D0DFAD /* PUBCommunication+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PUBCommunication+Push.h"; path = "Classes/PUBCommunication+Push.h"; sourceTree = "<group>"; };
+		377774851A825D7400D0DFAD /* PUBCommunication+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PUBCommunication+Push.m"; path = "Classes/PUBCommunication+Push.m"; sourceTree = "<group>"; };
 		37B57E9919ECFC76000B893A /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
 		37B57E9C19ECFE3E000B893A /* Publiss_2.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.0.xcdatamodel; sourceTree = "<group>"; };
 		37C240421A63D26D00A5CF2A /* Publiss_2.2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.2.0.xcdatamodel; sourceTree = "<group>"; };
@@ -427,6 +430,8 @@
 			children = (
 				8776661419ACED98000DFFF1 /* PUBCommunication.h */,
 				8776661519ACED98000DFFF1 /* PUBCommunication.m */,
+				377774841A825D7400D0DFAD /* PUBCommunication+Push.h */,
+				377774851A825D7400D0DFAD /* PUBCommunication+Push.m */,
 				728BDD771A600C80002C44D5 /* PUBAuthentication.h */,
 				728BDD781A600C80002C44D5 /* PUBAuthentication.m */,
 				8776661619ACED98000DFFF1 /* PUBDocumentFetcher.h */,
@@ -966,6 +971,7 @@
 				87ACA1A819F7EC520075364D /* PUBMenuItemManager.m in Sources */,
 				37CD7A231A767E6500E7F6AB /* PUBWebViewController.m in Sources */,
 				877665E919ACECDE000DFFF1 /* PUBBadgeView.m in Sources */,
+				377774861A825D7400D0DFAD /* PUBCommunication+Push.m in Sources */,
 				877665C419ACEA0C000DFFF1 /* PUBPDFDocument.m in Sources */,
 				8774EA1B1A7B83BA00B66DD9 /* PUBDocument.m in Sources */,
 				870110E8180FCF140034B9AC /* main.m in Sources */,

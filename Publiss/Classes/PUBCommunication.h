@@ -30,6 +30,7 @@
                      pushToken:(NSString *)pushToken
                     deviceType:(NSString *)type
                       language:(NSString *)lang
+                   permissions:(NSArray *)permissions
                     completion:(void(^)(id responseObject))completionBlock
                          error:(void(^)(NSError *error))errorBlock;
 
