@@ -63,12 +63,13 @@
     [self.presentingViewController.view.layer renderInContext:context];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-
+    
+    __strong UIImageView *background = self.background;
     if (PUBConfig.sharedConfig.blurEffectStyle == PUBBlurEffectStyleLight) {
-        [self.background setImage:[img applyLightEffect]];
+        [background setImage:[img applyLightEffect]];
     }
     else {
-        [self.background setImage:[img applyDarkEffect]];
+        [background setImage:[img applyDarkEffect]];
     }
 }
 
