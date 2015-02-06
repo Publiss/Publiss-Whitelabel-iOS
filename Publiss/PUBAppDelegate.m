@@ -19,11 +19,10 @@
 @implementation PUBAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+    application.applicationIconBadgeNumber = 0;
     
-    PUBConfig.sharedConfig.appToken = @"a3971df7-eb65-4a36-8a7a-f90714ef38c3";
-    PUBConfig.sharedConfig.appSecret = @"a99ecf6c4173b00e90b3f77937334103";
-    PUBConfig.sharedConfig.webserviceBaseURL = [NSURL URLWithString:@"https://staging-backend.publiss.com"];
+    PUBConfig.sharedConfig.appToken = @"1d3ae766-0206-4eb7-90e1-f2e2917a4635";
+    PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
     
     [Publiss.staticInstance setupWithLicenseKey:"T/b4cf+SB2t6JcWU/Izbkzkt8j70K2Zc9S5ubSdyI6cuJm1Q0tBv8eQz7DpN"
      "J0/RAblrGUgI2T7mHc3vpqPHEAjd8XG9J3naWNgbrhQvaMhUmv7RBVI4tvAf"
@@ -71,7 +70,7 @@
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [PUBPreferences validateAndPersistPushToken:deviceToken];
     [PUBCommunication.sharedInstance sendPushTokenToServer];
-    NSLog(@"%@", deviceToken);
+    PUBLog(@"%@", deviceToken);
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {

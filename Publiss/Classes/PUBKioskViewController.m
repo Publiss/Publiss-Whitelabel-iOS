@@ -355,7 +355,7 @@
         [PUBDocument setShouldShowNewFlag:YES];
     } error:^(NSError *error) {
         PUBAuthentication *auth = PUBAuthentication.sharedInstance;
-        if ([auth isLoggedIn]) {
+        if ([auth isLoggedIn] && error.code != -1009) { // -1009 = internet offline
             [auth logout];
             [PUBDocument setShouldShowNewFlag:NO];
             [self refreshDocumentsWithActivityViewAnimated:YES];
