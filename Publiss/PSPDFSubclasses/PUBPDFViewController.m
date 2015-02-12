@@ -50,19 +50,21 @@
         });
         
         // HUD style
-        
         builder.allowToolbarTitleChange = NO;
         
         builder.shouldShowHUDOnViewWillAppear = NO;
         builder.shouldHideNavigationBarWithHUD = YES;
         builder.shouldHideStatusBarWithHUD = YES;
+        builder.shouldHideHUDOnPageChange = NO;
+        builder.shouldAskForAnnotationUsername = NO;
+        builder.fixedVerticalPositionForFitToWidthEnabledMode = YES;
         builder.backgroundColor = [UIColor blackColor];
-        
+        builder.showAnnotationMenuAfterCreation = YES;
         builder.allowBackgroundSaving = YES;
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
         builder.pageTransition = PSPDFPageTransitionCurl;
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
-        builder.thumbnailBarMode = PSPDFThumbnailBarModeScrollable;
+        builder.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
         builder.pageMode = PSPDFPageModeAutomatic;
     }]];
     
@@ -84,9 +86,9 @@
     } else {
         self.rightBarButtonItems = @[self.activityButtonItem, self.searchButtonItem, self.outlineButtonItem, self.viewModeButtonItem];
     }
-    self.outlineButtonItem.availableControllerOptions = [NSOrderedSet orderedSetWithObjects:@(PSPDFOutlineBarButtonItemOptionOutline), @(PSPDFOutlineBarButtonItemOptionBookmarks), nil];
-    self.activityButtonItem.applicationActivities = @[PSPDFActivityTypeGoToPage];
-    self.activityButtonItem.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact];
+//    self.outlineButtonItem.availableControllerOptions = [NSOrderedSet orderedSetWithObjects:@(PSPDFOutlineBarButtonItemOptionOutline), @(PSPDFOutlineBarButtonItemOptionBookmarks), nil];
+//    self.activityButtonItem.applicationActivities = @[PSPDFActivityTypeGoToPage];
+//    self.activityButtonItem.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard, UIActivityTypeAssignToContact];
     
     // Restore view state.
     if (self.pubDocument) {
@@ -148,7 +150,7 @@
     return self.initallyHiddenStatusBar ? UIStatusBarAnimationFade : [super preferredStatusBarUpdateAnimation];
 }
 
-- (UIStatusBarStyle) preferredStatusBarStyle {
+- (UIStatusBarStyle)preferredStatusBarStyle {
     return PUBConfig.sharedConfig.statusBarStyle;
 }
 
@@ -171,7 +173,6 @@
     [JDStatusBarNotification dismissAnimated:YES];
     
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
-    [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
     [dnc removeObserver:self name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
 }
 

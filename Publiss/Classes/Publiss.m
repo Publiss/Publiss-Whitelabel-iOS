@@ -14,8 +14,8 @@
 #import "UIColor+PUBDesign.h"
 #import "PUBConstants.h"
 #import <PublissCore.h>
-#import "PSPDFKit.h"
 #import "PUBConfig.h"
+#import "PSPDFKit.h"
 
 @implementation Publiss
 
@@ -42,7 +42,7 @@
     return bundle;
 }
 
-- (void)setupWithLicenseKey:(const char *)licenseKey {
+- (void)setupWithLicenseKey:(NSString *)licenseKey {
 #if defined(PUBClearAllFilesOnAppStart) && PUBClearAllFilesOnAppStart
     // DEBUG: Clear all files!
     NSString *publissPath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES).firstObject;
@@ -75,7 +75,8 @@
     }
     
     if (licenseKey != nil) {
-        PSPDFSetLicenseKey(licenseKey);
+        [PSPDFKit setLicenseKey:licenseKey];
+//        PSPDFSetLicenseKey();
     }
     
     // Reset data model

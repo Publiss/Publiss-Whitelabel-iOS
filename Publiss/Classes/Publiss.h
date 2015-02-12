@@ -19,6 +19,6 @@ extern void PUBSetLocalizationDictionary(NSDictionary *localizationDict);
 @property (strong, nonatomic) NSString *googleAnalyticsTrackingCode;
 
 + (Publiss *)staticInstance;
-- (void)setupWithLicenseKey:(const char *)licenseKey;
+- (void)setupWithLicenseKey:(NSString *)licenseKey;
 
 @end

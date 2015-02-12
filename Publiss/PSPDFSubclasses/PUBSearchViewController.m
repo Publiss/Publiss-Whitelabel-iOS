@@ -15,7 +15,8 @@
 #pragma mark - NSObject
 
 - (id)initWithDocument:(PSPDFDocument *)document delegate:(id<PSPDFSearchViewControllerDelegate>)delegate {
-    if (self = [super initWithDocument:document delegate:delegate]) {
+    if (self = [super initWithDocument:document]) {
+        self.delegate = delegate;
         [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(remoteObjectDidChangeNotification:) name:PUBDocumentFetcherUpdateNotification object:nil];
     }
     return self;

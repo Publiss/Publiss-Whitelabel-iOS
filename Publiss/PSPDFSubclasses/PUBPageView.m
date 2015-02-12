@@ -67,8 +67,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - PSPDFPageView
 
-- (void)displayPage:(NSUInteger)page pageRect:(CGRect)pageRect scale:(CGFloat)scale delayPageAnnotations:(BOOL)delayPageAnnotations presentationContext:(id <PSPDFPresentationContext>)presentationContext {
-    [super displayPage:page pageRect:pageRect scale:scale delayPageAnnotations:delayPageAnnotations presentationContext:presentationContext];
+- (void)displayPage:(NSUInteger)page pageRect:(CGRect)pageRect scale:(CGFloat)scale presentationContext:(id <PSPDFPresentationContext>)presentationContext {
+    [super displayPage:page pageRect:pageRect scale:scale presentationContext:presentationContext];
 
     // Prepare progress
     [self.activityView setProgress:0.f animated:NO];
