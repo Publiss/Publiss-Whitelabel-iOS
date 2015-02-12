@@ -24,7 +24,7 @@
     PUBConfig.sharedConfig.appToken = @"1d3ae766-0206-4eb7-90e1-f2e2917a4635";
     PUBConfig.sharedConfig.appSecret = @"9fc4153103bd73cbe36c88738dc9e8bb";
     
-    [Publiss.staticInstance setupWithLicenseKey:"T/b4cf+SB2t6JcWU/Izbkzkt8j70K2Zc9S5ubSdyI6cuJm1Q0tBv8eQz7DpN"
+    [Publiss.staticInstance setupWithLicenseKey:@"T/b4cf+SB2t6JcWU/Izbkzkt8j70K2Zc9S5ubSdyI6cuJm1Q0tBv8eQz7DpN"
      "J0/RAblrGUgI2T7mHc3vpqPHEAjd8XG9J3naWNgbrhQvaMhUmv7RBVI4tvAf"
      "/S2PJDvUyrx63cz/wNIEnVFxQTGfZvqFNaKMFLQMEUqGbRVzRZHE553GATeX"
      "77BnVcMOoQSPgEV6jrSLkvuYEa0XNDG6ZE/xNkaRViwW70Mmsa71YY9gKjz0"
