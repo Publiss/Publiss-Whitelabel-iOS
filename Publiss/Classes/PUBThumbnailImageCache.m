@@ -15,8 +15,6 @@
 @property (nonatomic, strong) dispatch_queue_t ioQueue;
 @end
 
-//TODO: Log all error objects for file operations.
-
 @implementation PUBThumbnailImageCache
 
 - (id)init {
@@ -42,8 +40,8 @@
     if (imageData) {
         return [[UIImage alloc] initWithData:imageData];
     } else {
-    return nil;
-}
+        return nil;
+    }
 }
 
 - (void)setImage:(UIImage *)image forURLString:(NSString *)URLString {

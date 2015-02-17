@@ -283,6 +283,14 @@
     }
 }
 
+#pragma mark - Setter
+
+- (void)setPublishedDocuments:(NSArray *)documentArray {
+    _publishedDocuments = documentArray;
+    self.indexPathsForDocuments = nil;
+    self.indexPathsForDocumentsByLinkedTag = nil;
+}
+
 #pragma mark - Gesture
 
 - (void)panGestureRecognized:(UIPanGestureRecognizer *)sender {
@@ -395,6 +403,76 @@
     }
 }
 
+- (void)logout {
+    [PUBCommunication.sharedInstance sendPushTokenToServer];
+}
+
+- (void)deleteButtonClicked:(UIButton *)button  {
+    if ([button isKindOfClass:UIButton.class]) {
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[self.collectionView convertPoint:button.superview.center fromView:button.superview]];
+        PUBDocument *document = (self.publishedDocuments)[indexPath.row];
+        
+        if (document.language.linkedTag.length > 0) {
+            NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
+                                                     ascending:YES
+                                                     predicate:[NSPredicate predicateWithFormat:@"state == %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
+            
+            for (PUBDocument *documentToDelete in documents) {
+                [self removePdfForDocument:documentToDelete];
+            }
+        }
+        else {
+            [self removePdfForDocument:document];
+        }
+    }
+}
+
+- (void)handleLongPressgesture:(UILongPressGestureRecognizer *)gesture {
+    if (gesture.state == UIGestureRecognizerStateBegan) {
+        CGPoint point = [gesture locationInView:self.collectionView];
+        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
+        
+        if (indexPath) {
+            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
+            PUBDocument *document = self.publishedDocuments[indexPath.item];
+            
+            CGFloat endAlpha;
+            CGAffineTransform endTransform;
+            BOOL startAnimation = NO;
+            
+            if (cell.deleteButton.hidden && document.state == PUBDocumentStateDownloaded) {
+                startAnimation = YES;
+                cell.showDeleteButton = YES;
+                endAlpha = 0.98f;
+                cell.deleteButton.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
+                endTransform = CGAffineTransformMakeScale(1.0f, 1.0f);
+            } else {
+                endAlpha = 0.0f;
+                endTransform = CGAffineTransformMakeScale(0.1f, 0.1f);
+            }
+            
+            [UIView animateWithDuration:0.25f
+                                  delay:0
+                 usingSpringWithDamping:10.f
+                  initialSpringVelocity:10.f
+                                options:UIViewAnimationOptionCurveEaseInOut
+                             animations:^{
+                                 cell.deleteButton.transform = endTransform;
+                                 cell.deleteButton.alpha = endAlpha;
+                             }
+                             completion:^(BOOL finished) {
+                                 if (finished) {
+                                     cell.deleteButton.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
+                                     
+                                     if (!startAnimation) {
+                                         cell.showDeleteButton = NO;
+                                     }
+                                 }
+                             }];
+        }
+    }
+}
+
 #pragma mark - PUBUserLoginDelegate
 
 - (BOOL)pubUserShouldLoginWithCredentials:(NSDictionary *)credentials {
@@ -463,6 +541,28 @@
     }
 }
 
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString *const identifier = @"DocumentCell";
+    PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+    PUBDocument *document = (self.publishedDocuments)[indexPath.item];
+    [cell setupForDocument:(PUBDocument *)document];
+    [cell.deleteButton addTarget:self
+                          action:@selector(deleteButtonClicked:)
+                forControlEvents:UIControlEventTouchUpInside];
+    
+    // first look in cover image cache if there is already a preprocessed cover image
+    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
+    UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
+
+    if (nil != thumbnail) {
+        [self prepareCellWithThumbnail:thumbnail cell:cell indexPath:indexPath document:document];
+    } else {
+        [self prepareCellWithoutThumbnail:cell indexPath:indexPath collectionView:collectionView thumbnailURL:thumbnailURL document:document];
+    }
+    [cell setNeedsLayout];
+    return cell;
+}
+
 - (void)prepareCellWithThumbnail:(UIImage *)thumbnail cell:(PUBCellView *)cell indexPath:(NSIndexPath *)indexPath document:(PUBDocument *)document
 {
     cell.coverImage.image = thumbnail;
@@ -510,29 +610,6 @@
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView
-                  cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *const identifier = @"DocumentCell";
-    PUBCellView *cell = (PUBCellView *)[collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-    PUBDocument *document = (self.publishedDocuments)[indexPath.item];
-    [cell setupForDocument:(PUBDocument *)document];
-    [cell.deleteButton addTarget:self
-                          action:@selector(deleteButtonClicked:)
-                forControlEvents:UIControlEventTouchUpInside];
-    
-    // first look in cover image cache if there is already a preprocessed cover image
-    NSURL *thumbnailURL = [PUBDocumentFetcher.sharedFetcher coverImageForDocument:document withSize:cell.bounds.size];
-    UIImage *thumbnail = [PUBThumbnailImageCache.sharedInstance thumbnailImageWithURLString:thumbnailURL.absoluteString];
-
-    if (nil != thumbnail) {
-        [self prepareCellWithThumbnail:thumbnail cell:cell indexPath:indexPath document:document];
-    } else {
-        [self prepareCellWithoutThumbnail:cell indexPath:indexPath collectionView:collectionView thumbnailURL:thumbnailURL document:document];
-    }
-    [cell setNeedsLayout];
-    return cell;
-}
-
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -540,27 +617,7 @@
     [self presentDocumentAccordingToState:document atIndexPath:indexPath];
 }
 
-#pragma mark - Actions
-
-- (void)deleteButtonClicked:(UIButton *)button  {
-    if ([button isKindOfClass:UIButton.class]) {
-        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[self.collectionView convertPoint:button.superview.center fromView:button.superview]];
-        PUBDocument *document = (self.publishedDocuments)[indexPath.row];
-        
-        if (document.language.linkedTag.length > 0) {
-            NSArray *documents = [PUBDocument fetchAllSortedBy:@"language.localizedTitle"
-                                                     ascending:YES
-                                                     predicate:[NSPredicate predicateWithFormat:@"state == %lu AND language.linkedTag == %@", PUBDocumentStateDownloaded, document.language.linkedTag]];
-            
-            for (PUBDocument *documentToDelete in documents) {
-                    [self removePdfForDocument:documentToDelete];
-            }
-        }
-        else {
-            [self removePdfForDocument:document];
-        }
-    }
-}
+#pragma mark - Purchase & Restore
 
 - (void)restorePurchases {
     [IAPController.sharedInstance restorePurchasesWithCompletion:^(NSError *error) {
@@ -604,6 +661,10 @@
     }];
 }
 
+- (void)clearPurchases {
+    [IAPController.sharedInstance clearPurchases];
+}
+
 - (void)displayRestoreSuccessMessage {
     [[[UIAlertView alloc] initWithTitle:PUBLocalize(@"Purchases")
                                 message:PUBLocalize(@"Your purchases have been restored.")
@@ -619,56 +680,6 @@
                                delegate:nil
                       cancelButtonTitle:PUBLocalize(@"OK")
                       otherButtonTitles:nil] show];
-}
-
-- (void)clearPurchases {
-    [IAPController.sharedInstance clearPurchases];
-}
-
-- (void)handleLongPressgesture:(UILongPressGestureRecognizer *)gesture {
-    if (gesture.state == UIGestureRecognizerStateBegan) {
-        CGPoint point = [gesture locationInView:self.collectionView];
-        NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
-        
-        if (indexPath) {
-            PUBCellView *cell = (PUBCellView *)[self.collectionView cellForItemAtIndexPath:indexPath];
-            PUBDocument *document = self.publishedDocuments[indexPath.item];
-            
-            CGFloat endAlpha;
-            CGAffineTransform endTransform;
-            BOOL startAnimation = NO;
-            
-            if (cell.deleteButton.hidden && document.state == PUBDocumentStateDownloaded) {
-                startAnimation = YES;
-                cell.showDeleteButton = YES;
-                endAlpha = 0.98f;
-                cell.deleteButton.transform = CGAffineTransformMakeScale(0.1f, 0.1f);
-                endTransform = CGAffineTransformMakeScale(1.0f, 1.0f);
-            } else {
-                endAlpha = 0.0f;
-                endTransform = CGAffineTransformMakeScale(0.1f, 0.1f);
-            }
-            
-            [UIView animateWithDuration:0.25f
-                                  delay:0
-                 usingSpringWithDamping:10.f
-                  initialSpringVelocity:10.f
-                                options:UIViewAnimationOptionCurveEaseInOut
-                             animations:^{
-                                 cell.deleteButton.transform = endTransform;
-                                 cell.deleteButton.alpha = endAlpha;
-                             }
-                             completion:^(BOOL finished) {
-                                 if (finished) {
-                                     cell.deleteButton.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
-                                     
-                                     if (!startAnimation) {
-                                         cell.showDeleteButton = NO;
-                                     }
-                                 }
-                             }];
-        }
-    }
 }
 
 #pragma mark - Helper
@@ -697,11 +708,55 @@
     return isLoadingInProgress;
 }
 
-#pragma mark - Notifications
-
-- (void)logout {
-    [PUBCommunication.sharedInstance sendPushTokenToServer];
+- (NSIndexPath *)indexPathForProductID:(NSString *)productID {
+    if (!self.indexPathsForDocuments) {
+        self.indexPathsForDocuments = [NSDictionary new];
+    }
+    
+    NSIndexPath *indexPath = self.indexPathsForDocuments[productID];
+    if (!indexPath) {
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
+            if ([document.productID isEqualToString:productID]) {
+                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+                
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocuments];
+                [dictionary setObject:indexPath forKey:document.productID];
+                self.indexPathsForDocuments = dictionary;
+                break;
+            }
+        }
+    }
+    
+    return indexPath;
 }
+
+- (NSIndexPath *)indexPathForLinkedTag:(NSString *)linkedTag {
+    if (!self.indexPathsForDocumentsByLinkedTag) {
+        self.indexPathsForDocumentsByLinkedTag = [NSDictionary new];
+    }
+    
+    NSIndexPath *indexPath = self.indexPathsForDocumentsByLinkedTag[linkedTag];
+    if (!indexPath) {
+        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
+            PUBDocument *document = self.publishedDocuments[i];
+            NSLog(@"%ld: %@ ... %@", (long)i, document.language.linkedTag, linkedTag);
+            
+            if (document.language.linkedTag.length > 0 && [document.language.linkedTag isEqualToString:linkedTag]) {
+                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+                
+                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocumentsByLinkedTag];
+                [dictionary setObject:indexPath forKey:document.language.linkedTag];
+                self.indexPathsForDocumentsByLinkedTag = dictionary;
+                break;
+            }
+        }
+    }
+    
+    return indexPath;
+}
+
+#pragma mark - Notifications
 
 - (void)trackPage {
     [self.pageTracker fire];
@@ -770,61 +825,9 @@
     }
 }
 
-- (NSIndexPath *)indexPathForProductID:(NSString *)productID {
-    if (!self.indexPathsForDocuments) {
-        self.indexPathsForDocuments = [NSDictionary new];
-    }
-    
-    NSIndexPath *indexPath = self.indexPathsForDocuments[productID];
-    if (!indexPath) {
-        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
-            PUBDocument *document = self.publishedDocuments[i];
-            if ([document.productID isEqualToString:productID]) {
-                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-                
-                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocuments];
-                [dictionary setObject:indexPath forKey:document.productID];
-                self.indexPathsForDocuments = dictionary;
-                break;
-            }
-        }
-    }
-    
-    return indexPath;
-}
 
-- (NSIndexPath *)indexPathForLinkedTag:(NSString *)linkedTag {
-    if (!self.indexPathsForDocumentsByLinkedTag) {
-        self.indexPathsForDocumentsByLinkedTag = [NSDictionary new];
-    }
-    
-    NSIndexPath *indexPath = self.indexPathsForDocumentsByLinkedTag[linkedTag];
-    if (!indexPath) {
-        for (NSInteger i = 0; i < self.publishedDocuments.count; i++) {
-            PUBDocument *document = self.publishedDocuments[i];
-            NSLog(@"%ld: %@ ... %@", (long)i, document.language.linkedTag, linkedTag);
-            
-            if (document.language.linkedTag.length > 0 && [document.language.linkedTag isEqualToString:linkedTag]) {
-                indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-                
-                NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithDictionary:self.indexPathsForDocumentsByLinkedTag];
-                [dictionary setObject:indexPath forKey:document.language.linkedTag];
-                self.indexPathsForDocumentsByLinkedTag = dictionary;
-                break;
-            }
-        }
-    }
-    
-    return indexPath;
-}
 
-- (void)setPublishedDocuments:(NSArray *)documentArray {
-    _publishedDocuments = documentArray;
-    self.indexPathsForDocuments = nil;
-    self.indexPathsForDocumentsByLinkedTag = nil;
-}
-
-#pragma mark PSPDFViewControllerDelegate
+#pragma mark - PSPDFViewControllerDelegate
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
@@ -1091,7 +1094,7 @@
     return cell.coverImage.image;
 }
 
-#pragma mark - KVNProgress configuration
+#pragma mark - KVNProgress Configuration
 
 - (KVNProgressConfiguration *)fullScreenBlockingProgressConfiguration {
     KVNProgressConfiguration *configuration = [[KVNProgressConfiguration alloc] init];
