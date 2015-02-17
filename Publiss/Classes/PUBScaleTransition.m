@@ -85,6 +85,7 @@
                              toView.hidden = NO;
                              [blendOverView removeFromSuperview];
                              [transitionImageViewTarget removeFromSuperview];
+                             
                              [transitionContext completeTransition:YES];
                          }];
     }
@@ -121,10 +122,11 @@
                              [transitionImageViewTarget removeFromSuperview];
                              [blendOverView removeFromSuperview];
                              [dimView removeFromSuperview];
-                             [transitionContext completeTransition:YES];
                              
                              self.transitionSourceView.hidden = NO;
                              self.transitionSourceView.superview.hidden = NO;
+                             
+                             [transitionContext completeTransition:YES];
                          }];
     }
 }
