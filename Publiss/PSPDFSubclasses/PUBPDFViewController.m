@@ -20,6 +20,7 @@
 #import "PSPDFSpeechController.h"
 #import "PUBConstants.h"
 #import "PUBConfig.h"
+#import "PUBFreeTextAccessoryView.h"
 
 @interface PUBPDFViewController ()
 @property (nonatomic, strong) NSDictionary *documentProgress;
@@ -42,6 +43,7 @@
         [builder overrideClass:PSPDFLinkAnnotationView.class withClass:PUBLinkAnnotationView.class];
         [builder overrideClass:PSPDFPageView.class withClass:PUBPageView.class];
         [builder overrideClass:PSPDFSearchViewController.class withClass:PUBSearchViewController.class];
+        [builder overrideClass:PSPDFFreeTextAccessoryView.class withClass:PUBFreeTextAccessoryView.class];
         
         // Appearance only needs to be set up once.
         static dispatch_once_t onceToken;

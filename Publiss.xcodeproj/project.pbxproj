@@ -63,6 +63,7 @@
 		870110FA180FCF140034B9AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DD180FCF140034B9AC /* UIKit.framework */; };
 		870110FB180FCF140034B9AC /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 870110DF180FCF140034B9AC /* CoreData.framework */; };
 		87011103180FCF140034B9AC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87011101180FCF140034B9AC /* InfoPlist.strings */; };
+		8714D6AB1A933FF400F8B020 /* PUBFreeTextAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8714D6AA1A933FF400F8B020 /* PUBFreeTextAccessoryView.m */; };
 		8749898319B07668006ABCA3 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8749898519B07668006ABCA3 /* Localizable.strings */; };
 		8774EA151A7B82B900B66DD9 /* PUBPermission.m in Sources */ = {isa = PBXBuildFile; fileRef = 8774EA141A7B82B900B66DD9 /* PUBPermission.m */; };
 		8774EA1B1A7B83BA00B66DD9 /* PUBDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 8774EA1A1A7B83BA00B66DD9 /* PUBDocument.m */; };
@@ -220,6 +221,8 @@
 		870110F6180FCF140034B9AC /* PublissTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PublissTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		870110F7180FCF140034B9AC /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		87011100180FCF140034B9AC /* PublissTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PublissTests-Info.plist"; sourceTree = "<group>"; };
+		8714D6A91A933FF400F8B020 /* PUBFreeTextAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PUBFreeTextAccessoryView.h; sourceTree = "<group>"; };
+		8714D6AA1A933FF400F8B020 /* PUBFreeTextAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PUBFreeTextAccessoryView.m; sourceTree = "<group>"; };
 		8749896F19B06313006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		8749898419B07668006ABCA3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8749898619B0766A006ABCA3 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -740,6 +743,8 @@
 				877665C219ACEA0C000DFFF1 /* PUBThumbnailGridViewCell.m */,
 				37CD7A211A767E6500E7F6AB /* PUBWebViewController.h */,
 				37CD7A221A767E6500E7F6AB /* PUBWebViewController.m */,
+				8714D6A91A933FF400F8B020 /* PUBFreeTextAccessoryView.h */,
+				8714D6AA1A933FF400F8B020 /* PUBFreeTextAccessoryView.m */,
 			);
 			path = PSPDFSubclasses;
 			sourceTree = "<group>";
@@ -970,6 +975,7 @@
 				37F2F9BA19F13004003E344D /* PUBDimmView.m in Sources */,
 				87ACA1A819F7EC520075364D /* PUBMenuItemManager.m in Sources */,
 				37CD7A231A767E6500E7F6AB /* PUBWebViewController.m in Sources */,
+				8714D6AB1A933FF400F8B020 /* PUBFreeTextAccessoryView.m in Sources */,
 				877665E919ACECDE000DFFF1 /* PUBBadgeView.m in Sources */,
 				377774861A825D7400D0DFAD /* PUBCommunication+Push.m in Sources */,
 				877665C419ACEA0C000DFFF1 /* PUBPDFDocument.m in Sources */,
