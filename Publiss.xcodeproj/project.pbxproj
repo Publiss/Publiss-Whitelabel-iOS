@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		377774861A825D7400D0DFAD /* PUBCommunication+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = 377774851A825D7400D0DFAD /* PUBCommunication+Push.m */; };
+		378A20851A9384F400701B01 /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 378A20841A9384F400701B01 /* libc++.dylib */; };
 		37B57E9B19ECFC76000B893A /* PublissCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37B57E9919ECFC76000B893A /* PublissCore.framework */; };
 		37C240451A63D37A00A5CF2A /* PUBLanguage.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C240441A63D37A00A5CF2A /* PUBLanguage.m */; };
 		37C2404B1A63D40600A5CF2A /* PUBLanguage+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 37C2404A1A63D40600A5CF2A /* PUBLanguage+Helper.m */; };
@@ -138,6 +139,7 @@
 		3744FE8C1A3F358A00F2BAB7 /* Publiss_2.1.1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.1.xcdatamodel; sourceTree = "<group>"; };
 		377774841A825D7400D0DFAD /* PUBCommunication+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PUBCommunication+Push.h"; path = "Classes/PUBCommunication+Push.h"; sourceTree = "<group>"; };
 		377774851A825D7400D0DFAD /* PUBCommunication+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PUBCommunication+Push.m"; path = "Classes/PUBCommunication+Push.m"; sourceTree = "<group>"; };
+		378A20841A9384F400701B01 /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
 		37B57E9919ECFC76000B893A /* PublissCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = PublissCore.framework; sourceTree = "<group>"; };
 		37B57E9C19ECFE3E000B893A /* Publiss_2.1.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.1.0.xcdatamodel; sourceTree = "<group>"; };
 		37C240421A63D26D00A5CF2A /* Publiss_2.2.0.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Publiss_2.2.0.xcdatamodel; sourceTree = "<group>"; };
@@ -343,6 +345,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				378A20851A9384F400701B01 /* libc++.dylib in Frameworks */,
 				EFC288A718A0ED6700D74A1C /* SystemConfiguration.framework in Frameworks */,
 				EFB9DB5618508F8A008CEBDE /* CoreTelephony.framework in Frameworks */,
 				8110782E1811301F00281106 /* libxml2.2.dylib in Frameworks */,
@@ -623,6 +626,7 @@
 		870110D8180FCF140034B9AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				378A20841A9384F400701B01 /* libc++.dylib */,
 				37B57E9819ECFC76000B893A /* PublissCore.embeddedframework */,
 				EFC288A618A0ED6700D74A1C /* SystemConfiguration.framework */,
 				EFC288A418A0ED5500D74A1C /* AdSupport.framework */,

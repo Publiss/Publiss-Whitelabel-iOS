@@ -9,6 +9,12 @@
 #import "PUBDocumentTransition.h"
 #import "PUBDimmView.h"
 
+@interface PUBDocumentTransition()
+
+@property (nonatomic, strong) UIView *transitionSourceView;
+
+@end
+
 @implementation PUBDocumentTransition
 
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {

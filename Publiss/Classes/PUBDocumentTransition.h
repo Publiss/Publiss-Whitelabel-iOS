@@ -20,7 +20,7 @@ typedef NS_ENUM(NSInteger, PUBTargetPosition) {
 
 @property (nonatomic, assign) id<PUBDocumentTransitionDataSource> dataSource;
 
-@property (nonatomic, strong) UIView *transitionSourceView;
+
 @property (nonatomic, copy) UIImage *transitionImage;
 @property (nonatomic, assign) PUBTargetPosition targetPosition;
 
@@ -31,9 +31,11 @@ typedef NS_ENUM(NSInteger, PUBTargetPosition) {
 
 @protocol PUBDocumentTransitionDataSource <NSObject>
 
-@optional
 
+@required
 - (UIView *)currentTransitionSourceView;
+
+@optional
 - (UIImage *)currentTransitionImage;
 
 @end

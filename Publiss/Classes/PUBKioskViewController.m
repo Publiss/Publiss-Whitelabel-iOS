@@ -917,7 +917,12 @@
 }
 
 - (void)presentDocumentAccordingToState:(PUBDocument *)document atIndexPath:(NSIndexPath *)indexPath {
-    if (([self numberOfAvailableLanguagesForDocument:document] == 1 || document.language.linkedTag == nil) && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStatePurchased)) {
+    BOOL noLanguages = [self numberOfAvailableLanguagesForDocument:document] == 1 ||
+                        document.language.linkedTag == nil ||
+                        PUBConfig.sharedConfig.preferredLanguage == nil ||
+                        PUBConfig.sharedConfig.preferredLanguage.length == 0;
+    
+    if (noLanguages && (document.state == PUBDocumentStateDownloaded || document.state == PUBDocumentStatePurchased)) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self presentDocument:document atIndexPath:indexPath];
         });
@@ -1011,11 +1016,7 @@
     UIViewController *controllerToPresent = pdfController;
     
     if (indexPath) {
-        PUBCellView *cell = (PUBCellView*)[self.collectionView cellForItemAtIndexPath:indexPath];
-        
         self.transitioningDelegate.selectedTransition = PUBSelectedTransitionDocument;
-        self.transitioningDelegate.documentTransition.transitionSourceView = cell.coverImage;
-        self.transitioningDelegate.documentTransition.transitionImage = cell.coverImage.image;
         self.transitioningDelegate.documentTransition.targetPosition = [PUBDocumentTransition targetPositionForPageIndex:pdfController.page
                                                                                                       isDoubleModeActive:pdfController.isDoublePageMode];
         self.transitioningDelegate.documentTransition.dataSource = self;
@@ -1044,7 +1045,6 @@
     
     self.transitioningDelegate.documentTransition.animationEndedBlock = ^(BOOL success, TransitionMode mode) {
         if (mode == TransitionModeDismiss) {
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [welf.collectionView reloadData];
             });

@@ -63,8 +63,10 @@
         builder.backgroundColor = [UIColor blackColor];
         builder.showAnnotationMenuAfterCreation = YES;
         builder.allowBackgroundSaving = YES;
+        
         builder.renderAnimationEnabled = NO; // Doesn't look good with progressive download.
-        builder.pageTransition = PSPDFPageTransitionCurl;
+        //builder.pageTransition = PSPDFPageTransitionCurl; // Issue with page curl...
+        
         builder.renderingMode = PSPDFPageRenderingModeThumbnailThenFullPage;
         builder.thumbnailBarMode = PSPDFThumbnailBarModeScrobbleBar;
         builder.pageMode = PSPDFPageModeAutomatic;
@@ -137,8 +139,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
     [self hideStatusBarInJustTheReightWay];
+  
+    [self updateConfigurationWithBuilder:^(PSPDFConfigurationBuilder *builder) {
+        builder.pageTransition = PSPDFPageTransitionCurl;
+    }];
     
     NSNotificationCenter *dnc = NSNotificationCenter.defaultCenter;
     [dnc addObserver:self selector:@selector(pageViewDidLoad:) name:PSPDFViewControllerDidLoadPageViewNotification object:nil];
@@ -165,6 +170,10 @@
         [self setHUDVisible:YES animated:NO];
         [self setHUDVisible:NO animated:NO];
     });
+}
+
+- (BOOL)isDoublePageMode {
+    return UIInterfaceOrientationIsLandscape(self.interfaceOrientation);
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
