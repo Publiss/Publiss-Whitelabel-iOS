@@ -33,7 +33,7 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (= 2.4.1)
   - GoogleAnalytics-iOS-SDK (= 3.10)
-  - JDStatusBarNotification
+  - JDStatusBarNotification (= 1.5.1)
   - KVNProgress (= 2.1.6)
   - Lockbox (= 2.1.0)
   - PSPDFKit (from `https://customers.pspdfkit.com/cocoapods/***REMOVED***/4.2.2.podspec`)
