@@ -26,7 +26,6 @@ PODS:
   - JDStatusBarNotification (1.5.1)
   - KVNProgress (2.1.6)
   - Lockbox (2.1.0)
-  - PSPDFKit (4.2.2)
   - REFrostedViewController (2.4.7)
   - UIActionSheet+Blocks (0.8.1)
 
@@ -36,13 +35,8 @@ DEPENDENCIES:
   - JDStatusBarNotification (= 1.5.1)
   - KVNProgress (= 2.1.6)
   - Lockbox (= 2.1.0)
-  - PSPDFKit (from `https://customers.pspdfkit.com/cocoapods/***REMOVED***/4.2.2.podspec`)
   - REFrostedViewController (= 2.4.7)
   - UIActionSheet+Blocks (= 0.8.1)
-
-EXTERNAL SOURCES:
-  PSPDFKit:
-    :podspec: https://customers.pspdfkit.com/cocoapods/***REMOVED***/4.2.2.podspec
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
@@ -50,7 +44,6 @@ SPEC CHECKSUMS:
   JDStatusBarNotification: 46965cc93efa668fa9f1c31cb223df5c84b421d5
   KVNProgress: ac45e7ded3510560d1900de8747f49dcbbc92c55
   Lockbox: 3168f08cb26680b05a0702b8c0cc6da32788059d
-  PSPDFKit: 601d3120f04ba296e8aca41e46ba087db3dee24f
   REFrostedViewController: 08870a24788191339608b80b2bd4fce549858f0d
   UIActionSheet+Blocks: c8b9c02f3d08964e8f7a4202f004a639c15eab80
 
