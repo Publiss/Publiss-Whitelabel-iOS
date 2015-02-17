@@ -81,6 +81,7 @@
     self.extendedLayoutIncludesOpaqueBars = YES;
     
     self.thumbnailController.thumbnailCellClass = PUBThumbnailGridViewCell.class;
+    [self.annotationToolbarController updateHostView:self.view container:nil viewController:self];
     
     // Toolbar configuration
     if (PUBIsiPad()) {
